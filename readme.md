@@ -3,8 +3,11 @@ Playbook is like storybook but for the master class IDE
 
 ### Quick start
 ```bash
-# install 
-yarn add -D @masterclass/playbook
+# install globally
+npm i -g masterclass-playbook
+
+# OR install locally
+yarn add -D masterclass-playbook
 
 # init a simple hello world 
 npx playbook init --helloworld

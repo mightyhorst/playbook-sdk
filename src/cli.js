@@ -5,7 +5,7 @@ export function cli(args) {
     clear();
     console.log(`
     🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝
-    
+
      _____  _              
     |  __ || |             
     | |__) | | __ _ _   _  
@@ -24,7 +24,7 @@ export function cli(args) {
      🥑  ${chalk.blueBright('playbook create')} - choose your adventure
 
     ${chalk.gray('Subscribe...')}
-     🍇  ${chalk.greenBright('playbook play')} - step by step walkthrough of a published playbook 
+     🍇  ${chalk.magenta('playbook play')} - step by step walkthrough of a published playbook 
 
     🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝
     
