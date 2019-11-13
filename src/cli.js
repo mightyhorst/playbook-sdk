@@ -16,11 +16,15 @@ export function cli(args) {
                     |___/  
         B . O . O . K
 
-     🥑  ${chalk.blueBright('playbook')} - choose your adventure
-     🍎  ${chalk.greenBright('playbook init')} - create a new playbook 
+    ${chalk.gray('Publish...')}
+     🍎  ${chalk.cyan('playbook init')} - create a new playbook 
      🍋  ${chalk.magentaBright('playbook build')} - builds the playbook.json
-     🍉  ${chalk.yellowBright('playbook push')} - pushes the playbook.json to master-class
-     🍑  ${chalk.green('playbook run')} - pushes the playbook.json and runs it 
+     🍉  ${chalk.yellow('playbook push')} - pushes the playbook.json to master-class
+     🍑  ${chalk.green('playbook serve')} - pushes the playbook.json and runs it 
+     🥑  ${chalk.blueBright('playbook create')} - choose your adventure
+
+    ${chalk.gray('Subscribe...')}
+     🍇  ${chalk.greenBright('playbook play')} - step by step walkthrough of a published playbook 
 
     🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝
     
