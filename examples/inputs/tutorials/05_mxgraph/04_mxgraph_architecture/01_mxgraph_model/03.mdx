@@ -1,0 +1,106 @@
+<h4><a id="model_change_methods"></a>The Model Change Methods</h4>
+
+<p>Below is a list of the methods that alter the graph model and
+should be placed, directly or indirectly, with the scope of an update:</p>
+
+<ul>
+	<li>add(parent, child, index)</li>
+	<li>remove(cell)</li>
+	<li>setCollapsed(cell, collapsed)</li>
+	<li>setGeometry(cell, geometry)</li>
+	<li>setRoot(root)</li>
+	<li>setStyle(cell, style)</li>
+	<li>setTerminal(cell, terminal, isSource)</li>
+	<li>setTerminals(edge,source,target)</li>
+	<li>setValue(cell, value)</li>
+	<li>setVisible(cell, visible)</li>
+</ul>
+
+<p>Initially, we will just concern ourselves with the add and
+remove, as well as the geometry and style editing methods. Note that
+these are not core API methods, as usual these methods are on the
+mxGraph class, where appropriate, and they perform the update
+encapsulation for you.</p>
+
+<p><em>Design Background</em> - Some people are confused by the
+presence of visual information being stored by the model. These
+attributes comprise cell positioning, visibility and collapsed state.
+The model stores the default state of these attributes, providing a
+common place to set them on a per-cell basis, whereas, views can
+override the values on a per-view basis. The model is simply the first
+common place in the architecture where these attributes can be set on a
+global basis. Remember, this is a graph <em>visualization</em> library,
+the visualization part is the core functionality.</p>
+
+<h5><a id="inserting_cells"></a>Inserting Cells</h5>
+
+<p>The three graph cells created in the <CODE>HelloWorld</CODE>
+application are two vertices and one edge connecting the vertices. If
+you are not familiar with basic graph theory and its terminology, please
+see the <a href="http://en.wikipedia.org/wiki/Graph_theory">wikipedia
+entry</a>.</p>
+
+<p>You can add vertices and edges using the add() method on the
+model. However, for the purposes of general usage of this library, learn
+that mxGraph.insertVertex() and mxGraph.insertEdge() are the core public
+API for adding cells. The function of the model requires that the cell
+to be added is already created, whereas the mxGraph.insertVertex()
+creates the cell for you.</p>
+
+<div id="coreapi">
+<p><strong>Core API functions:</strong></p>
+
+<ul>
+	<li><strong>mxGraph.insertVertex(</strong><strong>parent,
+	id, value, x, y, width, height, style</strong><strong>)</strong> &ndash; creates
+	and inserts a new vertex into the model, within a begin/end update
+	call.</li>
+	<li><strong>mxGraph.insertEdge(</strong><strong>parent,
+	id, value, source, target, style</strong><strong>)</strong><strong>
+	&ndash; </strong>creates and inserts a new edge into the model, within a
+	begin/end update call.</li>
+</ul>
+</div>
+
+<p><code>mxGraph.insertVertex()</code> will create an mxCell object
+and return it from the method used. The parameters of the function are:</p>
+
+<ul>
+<li><strong>parent</strong> &ndash; the cell which is the immediate
+parent of the new cell in the group structure. We will address the
+group structure shortly, but for now use <code>graph.getDefaultParent();</code>
+as your default parent, as used in the HelloWorld example.</li>
+
+<li><strong>id</strong> &ndash; this is a global unique identifier
+that describes the cell, it is always a string. This is primarily for
+referencing the cells in the persistent output externally. If you do not
+wish to maintain ids yourself, pass null into this parameter and ensure
+that mxGraphModel.isCreateIds() returns true. This way the model will
+manage the ids and ensure they are unique.</li>
+
+<li><strong>value</strong> &ndash; this is the user object of the
+cell. User object are simply that, just objects, but form the objects
+that allow you to associate the business logic of an application with
+the visual representation of mxGraph. They will be described in more
+detail later in this manual, however, to start with if you use a string
+as the user object, this will be displayed as the label on the vertex or
+edge.</li>
+
+<li><strong>x, y, width, height</strong> &ndash; as the names
+suggest, these are the x and y position of the top left corner of the
+vertex and its width and height.</li>
+
+<li><strong>style</strong> &ndash; the style description to be
+applied to this vertex. Styles will be described in more detail shortly,
+but at a simple level this parameter is a string that follows a
+particular format. In the string appears zero or more style names and
+some number of key/value pairs that override the global style or set a
+new style. Until we create custom styles, we will just use those
+currently available.</li>
+</ul>
+
+<p>With the edge addition method, the identically named parameters
+perform the same function as in the vertex addition method. The source
+and target parameters define the vertices to which the edge is
+connected. Note that the source and target vertices should already have
+been inserted into the model.</p>

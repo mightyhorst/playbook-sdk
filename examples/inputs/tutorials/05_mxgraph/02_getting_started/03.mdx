@@ -1,0 +1,34 @@
+<h1><a id="constructor"></a>Constructor</h1>
+
+<p>For subclassing in mxGraph, the same mechanism should be applied.
+For example, for subclassing the mxGraph class, first a constructor must
+be defined for the new class. The constructor calls the super
+constructor with any arguments that it may have using the <em>call</em>
+function on the mxGraph function object, passing along explicitly each
+argument:</p>
+
+```javascript
+function MyGraph(container)
+{
+   mxGraph.call(this, container);
+}
+```
+
+<p>The prototype of MyGraph inherits from mxGraph as follows. As
+usual, the constructor is redefined after extending the superclass:</p>
+
+```javascript
+	MyGraph.prototype = new mxGraph();
+	MyGraph.prototype.constructor = MyGraph;
+```
+
+<p>You may want to define the codec associated for the class after
+the above code (see I/O section of manual). This code will be executed
+at class loading time and makes sure the same codec is used to encode
+instances of mxGraph and MyGraph.</p>
+
+```javascript
+var codec = mxCodecRegistry.getCodec(mxGraph);
+codec.template = new MyGraph();
+mxCodecRegistry.register(codec);
+```

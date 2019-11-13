@@ -1,0 +1,164 @@
+/* global mxEvent */
+/* global mxEffects */
+/* global mxClient */
+/* global mxUtils */
+/* global mxObjectCodec */
+/* global mxUtils */
+/* global mxEditor */
+/* global mxObjectCodec */
+/* global mxPanningManager */
+/* global mxEvent */
+/* global mxEvent */
+/* global mxClient */
+/* global mxUtils */
+/* global mxGraph */
+/* global mxRubberband */
+/*eslint no-undef: "off"*/
+
+const graphCtrl = {
+
+	nextId: 1, 
+
+	models: {
+		boxes: [],
+		lines: []
+	},
+
+	views: {
+		graph: null, 
+		boxes: [],
+		lines: []
+	},
+
+	_find(id, modelType){
+		const models = this.models[modelType];
+		const views = this.views[modelType];
+
+		return {
+			view: views.find(v => v.id === id),
+			model: models.find(m => m.id === id)
+		}
+	},
+	findBox(id){
+		return this._find(id, 'boxes');
+	},
+
+	findLine(id){
+		return this.find(id, 'lines');
+	},
+
+	_getGraph(){
+		return this.views.graph;
+	},
+	_getRootParent(){
+		return this.views.graph.getDefaultParent();
+	},
+
+	_createId(){
+		this.nextId++;
+		return this.nextId; 
+	},
+
+	createBox(boxModel){
+		const id = this._createId();
+		const parent = this._getRootParent();
+
+		const view = this._getGraph().insertVertex(
+			parent, 
+			null, 
+			boxModel.title, 
+			boxModel.top, 
+			boxModel.left, 
+			boxModel.width, 
+			boxModel.height
+		);
+
+		return view;
+	}, 
+
+	createLine(fromBoxView, toBoxView, lineModel){
+		const id = this._createId();
+		const parent = this._getRootParent();
+
+		const view = this._getGraph().insertEdge(
+			parent, 
+			null, 
+			lineModel.title || '', 
+			fromBoxView, 
+			toBoxView
+		);
+
+		return view;
+	},
+
+
+	main(){
+		const boxModel1 = {
+			title: 'Hello', 
+			top: 20, 
+			left: 20, 
+			width: 80, 
+			height: 30, 
+		};
+		const boxModel2 = {
+			title: 'World', 
+			top: 200, 
+			left: 150, 
+			width: 80, 
+			height: 30,
+		};
+		const box1 = this.createBox(boxModel1);
+		const box2 = this.createBox(boxModel2);
+		const lineModel = {
+			title: ''
+		}
+		this.createLine(box1, box2, lineModel);
+	}
+
+}
+
+// Program starts here. Creates a sample graph in the
+// DOM node with the specified ID. This function is invoked
+// from the onLoad event handler of the document (see below).
+function main(container)
+{
+	// Checks if the browser is supported
+	if (!mxClient.isBrowserSupported())
+	{
+		// Displays an error message if the browser is not supported.
+		mxUtils.error('Browser is not supported!', 200, false);
+	}
+	else
+	{
+		// Disables the built-in context menu
+		mxEvent.disableContextMenu(container);
+		
+		// Creates the graph inside the given container
+		graphCtrl.views.graph = new mxGraph(container);
+		const graph = graphCtrl.views.graph;
+		window.graph = graph;
+
+		// Enables rubberband selection
+		new mxRubberband(graph);
+		
+		// Gets the default parent for inserting new cells. This
+		// is normally the first child of the root (ie. layer 0).
+		
+		/**
+		graphCtrl.views.graph.graphParent = graph.getDefaultParent();
+		**/
+
+
+		// Adds cells to the model in a single step
+		graph.getModel().beginUpdate();
+		try
+		{	
+			graphCtrl.main();
+		}
+		finally
+		{
+			// Updates the display
+			graph.getModel().endUpdate();
+		}
+	}
+};

@@ -1,0 +1,88 @@
+<h4><a id="user_objects"></a>User Objects</h4>
+
+<p>The User object is what gives mxGraph diagrams a context, it
+stores the business logic associated with a visual cell. In the
+HelloWorld example the user object has just been a string, in this case
+it simply represents the label that will be displayed for that cell. In
+more complex applications, these user objects will be objects instead.
+Some attribute of that object will generally be the label that the
+visual cell will display, the rest of the object describes logic
+relating to the application domain.</p>
+
+<p>Using the example of a simple workflow or process application,
+say we have the graph below (<a
+	href="http://www.jgraph.com/demo/mxgraph/editors/workfloweditor.html">this
+example is available online</a>, select the Swimlanes example from the tasks
+window):</p>
+
+<p><img src="images/mx_man_simple_workflow.png"
+	name="ill_simple_workflow"/><br/>
+<em>A simple workflow</em></p>
+<br/>
+
+<p>Typically, this workflow will exist on some application server
+and/or database. The browser user connects to that server, or some
+front-end server linked to the application server and the user's web
+application requests the &ldquo;order&rdquo; workflow. The server
+obtains the data of that workflow and transmits it to the client.</p>
+
+<p>mxGraph supports the process of populating the model on the
+server-side and transmitting to the client, and back again. See the
+later chapter on &ldquo;I/O and Server Communication&rdquo;.</p>
+
+<p>The data transmitted will be both the visual model (the diagram)
+as well as the business logic (mostly contained in the user objects).
+The client will initially show the diagram above. If the user has
+permission to edit this workflow they will normally be able to do two
+things, 1) edit the diagram, add and remove vertices, as well as
+changing the connections, and 2) edit the user objects of the cells
+(vertices and/or edges).</p>
+
+<p>In the online demo, if you right click and select properties of
+the &ldquo;Check Inventory&rdquo; diamond you will see this dialog:</p>
+
+<p><img src="images/mx_man_vertex_props.png" name="ill_vertex_props"/><br/>
+<em>The properties of a vertex</em></p>
+<br/>
+
+<p>These properties show the geometry, label, ID etc, but a dialog
+could just as easily show the user object of the cell. There might be a
+reference to some process on the workflow engine as to how the inventory
+is actually checked. This might be an application specific mechanism for
+both the server and client to assign some identification to remote
+method calls. Another value might be the type of object that process
+returned, maybe a boolean or an integer to indicate stock level in this
+case. Given that return type, it is possible to enforce constraints with
+the diagram and provide visual alerts of if, say, the outgoing edges
+decision check does not correspond to the return type of the vertex.</p>
+
+<p>Next, as an example, the user objects of the outgoing edges might
+contain a label and a boolean state. Again, the mxGraph-based editor
+might provide the means to alter the boolean value. On the server, when
+executing the process, it might follow the edges that correspond to the
+boolean value returned by the decision node.</p>
+
+<p>Keep in mind that the above example is very domain specific, it
+is there to explain how the user object maps to the business logic of
+the application. It visualizes how mxGraph creates what we term a <strong>contextual
+graph</strong>. The context is formed by the connections between vertices and the
+business logic stored within the user objects. A typical application
+receives the visual and business logic from a sever, may allow editing
+of both, then transmits both back to the server for persistence and/or
+execution.</p>
+
+<h4><a id="cell_types"></a>Cell Types</h4>
+<p>As described previously, mxGraph is the primary API for using
+this library and the same concept applies to cells. One basic state of
+the cell not exposed on the graph is whether a cell is a vertex or an
+edge, this call be performed on the cell or on the model.</p>
+
+<p>There are two boolean flags on mxCell, vertex and edge, and the
+helper methods set one of these to true when the cell is created.
+isVertex(), isEdge() on mxIGraphModel are what the model uses to
+determine a cell's type, there are not separate objects for either type.
+Technically, it is possible to switch the type of a cell at runtime, but
+take care to invalidate the cell state (see later section) after
+changing the type. Also, be aware that the geometry object variable
+means different things to vertices and edges. Generally, it is not
+recommended to change a cell type at runtime.</p>

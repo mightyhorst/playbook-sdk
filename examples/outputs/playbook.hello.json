@@ -1,0 +1,2031 @@
+{
+    "config": "cli",
+    "categories": [
+        {
+            "id": 1,
+            "title": "React",
+            "scenes": [
+                {
+                    "id": 2,
+                    "title": "Setting up React",
+                    "steps": [
+                        {
+                            "id": 3,
+                            "title": "Install your Apps",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 4,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "hr",
+                                            "txt": ""
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "id: hello-world\ntitle: Hello World\npermalink: docs/hello-world.html\nprev: cdn-links.html"
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "next: introducing-jsx.html"
+                                        },
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Hello World"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The smallest React example looks like this:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "ReactDOM.render(\n  <h1>Hello, world!</h1>,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render(\n  <h1>Hello, world!</h1>,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It displays a heading saying \"Hello, world!\" on the page."
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "title": "Quick start",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 6,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "hr",
+                                            "txt": ""
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "id: hello-world\ntitle: Hello World\npermalink: docs/hello-world.html\nprev: cdn-links.html"
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "next: introducing-jsx.html"
+                                        },
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Install your apps"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "All you will need is a Text Editor or IDE (we suggest Visual Code by Microsoft)"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "And the terminal. "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "If you're on a Mac, you will find it under Utilities > Terminal ",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Utilities > Terminal"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "title": "JSX Syntax",
+                    "steps": [
+                        {
+                            "id": 8,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 9,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "hr",
+                                            "txt": ""
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "id: introducing-jsx\ntitle: Introducing JSX\npermalink: docs/introducing-jsx.html\nprev: hello-world.html"
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "next: rendering-elements.html"
+                                        },
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Introducing JSX"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Consider this variable declaration:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "const element = <h1>Hello, world!</h1>;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "const element = <h1>Hello, world!</h1>;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This funny tag syntax is neither a string nor HTML."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "JSX produces React \"elements\". We will explore rendering them to the DOM in the next section"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Below, you can find the basics of JSX necessary to get you started."
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Why JSX?"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "React embraces the fact that rendering logic is inherently coupled with other UI logic: how events are handled, how the state changes over time, and how the data is prepared for display."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Instead of artificially separating technologies by putting markup and logic in separate files, React separates concerns with loosely coupled units called \"components\" that contain both. We will come back to components in a further section, but if you're not yet comfortable putting markup in JS, this talk might convince you otherwise.",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "technologies"
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "separates concerns",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "em",
+                                                            "txt": "concerns"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "further section"
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "this talk"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "React doesn't require using JSX, but most people find it helpful as a visual aid when working with UI inside the JavaScript code. It also allows React to show more useful error and warning messages."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "With that out of the way, let's get started!"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 10,
+                            "title": "Step 2",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 11,
+                                    "panel": "description",
+                                    "start": 2000,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Embedding Expressions in JSX"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In the example below, we declare a variable called name and then use it inside JSX by wrapping it in curly braces:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "name"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "const name = 'Write Your Name Here';\nconst element = <h1>Hello, {name}</h1>;\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "const name = 'Write Your Name Here';\nconst element = <h1>Hello, {name}</h1>;\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "You can put any valid JavaScript expression inside the curly braces in JSX. For example, 2 + 2, user.firstName, or formatName(user) are all valid JavaScript expressions.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "JavaScript expression"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "2 + 2"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "user.firstName"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "formatName(user)"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In the example below, we embed the result of calling a JavaScript function, formatName(user), into an <h1> element.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "formatName(user)"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<h1>"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "function formatName(user) {\n  return user.firstName + ' ' + user.lastName;\n}\n\nconst user = {\n  firstName: 'Harper',\n  lastName: 'Perez'\n};\n\nconst element = (\n  <h1>\n    Hello, {formatName(user)}!\n  </h1>\n);\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "function formatName(user) {\n  return user.firstName + ' ' + user.lastName;\n}\n\nconst user = {\n  firstName: 'Harper',\n  lastName: 'Perez'\n};\n\nconst element = (\n  <h1>\n    Hello, {formatName(user)}!\n  </h1>\n);\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We split JSX over multiple lines for readability. While it isn't required, when doing this, we also recommend wrapping it in parentheses to avoid the pitfalls of automatic semicolon insertion.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "automatic semicolon insertion"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "title": "Rendering Elements",
+                    "steps": [
+                        {
+                            "id": 13,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 14,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Rendering Elements"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Elements are the smallest building blocks of React apps."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "An element describes what you want to see on the screen:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "const element = <h1>Hello, world</h1>;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "const element = <h1>Hello, world</h1>;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Unlike browser DOM elements, React elements are plain objects, and are cheap to create. React DOM takes care of updating the DOM to match the React elements."
+                                        },
+                                        {
+                                            "tag": "blockquote",
+                                            "txt": "\n  Note:\n  One might confuse elements with a more widely known concept of \"components\". We will introduce components in the next section. Elements are what components are \"made of\", and we encourage you to read this section before jumping ahead.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "Note:",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Note:"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "One might confuse elements with a more widely known concept of \"components\". We will introduce components in the next section. Elements are what components are \"made of\", and we encourage you to read this section before jumping ahead.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "a",
+                                                            "txt": "next section"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "Rendering an Element into the DOM {#rendering-an-element-into-the-dom}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's say there is a <div> somewhere in your HTML file:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<div>"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "<div id=\"root\"></div>\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<div id=\"root\"></div>\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We call this a \"root\" DOM node because everything inside it will be managed by React DOM."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Applications built with just React usually have a single root DOM node. If you are integrating React into an existing app, you may have as many isolated root DOM nodes as you like."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "To render a React element into a root DOM node, pass both to ReactDOM.render():",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "const element = <h1>Hello, world</h1>;\nReactDOM.render(element, document.getElementById('root'));\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "const element = <h1>Hello, world</h1>;\nReactDOM.render(element, document.getElementById('root'));\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It displays \"Hello, world\" on the page."
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 15,
+                            "title": "Step 2",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 16,
+                                    "panel": "description",
+                                    "start": 4000,
+                                    "duration": 8000,
+                                    "description": [
+                                        {
+                                            "tag": "h2",
+                                            "txt": "Updating the Rendered Element"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "React elements are immutable. Once you create an element, you can't change its children or attributes. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "immutable"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "An element is like a single frame in a movie: it represents the UI at a certain point in time."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "With our knowledge so far, the only way to update the UI is to create a new element, and pass it to ReactDOM.render().",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Consider this ticking clock example:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "function tick() {\n  const element = (\n    <div>\n      <h1>Hello, world!</h1>\n      <h2>It is {new Date().toLocaleTimeString()}.</h2>\n    </div>\n  );\n\n  ReactDOM.render(element, document.getElementById('root'));\n}\n\nsetInterval(tick, 1000);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "function tick() {\n  const element = (\n    <div>\n      <h1>Hello, world!</h1>\n      <h2>It is {new Date().toLocaleTimeString()}.</h2>\n    </div>\n  );\n\n  ReactDOM.render(element, document.getElementById('root'));\n}\n\nsetInterval(tick, 1000);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It calls ReactDOM.render() every second from a setInterval() callback.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render()"
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "setInterval()",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "setInterval()"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "blockquote",
+                                            "txt": "\n  Note:\n  In practice, most React apps only call ReactDOM.render() once. In the next sections we will learn how such code gets encapsulated into stateful components.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "Note:",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Note:"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "In practice, most React apps only call ReactDOM.render() once. In the next sections we will learn how such code gets encapsulated into stateful components.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "ReactDOM.render()"
+                                                        },
+                                                        {
+                                                            "tag": "a",
+                                                            "txt": "stateful components"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 17,
+                    "title": "Components and Properties",
+                    "steps": [
+                        {
+                            "id": 18,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 19,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 20,
+                    "title": "State and Lifecycle",
+                    "steps": [
+                        {
+                            "id": 21,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 22,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "State and Lifecycle"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This page introduces the concept of state and lifecycle in a React component. You can find a detailed component API reference here.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "detailed component API reference here"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Consider the ticking clock example from one of the previous sections. In Rendering Elements, we have only learned one way to update the UI. We call ReactDOM.render() to change the rendered output:",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "one of the previous sections"
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Rendering Elements"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "function tick() {\n  const element = (\n    <div>\n      <h1>Hello, world!</h1>\n      <h2>It is {new Date().toLocaleTimeString()}.</h2>\n    </div>\n  );\n  ReactDOM.render(\n    element,\n    document.getElementById('root')\n  );\n}\n\nsetInterval(tick, 1000);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "function tick() {\n  const element = (\n    <div>\n      <h1>Hello, world!</h1>\n      <h2>It is {new Date().toLocaleTimeString()}.</h2>\n    </div>\n  );\n  ReactDOM.render(\n    element,\n    document.getElementById('root')\n  );\n}\n\nsetInterval(tick, 1000);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Try it on CodePen",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Try it on CodePen",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Try it on CodePen"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In this section, we will learn how to make the Clock component truly reusable and encapsulated. It will set up its own timer and update itself every second.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can start by encapsulating how the clock looks:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "function Clock(props) {\n  return (\n    <div>\n      <h1>Hello, world!</h1>\n      <h2>It is {props.date.toLocaleTimeString()}.</h2>\n    </div>\n  );\n}\n\nfunction tick() {\n  ReactDOM.render(\n    <Clock date={new Date()} />,\n    document.getElementById('root')\n  );\n}\n\nsetInterval(tick, 1000);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "function Clock(props) {\n  return (\n    <div>\n      <h1>Hello, world!</h1>\n      <h2>It is {props.date.toLocaleTimeString()}.</h2>\n    </div>\n  );\n}\n\nfunction tick() {\n  ReactDOM.render(\n    <Clock date={new Date()} />,\n    document.getElementById('root')\n  );\n}\n\nsetInterval(tick, 1000);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Try it on CodePen",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Try it on CodePen",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Try it on CodePen"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "However, it misses a crucial requirement: the fact that the Clock sets up a timer and updates the UI every second should be an implementation detail of the Clock.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Ideally we want to write this once and have the Clock update itself:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "ReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "To implement this, we need to add \"state\" to the Clock component.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "State is similar to props, but it is private and fully controlled by the component."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We mentioned before that components defined as classes have some additional features. Local state is exactly that: a feature available only to classes.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "mentioned before"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "Converting a Function to a Class {#converting-a-function-to-a-class}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "You can convert a function component like Clock to a class in five steps:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "ol",
+                                            "txt": "\nCreate an ES6 class, with the same name, that extends React.Component.\nAdd a single empty method to it called render().\nMove the body of the function into the render() method.\nReplace props with this.props in the render() body.\nDelete the remaining empty function declaration.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Create an ES6 class, with the same name, that extends React.Component.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "p",
+                                                            "txt": "Create an ES6 class, with the same name, that extends React.Component.",
+                                                            "kids": [
+                                                                {
+                                                                    "tag": "a",
+                                                                    "txt": "ES6 class"
+                                                                },
+                                                                {
+                                                                    "tag": "code",
+                                                                    "txt": "React.Component"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Add a single empty method to it called render().",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "p",
+                                                            "txt": "Add a single empty method to it called render().",
+                                                            "kids": [
+                                                                {
+                                                                    "tag": "code",
+                                                                    "txt": "render()"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Move the body of the function into the render() method.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "p",
+                                                            "txt": "Move the body of the function into the render() method.",
+                                                            "kids": [
+                                                                {
+                                                                    "tag": "code",
+                                                                    "txt": "render()"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Replace props with this.props in the render() body.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "p",
+                                                            "txt": "Replace props with this.props in the render() body.",
+                                                            "kids": [
+                                                                {
+                                                                    "tag": "code",
+                                                                    "txt": "props"
+                                                                },
+                                                                {
+                                                                    "tag": "code",
+                                                                    "txt": "this.props"
+                                                                },
+                                                                {
+                                                                    "tag": "code",
+                                                                    "txt": "render()"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Delete the remaining empty function declaration.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "p",
+                                                            "txt": "Delete the remaining empty function declaration."
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "class Clock extends React.Component {\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.props.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "class Clock extends React.Component {\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.props.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Try it on CodePen",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Try it on CodePen",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Try it on CodePen"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Clock is now defined as a class rather than a function.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The render method will be called each time an update happens, but as long as we render <Clock /> into the same DOM node, only a single instance of the Clock class will be used. This lets us use additional features such as local state and lifecycle methods.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "render"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<Clock />"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "Adding Local State to a Class {#adding-local-state-to-a-class}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We will move the date from props to state in three steps:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "date"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "1) Replace this.props.date with this.state.date in the render() method:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.props.date"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state.date"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "render()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "class Clock extends React.Component {\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "class Clock extends React.Component {\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "2) Add a class constructor that assigns the initial this.state:",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "class constructor"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Note how we pass props to the base constructor:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "props"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Class components should always call the base constructor with props.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "props"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "3) Remove the date prop from the <Clock /> element:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "date"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<Clock />"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "ReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We will later add the timer code back to the component itself."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The result looks like this:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n\nReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n\nReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Try it on CodePen",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Try it on CodePen",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Try it on CodePen"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Next, we'll make the Clock set up its own timer and update itself every second.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "Adding Lifecycle Methods to a Class {#adding-lifecycle-methods-to-a-class}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In applications with many components, it's very important to free up resources taken by the components when they are destroyed."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We want to set up a timer whenever the Clock is rendered to the DOM for the first time. This is called \"mounting\" in React.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "set up a timer"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We also want to clear that timer whenever the DOM produced by the Clock is removed. This is called \"unmounting\" in React.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "clear that timer"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can declare special methods on the component class to run some code when a component mounts and unmounts:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  componentDidMount() {\n\n  }\n\n  componentWillUnmount() {\n\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  componentDidMount() {\n\n  }\n\n  componentWillUnmount() {\n\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "These methods are called \"lifecycle methods\"."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The componentDidMount() method runs after the component output has been rendered to the DOM. This is a good place to set up a timer:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "componentDidMount()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "  componentDidMount() {\n    this.timerID = setInterval(\n      () => this.tick(),\n      1000\n    );\n  }\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "  componentDidMount() {\n    this.timerID = setInterval(\n      () => this.tick(),\n      1000\n    );\n  }\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Note how we save the timer ID right on this.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "While this.props is set up by React itself and this.state has a special meaning, you are free to add additional fields to the class manually if you need to store something that doesn’t participate in the data flow (like a timer ID).",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.props"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We will tear down the timer in the componentWillUnmount() lifecycle method:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "componentWillUnmount()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "  componentWillUnmount() {\n    clearInterval(this.timerID);\n  }\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "  componentWillUnmount() {\n    clearInterval(this.timerID);\n  }\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Finally, we will implement a method called tick() that the Clock component will run every second.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "tick()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It will use this.setState() to schedule updates to the component local state:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.setState()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  componentDidMount() {\n    this.timerID = setInterval(\n      () => this.tick(),\n      1000\n    );\n  }\n\n  componentWillUnmount() {\n    clearInterval(this.timerID);\n  }\n\n  tick() {\n    this.setState({\n      date: new Date()\n    });\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n\nReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "class Clock extends React.Component {\n  constructor(props) {\n    super(props);\n    this.state = {date: new Date()};\n  }\n\n  componentDidMount() {\n    this.timerID = setInterval(\n      () => this.tick(),\n      1000\n    );\n  }\n\n  componentWillUnmount() {\n    clearInterval(this.timerID);\n  }\n\n  tick() {\n    this.setState({\n      date: new Date()\n    });\n  }\n\n  render() {\n    return (\n      <div>\n        <h1>Hello, world!</h1>\n        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n      </div>\n    );\n  }\n}\n\nReactDOM.render(\n  <Clock />,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Try it on CodePen",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Try it on CodePen",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Try it on CodePen"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Now the clock ticks every second."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's quickly recap what's going on and the order in which the methods are called:"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "1) When <Clock /> is passed to ReactDOM.render(), React calls the constructor of the Clock component. Since Clock needs to display the current time, it initializes this.state with an object including the current time. We will later update this state.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<Clock />"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "2) React then calls the Clock component's render() method. This is how React learns what should be displayed on the screen. React then updates the DOM to match the Clock's render output.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "render()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "3) When the Clock output is inserted in the DOM, React calls the componentDidMount() lifecycle method. Inside it, the Clock component asks the browser to set up a timer to call the component's tick() method once a second.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "componentDidMount()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "tick()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "4) Every second the browser calls the tick() method. Inside it, the Clock component schedules a UI update by calling setState() with an object containing the current time. Thanks to the setState() call, React knows the state has changed, and calls the render() method again to learn what should be on the screen. This time, this.state.date in the render() method will be different, and so the render output will include the updated time. React updates the DOM accordingly.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "tick()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "render()"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state.date"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "render()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "5) If the Clock component is ever removed from the DOM, React calls the componentWillUnmount() lifecycle method so the timer is stopped.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "componentWillUnmount()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "Using State Correctly {#using-state-correctly}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "There are three things you should know about setState().",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Do Not Modify State Directly {#do-not-modify-state-directly}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "For example, this will not re-render a component:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "// Wrong\nthis.state.comment = 'Hello';\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "// Wrong\nthis.state.comment = 'Hello';\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Instead, use setState():",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "// Correct\nthis.setState({comment: 'Hello'});\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "// Correct\nthis.setState({comment: 'Hello'});\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The only place where you can assign this.state is the constructor.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "State Updates May Be Asynchronous {#state-updates-may-be-asynchronous}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "React may batch multiple setState() calls into a single update for performance.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Because this.props and this.state may be updated asynchronously, you should not rely on their values for calculating the next state.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.props"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "For example, this code may fail to update the counter:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "// Wrong\nthis.setState({\n  counter: this.state.counter + this.props.increment,\n});\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "// Wrong\nthis.setState({\n  counter: this.state.counter + this.props.increment,\n});\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "To fix it, use a second form of setState() that accepts a function rather than an object. That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "// Correct\nthis.setState((state, props) => ({\n  counter: state.counter + props.increment\n}));\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "// Correct\nthis.setState((state, props) => ({\n  counter: state.counter + props.increment\n}));\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We used an arrow function above, but it also works with regular functions:",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "arrow function"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "// Correct\nthis.setState(function(state, props) {\n  return {\n    counter: state.counter + props.increment\n  };\n});\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "// Correct\nthis.setState(function(state, props) {\n  return {\n    counter: state.counter + props.increment\n  };\n});\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "State Updates are Merged {#state-updates-are-merged}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "When you call setState(), React merges the object you provide into the current state.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "For example, your state may contain several independent variables:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "  constructor(props) {\n    super(props);\n    this.state = {\n      posts: [],\n      comments: []\n    };\n  }\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "  constructor(props) {\n    super(props);\n    this.state = {\n      posts: [],\n      comments: []\n    };\n  }\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Then you can update them independently with separate setState() calls:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "setState()"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "  componentDidMount() {\n    fetchPosts().then(response => {\n      this.setState({\n        posts: response.posts\n      });\n    });\n\n    fetchComments().then(response => {\n      this.setState({\n        comments: response.comments\n      });\n    });\n  }\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "  componentDidMount() {\n    fetchPosts().then(response => {\n      this.setState({\n        posts: response.posts\n      });\n    });\n\n    fetchComments().then(response => {\n      this.setState({\n        comments: response.comments\n      });\n    });\n  }\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The merging is shallow, so this.setState({comments}) leaves this.state.posts intact, but completely replaces this.state.comments.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.setState({comments})"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state.posts"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "this.state.comments"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "The Data Flows Down {#the-data-flows-down}"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Neither parent nor child components can know if a certain component is stateful or stateless, and they shouldn't care whether it is defined as a function or a class."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This is why state is often called local or encapsulated. It is not accessible to any component other than the one that owns and sets it."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "A component may choose to pass its state down as props to its child components:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "<h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<h2>It is {this.state.date.toLocaleTimeString()}.</h2>\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This also works for user-defined components:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "<FormattedDate date={this.state.date} />\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<FormattedDate date={this.state.date} />\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The FormattedDate component would receive the date in its props and wouldn't know whether it came from the Clock's state, from the Clock's props, or was typed by hand:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "FormattedDate"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "date"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "function FormattedDate(props) {\n  return <h2>It is {props.date.toLocaleTimeString()}.</h2>;\n}\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "function FormattedDate(props) {\n  return <h2>It is {props.date.toLocaleTimeString()}.</h2>;\n}\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Try it on CodePen",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Try it on CodePen",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Try it on CodePen"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This is commonly called a \"top-down\" or \"unidirectional\" data flow. Any state is always owned by some specific component, and any data or UI derived from that state can only affect components \"below\" them in the tree."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "If you imagine a component tree as a waterfall of props, each component's state is like an additional water source that joins it at an arbitrary point but also flows down."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "To show that all components are truly isolated, we can create an App component that renders three <Clock>s:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "App"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<Clock>"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "function App() {\n  return (\n    <div>\n      <Clock />\n      <Clock />\n      <Clock />\n    </div>\n  );\n}\n\nReactDOM.render(\n  <App />,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "function App() {\n  return (\n    <div>\n      <Clock />\n      <Clock />\n      <Clock />\n    </div>\n  );\n}\n\nReactDOM.render(\n  <App />,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Try it on CodePen",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "Try it on CodePen",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Try it on CodePen"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Each Clock sets up its own timer and updates independently.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Clock"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In React apps, whether a component is stateful or stateless is considered an implementation detail of the component that may change over time. You can use stateless components inside stateful components, and vice versa."
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 23,
+                    "title": "Handling Events",
+                    "steps": [
+                        {
+                            "id": 24,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 25,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 26,
+                    "title": "Conditional Rendering",
+                    "steps": [
+                        {
+                            "id": 27,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 28,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 29,
+                    "title": "Lists and Keys",
+                    "steps": [
+                        {
+                            "id": 30,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 31,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 32,
+                    "title": "Forms",
+                    "steps": [
+                        {
+                            "id": 33,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 34,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 35,
+                    "title": "Lifting State Up",
+                    "steps": [
+                        {
+                            "id": 36,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 37,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 38,
+                    "title": "Lifting State Up",
+                    "steps": [
+                        {
+                            "id": 39,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 40,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 41,
+                    "title": "Composition vs Inheritance",
+                    "steps": [
+                        {
+                            "id": 42,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 43,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 44,
+                    "title": "Thinking in React",
+                    "steps": [
+                        {
+                            "id": 45,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 46,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 47,
+            "title": "Redux",
+            "scenes": [
+                {
+                    "id": 48,
+                    "title": "Introduction to redux",
+                    "steps": [
+                        {
+                            "id": 49,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 50,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 51,
+            "title": "React and Redux",
+            "scenes": [
+                {
+                    "id": 52,
+                    "title": "Using Redux with React",
+                    "steps": [
+                        {
+                            "id": 53,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 54,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
