@@ -25,12 +25,16 @@
   "license": "Not sure",
   "dependencies": {
     "@mdx-js/mdx": "^1.4.5",
+    "blessed": "^0.1.81",
     "canvas": "^2.6.0",
+    "cardinal": "^2.1.1",
     "chalk": "^3.0.0",
     "esm": "^3.2.25",
     "fetch-cheerio-object": "^1.3.0",
     "jsdom": "^15.1.1",
     "rimraf": "^3.0.0",
-    "showdown": "^1.9.0"
+    "showdown": "^1.9.0",
+    "term.js": "0.0.7",
+    "terminal-kit": "^1.31.7"
   }
 }
