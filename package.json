@@ -25,7 +25,6 @@
   "license": "Not sure",
   "dependencies": {
     "@mdx-js/mdx": "^1.4.5",
-    "blessed": "^0.1.81",
     "canvas": "^2.6.0",
     "cardinal": "^2.1.1",
     "chalk": "^3.0.0",
