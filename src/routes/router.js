@@ -1,9 +1,13 @@
+const chalk = require('chalk');
+
 const ROUTES = {
     INTERACTIVE: 'interactive',
     INIT: 'init',
+    BUILD: 'build',
 }
 const CTRLS = {
-    sxd: require('../ctrls/sxd.ctrl')
+    playbookInit: require('../ctrls/playbook-init.ctrl'),
+    playbookBuild: require('../ctrls/playbook-build.ctrl'),
 }
 
 
@@ -19,8 +23,15 @@ module.exports = (args) => {
         case ROUTES.INIT:
             
             console.log('🍎  Creating a new playbook for you...');
-            CTRLS.sxd.createPlaybook(args);
+            CTRLS.playbookInit.createPlaybook(args);
 
+            break;
+
+        case ROUTES.BUILD:
+            
+            console.log('🐸  Building started ... ');
+            CTRLS.playbookBuild.buildPlaybook(args);
+        
             break;
 
         default:
