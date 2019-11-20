@@ -1,17 +1,55 @@
 require('colors');
 var Diff = require('diff');
 
-var one = 'beep boop';
-var other = 'beep boob blah';
+const variableName = () => {
+    var index = 0;    
+    return (part, line) => { 
+        return part.added ? 'lineToAdd'+ index++ : 'lineToRemove'+index++;
+    }
+}
 
-var diff = Diff.diffChars(one, other);
 
-diff.forEach(function(part){
-  // green for additions, red for deletions
-  // grey for common parts
-  var color = part.added ? 'green' :
-    part.removed ? 'red' : 'grey';
-  process.stderr.write(part.value[color]);
-});
+module.exports = {
+    printDiff(one, other) {
 
-console.log(diff, {diff});
+        var diff = Diff.diffLines(one, other);
+
+        var line = 0; 
+
+        /**
+         * @description for each line added, removed or no change 
+         */
+        diff.forEach(function (part) {
+
+            /**
+             * @description colour scheme
+             */
+            var color = part.added ? 'green' :
+                part.removed ? 'red' : 'grey';
+            
+            /**
+             * @if added
+             */
+            if(part.added){
+                process.stderr.write(part.value[color]);
+            }
+            /**
+             * @if removed
+             */
+            else if(part.removed){
+
+                process.stderr.write(part.value[color]);
+            }
+            /**
+             * @if no change 
+             */
+            else{
+                process.stderr.write(part.value[color]);
+            }
+            //     console.log('added at line ['+line+']--->',  part.value)
+        });
+
+        // console.log(diff, { diff });
+
+    }
+}

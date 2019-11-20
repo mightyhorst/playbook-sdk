@@ -1,5 +1,0 @@
-class Component{
-	constructor(){
-		console.log('to do');
-	}
-}

@@ -4,26 +4,47 @@ const chalk = require('chalk');
 var term = require( 'terminal-kit' ).terminal ;
 
 /**
+ * @requires Constants - view constants 
+ */
+const VIEWS = require('../models/constants/views.const');
+const TEMPLATE = VIEWS.TEMPLATE;
+
+/*const TEMPLATE = {
+    default: path.resolve(__dirname, '../views/templates/hello.playbook.js'),
+    hello: path.resolve(__dirname, '../views/templates/hello.playbook.js'),
+    react: path.resolve(__dirname, '../views/templates/hello.playbook.js'),
+}*/
+
+/**
+ * @requires Controller - parent controller 
+ */
+const Controller = require('./controller');
+
+/**
  * @requires WordColor - color the words helper 
  */
 const WordColorService = require('../services/prettyprinter/WordColourService');
 
 
-const TEMPLATE = {
-    default: path.resolve(__dirname, '../views/templates/hello.playbook.js'),
-    hello: path.resolve(__dirname, '../views/templates/hello.playbook.js'),
-    react: path.resolve(__dirname, '../views/templates/example.react.playbook.js'),
-}
 
 
 
-class SxdCtrl{
+
+class PlaybookInitCtrl extends Controller{
+
+    constructor(){
+        super();
+    }
 
     createPlaybook(args){
 
         const playbookTemplate = args.length > 3 && args[3] === '--hello' ? TEMPLATE.hello : TEMPLATE.react;
 
-        const playbookContent = fs.readFileSync(playbookTemplate, {encoding:'utf8'});
+        /**
+         * @description from parent controller - wraps up the read file sync 
+         */
+        // const playbookContent = fs.readFileSync(playbookTemplate, {encoding:'utf8'});
+        const playbookContent = this.getTemplate(playbookTemplate);
 
         const outputFile = process.cwd() + '/hello.playbook.js';    
         fs.writeFileSync(outputFile, playbookContent, {encoding:'utf8'});
@@ -63,25 +84,6 @@ class SxdCtrl{
         */
     }
 
-    typeWriter(txt, speed){
-        var i = 0;
-        var txt = txt || 'Lorem ipsum dummy text blabla.';
-        var speed = speed || 10;
-
-
-        var start = () => {
-            if (i < txt.length) {
-                process.stdout.write( txt.charAt(i) );
-                i++;
-                setTimeout(start, speed);
-            }            
-        }
-
-        return {
-            start
-        }
-            
-    }
 }
 
-module.exports = new SxdCtrl();
+module.exports = new PlaybookInitCtrl();
