@@ -10,8 +10,9 @@ class FileModel{
 
     /**
      * Creates an instance of FileModel.
-     * @param {*} path
-     * @param {*} contents
+     * 
+     * @param {string} path - path to the file
+     * @param {string} contents - contents of the file 
      * @memberof IFile
      */
     constructor(path, contents){
@@ -20,11 +21,24 @@ class FileModel{
         this.contents = contents || this.get();
     }
 
+    /**
+     * Read the file 
+     *
+     * @returns
+     * @memberof FileModel
+     */
     get(){
         this.contents = fs.readFileSync(this.path, {encoding: 'utf8'});
         return this.contents;
     }
 
+    /**
+     * Write the file 
+     *
+     * @param {string} contents
+     * @returns
+     * @memberof FileModel
+     */
     put(contents){
         try{
             fs.writeFileSync(this.path, contents, {encoding:'utf8'});
