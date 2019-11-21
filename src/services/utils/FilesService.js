@@ -1,5 +1,11 @@
 const fs = require('fs');
 const glob = require('glob');
+const chalk = require('chalk');
+
+/**
+ * @requires Models 
+ */
+const FileModel = require('../../models/FileModel');
 
 /** 
  * Look ma, it's cp -R. 
@@ -89,6 +95,56 @@ class FileService{
     findAllCwd(filePattern){
         return this.findAll(process.cwd() , filePattern);
     }
+
+    /**
+     * Create File helper 
+     *
+     * @param {string} filePath - path to the folder 
+     * @param {string} fileName - name of the file with the extension
+     * @param {string} fileContents - contents to save into the file 
+     * @returns {FileModel} fileModel - file model is a nice wrapper for path and the contents 
+     * @memberof FileService
+     */
+    createFile(filePath, fileName, fileContents){
+        const fullFilePath = path.join(filePath, fileName);
+        try{
+            fs.writeFileSync(fullFilePath, fileContents, {encoding:'utf8'});
+            return new FileModel(fullFilePath, fileContents);
+        }catch(err){
+            console.log(`Error is writing the file: ${chalk.red('err.message')}. Arguments: ${chalk.magenta(JSON.stringify(arguments))}`);
+        }
+
+    }
+
+    /**
+     * @todo implement 
+     *
+     * @returns
+     * @memberof FileService
+     */
+    mvFile(){
+        return 'todo'
+    }
+    mvFolder(){
+
+    }
+    /**
+     * @todo implement append to file 
+     *
+     * @memberof FileService
+     */
+    appendToFile(){
+        
+    }
+    prependToFile(){
+        
+    }
+
+    /**
+     * @todo implement append to file 
+     *
+     * @memberof FileService
+     */
 
 
 }

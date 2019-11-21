@@ -8,6 +8,7 @@ var term = require( 'terminal-kit').terminal;
  * @requires Services 
  */
 const FileService = require('../services/utils/FilesService');
+const PlaybookService = require('../services/PlaybookService');
 
 /**
  * @constant VIEWS 
@@ -80,12 +81,14 @@ class Controller{
 
     /**
      * Returns the file paths to all the *playbook.js files 
+     * 
      * @returns {Array<IFile>} playbookFiles - array of paths to the playbook files and the contents 
      * @memberof Controller
      * @todo refactor to use FileService not glob directly 
      */
     findAllPlaybooks(){
-        const fileModels =  FileService.findAllCwd('*.playbook.js');
+        // const fileModels =  FileService.findAllCwd('*.playbook.js');
+        const fileModels =  PlaybookService.findAllPlaybooks();
         return fileModels;
     }
 }

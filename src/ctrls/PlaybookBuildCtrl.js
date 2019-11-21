@@ -9,8 +9,11 @@ const glob = require('glob');
  */
 const Controller = require('./Controller');
 
-
-
+/**
+ * @requires Services 
+ * * ExamplesService 
+ */
+// const ExamplesService = require('../services/ExamplesService');
 
 
 
@@ -43,6 +46,7 @@ class PlaybookBuildCtrl extends Controller{
              * @name run! 
              * @description require and auto run the playbook which will write the json. This relies on `global.playbook` 
              * @requires global.playbook
+             * ! this will write a file 
              */
             require(playbookJs.path);
         })

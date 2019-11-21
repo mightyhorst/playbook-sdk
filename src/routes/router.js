@@ -6,8 +6,8 @@ const ROUTES = {
     BUILD: 'build',
 }
 const CTRLS = {
-    playbookInit: require('../ctrls/playbook-init.ctrl'),
-    playbookBuild: require('../ctrls/playbook-build.ctrl'),
+    playbookInit: require('../ctrls/PlaybookInitCtrl'),
+    playbookBuild: require('../ctrls/PlaybookBuildCtrl'),
 }
 
 

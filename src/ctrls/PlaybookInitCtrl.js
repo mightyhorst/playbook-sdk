@@ -11,7 +11,7 @@ const Controller = require('./Controller');
 /**
  * @requires Constants - view constants 
  */
-const VIEWS = require('../models/constants/views.const');
+const VIEWS = require('../constants/views.const');
 const TEMPLATE = VIEWS.TEMPLATE;
 
 /**
@@ -23,15 +23,22 @@ const BuildMenuView = require('../views/menus/BuildMenuView');
  * @requires Services 
  * @param WordColorService - color the words helper 
  * @param FileService - helper for nice cmd line file tools 
+ * @param ExamplesService - helper for importing Examples  
  */
 const WordColorService = require('../services/prettyprinter/WordColourService');
 const FileService = require('../services/utils/FilesService');
+const ExamplesService = require('../services/ExamplesService');
 
 
-
-
-
-
+/**
+ * Playbook Init handler 
+ * 
+ * @api /playbook/init
+ * @calledby router 
+ *
+ * @class PlaybookInitCtrl
+ * @extends {Controller}
+ */
 class PlaybookInitCtrl extends Controller{
 
     constructor(){
@@ -52,7 +59,37 @@ class PlaybookInitCtrl extends Controller{
          * @name step0(args) 
          * @description select the template from the `args`
          * @param args - arg[3] should be the template 
+         * @todo REFACTOR 
+         *  1. remove .getTemplate
+         *  2. Load examples models from ExampleService 
+         *  3. Load them into a Menu View 
+         *  4. Display as List 
+         *  5. On select:
+         *  6. copy the PlaybookJs file contents to the pwd 
+         *  7. Copy the example folder to the pwd 
+         *  8. (no change) Slow print 
          */
+
+
+        /**
+         * @step 1. Get all templates 
+         */ 
+        let exampleModels;
+        try{
+            exampleModels = ExamplesService.findAllExamples();
+            console.log('exampleModels ---> ', exampleModels);
+            return 
+        }
+        catch(err){
+            console.log('Sorry, I had problems finding the examples. ', chalk.red(err.message));
+            console.error(err);
+            return;
+        }
+
+
+        /** 
+         * !refactor 
+         * **/
         const playbookTemplate = args.length > 3 && args[3] === '--hello' ? TEMPLATE.hello : TEMPLATE.react;
 
         /**
@@ -61,10 +98,18 @@ class PlaybookInitCtrl extends Controller{
          */
         const playbookContent = this.getTemplate(playbookTemplate.path);
 
-        const outputFile = process.cwd() + '/hello.playbook.js';    
-        fs.writeFileSync(outputFile, playbookContent, {encoding:'utf8'});
+        // const outputFile = process.cwd() + '/hello.playbook.js';    
+        
+        // fs.writeFileSync(outputFile, playbookContent, {encoding:'utf8'});
+        let fileModel; 
+        try{
+            fileModel = FileService.createFile(process.cwd(), 'hello.playbook.js', playbookContent);
+        }catch(err){
+            console.log('...aborting');
+            return; 
+        }
 
-        console.log('🍎  Created a new file called: '+ chalk.green(outputFile) );
+        console.log('🍎  Created a new file called: '+ chalk.green(fileModel.path) );
 
         /*const colouredWords = WordColorService.bulkWordColor(playbookContent); 
         colouredWords.forEach(colouredWord => {

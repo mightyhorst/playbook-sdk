@@ -1,3 +1,5 @@
+const QuestionModel = require('./QuestionModel');
+
 class QuestionListModel extends QuestionModel{
     
     constructor(varName, message, choiceModels){
