@@ -5,14 +5,14 @@ const chalk = require('chalk');
 var term = require( 'terminal-kit').terminal;
 
 /**
- * @requires WordColor - color the words helper 
+ * @requires Services 
  */
-const WordColorService = require('../services/prettyprinter/WordColourService');
+const FileService = require('../services/utils/FilesService');
 
 /**
  * @constant VIEWS 
  */
-const VIEWS = require('../models/constants/views.const');
+// const VIEWS = require('../models/constants/views.const');
 
 /**
  * @requires Models 
@@ -82,17 +82,10 @@ class Controller{
      * Returns the file paths to all the *playbook.js files 
      * @returns {Array<IFile>} playbookFiles - array of paths to the playbook files and the contents 
      * @memberof Controller
+     * @todo refactor to use FileService not glob directly 
      */
     findAllPlaybooks(){
-        var filePaths = glob.sync(process.cwd() + '*.playbook.js', {});
-            filePaths = filePaths.concat( glob.sync(process.cwd() + '/**/*.playbook.js', {}) );
-
-        const fileModels = filePaths.map(filePath => {
-
-            console.log('filePath -->', filePath)
-            return new FileModel(filePath);
-        });
-
+        const fileModels =  FileService.findAllCwd('*.playbook.js');
         return fileModels;
     }
 }
