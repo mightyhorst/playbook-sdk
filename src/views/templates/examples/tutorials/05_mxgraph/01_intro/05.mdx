@@ -1,0 +1,29 @@
+<h3><a id="graph_layouts"></a>Graph Layouts</h3>
+
+<p>Graph cells can be drawn anywhere in a simple application,
+including on top of one another. Certain applications need to present
+their information in a generally ordered, or specifically ordered
+structure. This might involve ensuring cells do not overlap and stay at
+least a certain distance from one another, or that cells appear in
+specific positions relative to other cells, usually the cells they are
+connected to by edges. This activity, called the layout application, can
+be used in a number of ways to assist users in setting out their graph.
+For non-editable graphs, layout application is the process of applying a
+layout algorithm to the cells. For interactive graphs, meaning those
+that can be edited through the UI, layout application might involve only
+allowing users to make changes to certain cells in certain positions, to
+re-apply the layout algorithm after each change to the graph, or to
+apply the layout when editing is complete.</p>
+
+<p><img src="https://jgraph.github.io/mxgraph/docs/images/mx_man_graph_layout.png" /><br/>
+<em>Layout of a workflow using a horizontal hierarchical layout</em></p>
+
+<p>mxGraph supports a range of tree, force-directed and hierarchical
+layouts which will fit most layout needs. See the later section on using
+the layouts for more information.</p>
+
+<p>In a client-server architecture there are two options for how
+layouts can be run. The Javascript versions provide the ability to run
+the layouting entirely on the client, while the same layout
+implementation in Java on the server-side enables the option to offload
+some processing to the server, if required.</p>

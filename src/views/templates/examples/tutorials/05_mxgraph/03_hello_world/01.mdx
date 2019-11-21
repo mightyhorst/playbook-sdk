@@ -1,0 +1,151 @@
+<h2><a id="hello_world"></a>Hello World!</h2>
+<p>Hello World in mxGraph consists of a simple client-side example
+that displays two connected vertices with the labels &ldquo;Hello&rdquo;
+and &ldquo;World!&rdquo;. The example demonstrates the following things:
+</p>
+
+<ul>
+	<li><strong>Creating an HTML page that links the mxGraph
+	client JavaScript,</strong></li>
+	<li><strong>Creating a container to place the mxGraph
+	into,</strong></li>
+	<li><strong>Adds the required cells to that graph.</strong></li>
+</ul>
+
+<p>The source code for the example, helloworld.html, can be found
+below and in the examples directory of both the evaluation and full
+versions of mxGraph. The HTML source contains two main sections, the
+head and the body. These contain the following main elements that you
+can consider a template for building a basic mxGraph application:</p>
+
+<ul>
+	<li><strong>mxBasePath</strong>: This is a JavaScript variable
+	that defines the directory within which the css, images, resources and js
+	directories are expected to be found. It is JavaScript code and needs
+	to be placed with in a <em>script</em> tag. This must come before the
+	line loading mxClient.js and should not have a trailing slash.</li>
+
+	<li><strong>mxClient.js</strong>: This is the path to mxGraph
+	library. If the HTML file is executed locally, the path might be local
+	to the computer or a public Internet path. If the html page were
+	downloaded from a web server, the path would generally be a public
+	Internet path.</li>
+
+	<li><strong>Creation of the container</strong>: At the bottom of
+	the code, in the body element, the function that is called on loading
+	the web page is defined (the value of onload). It passes in a div
+	container as a parameter, that is defined underneath. This div is the
+	container the mxGraph component will be placed within. In this example
+	a grid background is applied, as commonly used in diagramming
+	applications. No other part of the graph visuals are described at
+	container creation, other than the background and the container width
+	and height.
+
+	<p>Note that the overflow:hidden style should always be used if you
+	want no scrollbars to appear.</p>
+
+	</li>
+
+	<li><strong>The entry function</strong>: The main code of the file
+	is the entry method executed on page load in this case. This is
+	JavaScript code and must be within a JavaScript <em>script</em>
+	element. The first lines of any mxGraph application should be to check
+	the browser is supported and exit appropriately if not. If the browser
+	is supported, a mxGraph is created within the div container and three
+	cells are added to the graph between the begin/end update calls.</li>
+</ul>
+<br/>
+<p><img src="images/mx_man_hello_world.png" name="ill_hello_world" />
+<br/>
+<em>The mxGraph HelloWorld example</em></p>
+<br/>
+
+```js
+&lt;html&gt;
+&lt;head&gt;
+   &lt;title&gt;Hello, World! example for mxGraph&lt;/title&gt;
+
+   &lt;!-- Sets the <U>basepath</U> for the library if not in same directory --&gt;
+   &lt;script type=<em>&quot;text/javascript&quot;</em>&gt;
+      mxBasePath = '../src';
+   &lt;/script&gt;
+
+   &lt;!-- Loads and <U>initializes</U> the library --&gt;
+   &lt;script type=<em>&quot;text/javascript&quot;</em> src=<em>&quot;../src/js/mxClient.js&quot;</em>&gt;&lt;/script&gt;
+
+   &lt;!-- Example code --&gt;
+   &lt;script type=<em>&quot;text/javascript&quot;</em>&gt;
+      // Program starts here. Creates a sample graph in the
+      // DOM node with the specified ID. This function is invoked
+      // from the onLoad event handler of the document (see below).
+      function main(container)
+      {
+         // Checks if the browser is supported
+         if (!mxClient.isBrowserSupported())
+         {
+            mxUtils.error('Browser is not supported!', 200, false);
+         }
+         else
+         {
+            // Creates the graph inside the given container
+            var graph = new mxGraph(container);
+
+            // Enables rubberband selection
+            new mxRubberband(graph);
+
+            // Gets the default parent for inserting new cells. This
+            // is normally the first child of the root (ie. layer 0).
+            var parent = graph.getDefaultParent();
+
+            // Adds cells to the model in a single step
+            graph.getModel().beginUpdate();
+            try
+            {
+               var v1 = graph.insertVertex(parent, null,
+                        'Hello,', 20, 20, 80, 30);
+               var v2 = graph.insertVertex(parent, null,
+                        'World!', 200, 150, 80, 30);
+               var e1 = graph.insertEdge(parent, null, '', v1, v2);
+            }
+            finally
+            {
+               // Updates the display
+               graph.getModel().endUpdate();
+            }
+         }
+      };
+   &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;!-- Page passes the container for the graph to the program --&gt;
+&lt;body onload=<em>&quot;main(document.getElementById('graphContainer'))&quot;</em>&gt;
+
+   &lt;!-- Creates a container for the graph with a grid wallpaper --&gt;
+   &lt;div id=<em>&quot;graphContainer&quot;</em>
+      style=<em>&quot;overflow:hidden;width:321px;height:241px;background:url('editors/images/grid.gif')&quot;</em>&gt;
+   &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+```
+
+<p>Important concepts to note in this exercise are:</p>
+<ul>
+	<li><strong>mxClient.js</strong> is a JavaScript file combining all of the
+	JavaScript source code of mxGraph. When downloading from a web server,
+	obtaining all the JavaScript as one file is much faster than as lots of
+	separate files, due to the overhead of the requests/acknowledgements
+	required for each file. The speed increase is usually at least x2,
+	although it varies with the capacity of the server to have parallel
+	sockets open with one client.</li>
+	<li>The JavaScript code and its dependencies are all placed within
+	the <em>head</em> element.</li>
+	<li>Internet Explorer has, by default, security options enabled
+	that cause a user prompt when attempting to run JavaScript from the
+	local file system. This can be disabled in the options menu, but note
+	that running from the local file system is not a deployment scenario of
+	mxGraph, this would only happen during development.</li>
+	<li>Your application can be written and linked into the
+	application either within the HTML file, or in separate JavaScript
+	source code that is linked into the html in the way the mxClient.js
+	file is in the example.</li>
+</ul>

@@ -1,0 +1,90 @@
+<h4><a id="folding"></a>Folding</h4>
+
+<p>Folding is the collective term we use for expanding and
+collapsing groups. We say a cell is folded by making it's child vertices
+invisible. There are a number of functions relating to this feature:</p>
+
+
+<p><strong>Core API function:</strong></p>
+
+<ul>
+	<li>
+		<strong>mxGraph.foldCells(collapse, recurse, cells)</strong>
+		&ndash; 
+		States the collapsed state of the specificed cells, within a
+		begin/end update.
+	</li>
+</ul>
+
+
+<p><strong>Folding related functions:</strong></p>
+
+<ul>
+	<li>
+		<strong>mxGraph.isCellFoldable(cell, collapse)</strong> 
+		&ndash; 
+		By default true for cells with children.
+	</li>
+	<li>
+		<strong>mxGraph.isCellCollapsed(cell)</strong> 
+		&ndash; 
+		Returns the folded state of the cell
+	</li>
+</ul>
+
+<p>When a group cell is collapsed, three things occur by default:</p>
+
+<ul>
+	<li>The children of that cell become invisible.</li>
+	<li>The group bounds of the group cell is used. Within mxGeometry
+	there is a alternativeBounds field and in groups cells, by default
+	store a separate bounds for their collapsed and expanded states. The
+	switch between these instances is invoked by mxGraph.swapBounds() and
+	this is handled for you within a foldCells() call. This allows
+	collapsed groups to be resized whilst when expanded again the size
+	looks correct using the pre-collapsed size.</li>
+	<li>Edge promotion occurs, by default. Edge promotion means
+	displaying edges that connect to children within the collapsed group
+	that also connect to cells outside of the collapsed group, by making
+	them appear to connect to the collapsed parent.</li>
+</ul>
+
+
+<p>
+	<img src="https://jgraph.github.io/mxgraph/docs/images/mx_man_expand_swim.png"
+	name="ill_mx_man_expand_swim"/>
+	<br/>
+	<em>Expanded swimlane</em>
+</p>
+
+<p>
+	<img src="https://jgraph.github.io/mxgraph/docs/images/mx_man_collapse_swim.png"
+	name="ill_mx_man_collapse_swim"/>
+	<br/>
+	<em>Collapsed Swimlane</em>
+</p>
+
+<p>
+	The above two images demonstrate these three concepts. In its
+	expanded state the upper group cell displays a small box in the top left
+	hand corner with a &ldquo;-&rdquo; character inside. This indicates that
+	clicking on this box collapses the group cell. Doing this we get the
+	bottom image where the group cell takes on its collapsed size. Child
+	vertices and edge that do not leave the group cell are made invisible.
+	Finally, edges that exit the group cell are promoted to appear to be
+	connected to the collapsed group cell. Clicking on the &ldquo;+&rdquo;
+	character that now appears within the box expands the group cell and
+	brings it back to its original state of the top image.
+</p>
+
+<p>
+	Using the <strong>mxGraph.foldCells()</strong> function, you can achieve the same
+	result programmatically as clicking on the expand/collapse symbols. One
+	common usage of this is when the application zooms out a specific
+	amount, clusters of cells are grouped and the grouped cell collapsed
+	(very often without the &ldquo;-&rdquo; box since the application is
+	controlling the folding). This way fewer, larger cells are visible to
+	the user, each one representing their children cells logically. You
+	might then provide a mechanism to zoom into a group, which expands it in
+	the process. You might also provide drill-down/step-up, explained next.
+</p>

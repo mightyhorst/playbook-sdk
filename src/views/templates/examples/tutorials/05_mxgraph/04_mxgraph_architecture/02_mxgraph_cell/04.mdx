@@ -1,0 +1,102 @@
+<h4><a id="geometry"></a>Geometry</h4>
+
+<p>In the helloworld example we saw the position and size of the
+vertices passed into the insertVertex function. The coordinate system in
+JavaScript is x is positive to the right and y is positive downwards,
+and in terms of the graph, the positioning is absolute to the container
+within which the mxGraph is placed.</p>
+
+<p>The reason for a separate mxGeometry class, as opposed to simply
+having the mxRectangle class store this information, is that the edges
+also have geometry information.</p>
+
+<p>The width and height values are ignored for edges and the x and y
+values relate to the positioning of the edge label. In addition, edges
+have the concept of control points. These are intermediate points along
+the edge that the edge is drawn as passing through. The use of control
+points is sometimes referred to as <strong>edge routing</strong>.</p>
+
+<p>
+	<img src="https://jgraph.github.io/mxgraph/docs/images/mx_man_edge_routing.png" name="ill_edge_routing"/><br/>
+	<em>An edge routed by 2 control points</em>
+</p>
+
+<p>
+	There are two more important additional concepts in geometry, relative positioning and offsets
+</p>
+
+<h5><a id="relative_positioning"></a>Relative Positioning</h5>
+
+<p>By default, the x and y position of a vertex is the offset of the
+top left point of the bounding rectangle of the parent to the top left
+point of the bounding rectangle of the cell itself. The concept of
+parents and groups is discussed later in this chapter, but without going
+into too much detail, if a cell does not have cell parent, the graph
+container is its parent for positioning purposes.</p>
+
+
+<p><img src="https://jgraph.github.io/mxgraph/docs/images/mx_man_non_relative_pos.png"
+	name="ill_non_realtive_pos"/><br/>
+<em>Non-relative vertex positioning</em></p>
+<br/>
+
+
+<p>For an edge, in non-relative mode, which is the default mode, the
+edge label position is the absolute offset from the graph origin.</p>
+
+
+<p><img src="https://jgraph.github.io/mxgraph/docs/images/mx_man_non_realtive_edge_pos.png"
+	name="ill_non_rel_edge_pos"/><br/>
+<em>Non-relative edge label positioning</em></p>
+<br/>
+
+
+<p>For vertices in relative mode, (x,y) is the proportion along the
+parent cell's (width, height) where the cell's origin lies. (0,0) is the
+same origin as the parent, (1,1) places the origin at the bottom right
+corner of the parent. The same relative positioning extends below 0 and
+above 1 for both dimensions. This positioning is useful for keeping
+child cells fixed relative to the overall parent cell size.</p>
+
+<p><img src="https://jgraph.github.io/mxgraph/docs/images/mx_man_rel_vert_pos.png" name="rel_vert_pos"/><br/>
+<em>Relative vertex positions</em></p>
+<br/>
+
+<p>Lastly, edge labels in relative mode are palced based on the
+positioning from the center of the edge. The x-coordinate is the
+relative distance from the source end of the edge, at -1, to the target
+end of the edge, at 1. The y co-ordinate is the pixel offset orthogonal
+from the edge. The diagram below shows the values of x,y for various
+edge labels in relative mode. Note that for a straight edge, the
+calculations are simple. For edges with multiple control points, the
+edge has to be traced along its segments (a segment being the line
+between end points and/or control points) to find the correct distance
+along the edge. The y value is the orthogonal offset from that segment.</p>
+
+<p>Switching relative positioning on for edge labels is a common
+preference for applications. Navigate to the mxGraph.insertEdge()
+function in mxGraph, you will see this calls createEdge(). In
+createEdge() the geometry is set relative for every edge created using
+this prototype. This is partly the reason for the amount of helper
+functions in mxGraph, they enable easy changing of the default
+behaviour. You should try to use the mxGraph class API as much as
+possible to provide this benefit in your applications.</p>
+
+<h5><a id="offsets"></a>Offsets</h5>
+
+<p>The offset field in mxGeometry is an absolute x,y offset applied
+to the cell <strong>label</strong>. In the case of edge labels, the
+offset is always applied after the edge label has been calculated
+according to the relative flag in the above section.</p>
+
+<div id="coreapi">
+<p><strong>Core API functions:</strong></p>
+
+<ul><li><strong>mxGraph.resizeCell(cell, bounds)</strong> &ndash; Resizes
+the specified cell to the specified bounds, within a begin/end update
+call.</li>
+<li><strong>mxGraph.resizeCells(cells, bounds)</strong> &ndash;
+Resizes each of the cells in the cells array to the corresponding entry
+in the bounds array, within a begin/end update call.</li>
+</ul>
+</div>

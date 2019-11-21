@@ -1,4 +1,6 @@
-    const playbook = require('masterclass-playbook'); 
+    /** 
+     * @requires global.playbook to be set. This is set by the cli tool 
+     */
     /** 
      * or import {playbook} from 'masterclass-playbook'; 
      **/

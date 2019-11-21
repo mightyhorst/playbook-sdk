@@ -1,0 +1,35 @@
+# Do Not Forget the End Tag
+Some HTML elements will display correctly, even if you forget the end tag:
+
+Example
+```
+<html>
+<body>
+
+	<p> This is a paragraph
+	<p> This is a paragraph
+
+</body>
+</html>
+```
+
+The example above works in all browsers, because the closing tag is considered optional.
+
+*Never rely on this*. It might produce unexpected results and/or errors if you forget the end tag.
+
+## Empty HTML Elements
+HTML elements with no content are called empty elements.
+
+`<br>` is an empty element without a closing tag (the `<br>` tag defines a line break):
+
+### Example
+`<p> This is a <br> paragraph with a line break. </p>`
+
+Empty elements can be "closed" in the opening tag like this: `<br />`.
+
+> HTML5 does not require empty elements to be closed. But if you want stricter validation, or if you need to make your document readable by XML parsers, you must close all HTML elements properly.
+
+## HTML Is Not Case Sensitive
+HTML tags are not case sensitive: `<P>` means the same as `<p>`.
+
+The HTML5 standard does not require lowercase tags, but W3C recommends lowercase in HTML, and demands lowercase for stricter document types like XHTML.

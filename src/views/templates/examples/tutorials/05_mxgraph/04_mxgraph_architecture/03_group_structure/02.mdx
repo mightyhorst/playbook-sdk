@@ -1,0 +1,15 @@
+# Grouping 
+In grouping, cells are assigned a parent cell. In the simplest case, all cells have the default parent as their parent. The default parent is an invisible cell with the same bounds as the graph. 
+
+This is the cell returned by `graph.getDefaultParent()` in the helloworld example. 
+
+The `x,y` position of a vertex is its position relative to its parent, so in the case of default grouping (all cells sharing the default parent) the cell positioning is also the absolute co-ordinates on the graph component. 
+
+In the case all cells being added to the default root, the group structure logically looks like, in the case of the helloworld example, the diagram below.
+
+Note the addition of the `Layer 0` cell, this is the default indirection in the group structure that allows layer changes with the requirement of additional cells. We include it below for correctness, but in later group diagrams it will be omitted.
+
+
+![https://jgraph.github.io/mxgraph/docs/images/mx_man_hello_struct.png](https://jgraph.github.io/mxgraph/docs/images/mx_man_hello_struct.png)
+
+> The group structure of the helloworld example

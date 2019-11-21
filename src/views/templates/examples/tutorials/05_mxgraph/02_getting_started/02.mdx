@@ -1,0 +1,38 @@
+<h4><a id="extending_mxgraph"></a>Extending mxGraph in JavaScript</h4>
+
+<p>In JavaScript, there are various ways of mapping the Object
+Oriented paradigm to language constructs. mxGraph uses a particular
+scheme throughout the project, with the following implicit rules:</p>
+
+<ul>
+	<li>Do not change the built-in prototypes</li>
+	<li>Donot try to limit the power of the JavaScript language.</li>
+
+</ul>
+
+<p>There are two types of &ldquo;classes&rdquo; in mxGraph; <em>classes</em>
+and <em>singletons</em> (where only one instance of the class exists).
+Singletons are mapped to global objects where the variable name is the
+same as the class name. For example, mxConstants is an object with all
+the constants defined as object fields. Normal classes are mapped to a
+constructor function and a prototype which defines the instance fields
+and methods. For example, mxEditor is a function and mxEditor.prototype
+is the prototype for the object that the mxEditor function creates. The
+<em>mx</em> prefix is a convention that is used for all classes in the
+mxGraph package to avoid conflicts with other objects in the global
+namespace.</p>
+
+<p>For subclassing, the superclass must provide a constructor that
+is either parameterless or handles an invocation with no arguments.
+Furthermore, the special constructor field must be redefined after
+extending the prototype. For example, the superclass of mxEditor is
+mxEventSource. This is represented in JavaScript by first
+&ldquo;inheriting&rdquo; all fields and methods from the superclass by
+assigning the prototype to an instance of the superclass, eg.</p>
+<pre>mxEditor.prototype = new mxEventSource()</pre>
+<p>and redefining the constructor field using:</p>
+
+<pre>mxEditor.prototype.constructor = mxEditor</pre>
+
+<p>The latter rule is applied so that the type of an object can be
+retrieved via the name of it&rsquo;s constructor using <em>mxUtils.getFunctionName(obj.constructor)</em>.</p>
