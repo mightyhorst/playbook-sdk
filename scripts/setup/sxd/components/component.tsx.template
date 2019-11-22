@@ -1,0 +1,63 @@
+/** 
+ * @class {txtComponentName}
+ * @namespace components 
+ * @description 
+ * @author Nick Mitchell
+ */
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+
+/**
+ * @requires Components
+ */
+// import Example from './';
+
+/**
+ * @requires Assets
+ */
+
+
+/**
+ * @param {TProperty} TProperty 
+ */
+type TProperty = {
+    
+}
+/**
+ * @param {TState} TState
+ */
+type TState = {
+
+}
+
+/**
+ * {txtComponentName} 
+ *
+ * @class {txtComponentName}
+ * @extends {React.Component<TProperty, TState>}
+ */
+class {txtComponentName} extends React.Component<TProperty, TState> {
+
+    /**
+     * @param {PropTypes} propTypes - property types to check at run time 
+     */
+    static propTypes = {
+        
+    }
+
+    /**
+     * Render the {txtComponentName} 
+     *
+     * @returns {JSX} component 
+     * @memberof {txtComponentName}
+     */
+    render() {
+
+        return (
+            <div></div>
+        );
+    }
+
+}
+
+export default {txtComponentName};

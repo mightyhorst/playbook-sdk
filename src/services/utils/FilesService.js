@@ -1,11 +1,15 @@
 const fs = require('fs');
 const glob = require('glob');
 const chalk = require('chalk');
+const path = require('path');
+const rimraf = require("rimraf");
+
 
 /**
  * @requires Models 
  */
 const FileModel = require('../../models/FileModel');
+const FolderModel = require('../../models/FolderModel');
 
 /** 
  * Look ma, it's cp -R. 
@@ -25,7 +29,7 @@ var copyRecursiveSync = (src, dest) => {
         }); 
     } 
     else { 
-        fs.copyFile(src, dest); // UPDATE FROM: fs.linkSync(src, dest); 
+        fs.copyFileSync(src, dest); // UPDATE FROM: fs.linkSync(src, dest); 
     } 
 };
 
@@ -43,7 +47,9 @@ class FileService{
      * @param {*} destination
      */
     copyFolder(source, destination) {
-        copyRecursiveSync(src, dest);
+        rimraf.sync(destination);
+        copyRecursiveSync(source, destination);
+        return new FolderModel(destination);
     }
 
 
@@ -68,8 +74,9 @@ class FileService{
          * @step find all paths 
          * @requires glob 
          */
-        var filePaths = glob.sync(process.cwd() + filePattern, {});
-            filePaths = filePaths.concat( glob.sync(process.cwd() + `/**/${filePattern}`, {}) );
+        // var filePaths = glob.sync(fromFolder, filePattern, {});
+            // filePaths = filePaths.concat( glob.sync(fromFolder + `/**/${filePattern}`, {}) );
+        const filePaths = glob.sync(fromFolder + `/**/${filePattern}`, {}) ;
 
         /** 
          * @step map file paths to file model so includes contents too 
@@ -145,7 +152,25 @@ class FileService{
      *
      * @memberof FileService
      */
+    ls(folderPath){
 
+        const folderName = folderPath.split('/').pop();
+        console.log( chalk.bgBlue('List files and folders from: ')+chalk.bgMagenta.bold(folderName) + chalk.bgBlue.white(folderPath) );
+
+        fs.readdirSync(folderPath).forEach(file => {
+            console.log('• '+fileModel.path.replace(folderPath,''));
+        });
+    }
+    lsAll(folderPath){
+
+        const folderName = folderPath.split('/').pop();
+        console.log('\n'+ chalk.bgBlue('List ALL files and folders from: ')+chalk.bgMagenta.bold(folderName) +'\n'+ chalk.blue(folderPath));
+
+        const fileModels = this.findAll(folderPath, '*');
+        fileModels.forEach(fileModel => {
+            console.log('• '+fileModel.path.replace(folderPath,''));
+        })
+    }
 
 }
 

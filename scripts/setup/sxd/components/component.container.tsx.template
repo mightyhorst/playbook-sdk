@@ -1,0 +1,9 @@
+/** 
+ * @class {txtComponentName} Container
+ * @namespace components 
+ * @description 
+ * @author Nick Mitchell
+ */
+
+// Inject(Redux) 
+

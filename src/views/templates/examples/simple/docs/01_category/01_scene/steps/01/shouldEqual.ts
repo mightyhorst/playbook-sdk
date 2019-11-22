@@ -3,7 +3,7 @@
  *
  * @class HelloWorld
  */
-class HelloWorld{
+class AnotherHelloWorld{
 
     /**
      * name 

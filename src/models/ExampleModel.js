@@ -14,11 +14,14 @@ class ExampleModel{
     /**
      * Creates an instance of ExampleModel.
      * 
+     * @param {string} name - example name 
      * @param {FileModel} playbookFileModel - FileModel representing the playbook.js file 
      * @param {FolderModel} docsFolderModel - Folder Model representing the path to the docs folder referred to by the playbook file 
      * @memberof ExampleModel
      */
-    constructor(playbookFileModel, docsFolderModel){
+    constructor(name, playbookFileModel, docsFolderModel){
+
+        this.name = name; 
         this.playbookFileModel = playbookFileModel;
 
         if(docsFolderModel){

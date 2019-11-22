@@ -18,13 +18,20 @@ export function cli(args) {
 
     ${chalk.gray('Publish...')}
      🍎  ${chalk.cyan('playbook init')} - create a new playbook 
-     🍋  ${chalk.magentaBright('playbook build')} - builds the playbook.json
-     🍉  ${chalk.yellow('playbook push')} - pushes the playbook.json to master-class
-     🍑  ${chalk.green('playbook serve')} - pushes the playbook.json and runs it 
-     🥑  ${chalk.blueBright('playbook create')} - choose your adventure
+     🍋  ${chalk.yellow('playbook build')} - builds the playbook.json
+     🍉  ${chalk.magenta('playbook push')} - pushes the playbook.json to master-class
+     🍑  ${chalk.blueBright('playbook serve')} - pushes the playbook.json and runs it 
+     🥑  ${chalk.green('playbook wizard')} - you a wizard to create a playbook on the fly
+     🦄  ${chalk.magentaBright('playbook magic')} - reverse engineer a playbook from a git repo
+     
 
     ${chalk.gray('Subscribe...')}
      🍇  ${chalk.magenta('playbook play')} - step by step walkthrough of a published playbook 
+
+
+    ${chalk.gray('More...')}
+     🍏  ${chalk.green('playbook register')} - register an existing git repo 
+     🍑  ${chalk.blueBright('playbook setup')} - setup common platforms: storybook, jest, cypress and more!
 
     🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝 🥝
     

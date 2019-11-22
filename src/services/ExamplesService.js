@@ -1,9 +1,11 @@
 const path = require('path');
+const chalk = require('chalk');
 const FileService = require('./utils/FilesService');
 const Constants = require('../constants/index');
 const ExampleModel = require('../models/ExampleModel');
 const FolderModel = require('../models/FolderModel');
 const FileModel = require('../models/FileModel');
+
 
 class ExamplesService{
 
@@ -26,18 +28,19 @@ class ExamplesService{
         /**
          * @step map to example model 
          */
-        fileModels.map(playbookFileModel => {
+        const exampleModels = fileModels.map(playbookFileModel => {
             try{
-                const folderPath = this._parseFolderFromFile(playbookFileModel);
-                const playbookFolderModel = new FolderModel(folderPath); 
-                return new ExampleModel(playbookFileModel, playbookFolderModel);
+                const folder = this._parseFolderFromFile(playbookFileModel);
+                const playbookFolderModel = new FolderModel(folder.path); 
+                // playbookFolderModel.lsAll(); 
+                return new ExampleModel(folder.name, playbookFileModel, playbookFolderModel);
             }
             catch(err){
                 throw err;
             }
         })
 
-        return fileModels;
+        return exampleModels;
     }
 
     /**
@@ -55,7 +58,10 @@ class ExamplesService{
             const folderPath = playbookFileModel.folder;
             const folderName = parts[1];
 
-            return path.resolve(folderPath, folderName); 
+            return {
+                name: folderName, 
+                path: path.resolve(folderPath, folderName)
+            }
         }
         else{
             const err = new Error('The name doesn\'t match the pattern');

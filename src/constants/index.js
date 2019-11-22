@@ -1,5 +1,6 @@
 const path = require('path');
 
 module.exports = {
-    examplesFolder: path.resolve('../../views/templates/examples')
+    isDebug: true, 
+    examplesFolder: path.resolve(__dirname, '../views/templates/examples')
 }
