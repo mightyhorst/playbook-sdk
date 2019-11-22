@@ -3,6 +3,7 @@ const fs = require('fs');
 const chalk = require('chalk');
 var term = require( 'terminal-kit' ).terminal;
 
+
 /**
  * @requires Controller - parent controller 
  */
@@ -11,21 +12,29 @@ const Controller = require('./Controller');
 /**
  * @requires Constants - view constants 
  */
-const VIEWS = require('../constants/views.const');
-const TEMPLATE = VIEWS.TEMPLATE;
+// const VIEWS = require('../constants/views.const');
+// const TEMPLATE = VIEWS.TEMPLATE;
+const Constants = require('../constants/index');
+const debug = Constants.isDebug;
+
+
+/**
+ * @requires Models
+ */
+const QuestionChoiceModel = require('../models/menus/ChoiceModel');
 
 /**
  * @requires Views - menus 
  */
-const BuildMenuView = require('../views/menus/BuildMenuView');
+const InitMenuView = require('../views/menus/InitMenuView');
 
 /**
  * @requires Services 
- * @param WordColorService - color the words helper 
+ * !@param WordColorService - not used - color the words helper 
  * @param FileService - helper for nice cmd line file tools 
  * @param ExamplesService - helper for importing Examples  
  */
-const WordColorService = require('../services/prettyprinter/WordColourService');
+// const WordColorService = require('../services/prettyprinter/WordColourService');
 const FileService = require('../services/utils/FilesService');
 const ExamplesService = require('../services/ExamplesService');
 
@@ -53,7 +62,7 @@ class PlaybookInitCtrl extends Controller{
      * @param {string} args[1] - 'init'
      * @param {string} args[2] - '--templateName' 
      */
-    createPlaybook(args){
+    async createPlaybook(args){
 
         /**
          * @name step0(args) 
@@ -77,16 +86,68 @@ class PlaybookInitCtrl extends Controller{
         let exampleModels;
         try{
             exampleModels = ExamplesService.findAllExamples();
-            console.log('exampleModels ---> ', exampleModels);
-            return 
+            // console.log('exampleModels ---> ', exampleModels);
+            // console.log('exampleModels ---> ', exampleModels[0].playbookFileModel.contents);
         }
         catch(err){
-            console.log('Sorry, I had problems finding the examples. ', chalk.red(err.message));
-            console.error(err);
+            console.log('💀 Sorry, I had problems finding the examples. ', chalk.red(err.message));
+            if(debug) console.error(err);
             return;
         }
 
+        /**
+         * @step 2. Show Init Menu from Example View 
+         */ 
+        let chosenExampleModel, playbookName, playbookFolder;
+        try{
+            const choiceModels = exampleModels.map(exampleModel => {
+                return new QuestionChoiceModel(false, exampleModel.name);
+            })
 
+            const menuView = new InitMenuView(choiceModels);
+            const answers = await menuView.show();
+
+            /**
+             * @param {ExampleModel} chosenExampleModel - Chosen Example Model
+             */
+            chosenExampleModel = exampleModels.find(exampleModel=>{
+                return exampleModel.name === answers.keyChosenExample;
+            })
+
+            /** 
+             * @param {string} playbookName - name of the playbook 
+             */
+            playbookName = answers.keyPlaybookName+'.playbook.js';
+
+            /** 
+             * @param {string} playbookFolder - folder to install the playbook 
+             */
+            playbookFolder = path.resolve(process.cwd(), answers.keyPlaybookFolder);
+
+        }
+        catch(err){
+            console.log('💀 Sorry, I had problems showing the menu. ', chalk.red(err.message));
+            if(debug) console.error(err);
+            return;
+        }
+
+        if(debug) console.log({playbookName, playbookFolder, 'chosenExampleModel.name': chosenExampleModel.name});
+
+
+        /**
+         * @step 3. Create PlaybookJs file 
+         */ 
+        let createdPlaybookFileModel; 
+        try{
+            createdPlaybookFileModel = FileService.createFile(process.cwd(), 'hello.playbook.js', chosenExampleModel.playbookFileModel.content);
+        }
+        catch(err){
+            console.log('💀 Sorry, I had problems creating the playbook.js file. ', chalk.red(err.message));
+            return; 
+        }
+
+
+        return 
         /** 
          * !refactor 
          * **/
