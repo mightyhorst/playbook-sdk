@@ -133,6 +133,7 @@ class PlaybookInitCtrl extends Controller{
 
         if(debug) console.log({playbookName, playbookFolder, 'chosenExampleModel.name': chosenExampleModel.name});
 
+        
 
         /**
          * @step 3. Create PlaybookJs file 
@@ -143,19 +144,26 @@ class PlaybookInitCtrl extends Controller{
         }
         catch(err){
             console.log('💀 Sorry, I had problems creating the playbook.js file. ', chalk.red(err.message));
+            if(debug) console.error(err);
             return; 
         }
 
 
         /**
-         * @step 3. Create PlaybookJs file 
+         * @step 4. Copy Playbbok folder 
          */ 
-        let createdPlaybookFileModel; 
+        let createdPlaybookFolderModel, source, destination; 
         try{
-            createdPlaybookFileModel = FileService.createFile(playbookFolder, playbookName, chosenExampleModel.playbookFileModel.contents);
+            source = chosenExampleModel.docsFolderModel.path; 
+            destination = path.join(playbookFolder, 'playbook');
+
+            console.log(`Copying from: \n${chalk.blue(source)} \nto: \n${chalk.green(destination)}`);
+
+            createdPlaybookFolderModel = FileService.copyFolder(source, destination);
         }
         catch(err){
-            console.log('💀 Sorry, I had problems creating the playbook.js file. ', chalk.red(err.message));
+            console.log(`💀 Sorry, I had problems copying the playbook folder from ${chalk.blue(source)} to ${chalk.green(destination)} . `, chalk.red(err.message));
+            if(debug) console.error(err);
             return; 
         }
 

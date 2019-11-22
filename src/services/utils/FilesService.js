@@ -2,11 +2,14 @@ const fs = require('fs');
 const glob = require('glob');
 const chalk = require('chalk');
 const path = require('path');
+const rimraf = require("rimraf");
+
 
 /**
  * @requires Models 
  */
 const FileModel = require('../../models/FileModel');
+const FolderModel = require('../../models/FolderModel');
 
 /** 
  * Look ma, it's cp -R. 
@@ -26,7 +29,7 @@ var copyRecursiveSync = (src, dest) => {
         }); 
     } 
     else { 
-        fs.copyFile(src, dest); // UPDATE FROM: fs.linkSync(src, dest); 
+        fs.copyFileSync(src, dest); // UPDATE FROM: fs.linkSync(src, dest); 
     } 
 };
 
@@ -44,7 +47,9 @@ class FileService{
      * @param {*} destination
      */
     copyFolder(source, destination) {
-        copyRecursiveSync(src, dest);
+        rimraf.sync(destination);
+        copyRecursiveSync(source, destination);
+        return new FolderModel(destination);
     }
 
 

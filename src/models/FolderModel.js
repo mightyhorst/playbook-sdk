@@ -18,8 +18,9 @@ class FolderModel{
      * @param {string} path - path to the file
      * @memberof FolderModel
      */
-    constructor(path){
-        this.path = path;
+    constructor(filePath){
+        this.path = filePath;
+        this.folderName = pathService.basename(filePath);
     }
 
 
