@@ -1,5 +1,6 @@
 const fs = require('fs');
-const path = require('path');
+const pathService = require('path');
+const glob = require('glob');
 
 const FileModel = require('./FileModel');
 const FileService = require('../services/utils/FilesService');
@@ -39,6 +40,13 @@ class FolderModel{
         }
     }
 
+    ls(){
+        FileService.ls(this.path);
+    }
+
+    lsAll(){
+        FileService.lsAll(this.path);
+    }
 
     /**
      * @todo upload/save folder 

@@ -26,7 +26,25 @@ class FileModel{
         this.nameSansExt = pathService.parse(filePath).name;
         this.folder = pathService.dirname(filePath);
         this.ext = pathService.extname(filePath);
-        this.contents = fileContents || this.read();
+        // this.contents = fileContents || this.read();
+    }
+
+    /**
+     * getter for contents
+     * @private
+     * @memberof FileModel
+     */
+    get contents(){
+        return this.read();
+    }
+
+    /**
+     * setter for contents 
+     * @private
+     * @memberof FileModel
+     */
+    set contents(_contents){
+        this.write(_contents);
     }
 
     /**
@@ -36,8 +54,8 @@ class FileModel{
      * @memberof FileModel
      */
     read(){
-        this.contents = fs.readFileSync(this.path, {encoding: 'utf8'});
-        return this.contents;
+        this._contents = fs.readFileSync(this.path, {encoding: 'utf8'});
+        return this._contents;
     }
 
     /**
@@ -50,13 +68,15 @@ class FileModel{
     write(contents){
         try{
             fs.writeFileSync(this.path, contents, {encoding:'utf8'});
-            this.contents = contents;
+            this._contents = contents;
             return true;
         }
         catch(err){
             return false; 
         }
     }
+
+    
 
     /**
      * @todo upload/save folder 
@@ -95,4 +115,5 @@ class FileModel{
 
     }
 }
+
 module.exports = FileModel;
