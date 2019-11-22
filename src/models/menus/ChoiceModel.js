@@ -9,9 +9,9 @@ class ChoiceModel{
     
     /**
      * Creates an instance of ChoiceModel.
-     * @param {*} isSeperator
-     * @param {*} varName
-     * @param {*} isDisabled
+     * @param {boolean} isSeperator
+     * @param {string} varName
+     * @param {boolean} isDisabled 
      * @memberof ChoiceModel
      */
     constructor(isSeperator, varName, isDisabled){

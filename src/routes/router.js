@@ -4,14 +4,18 @@ const ROUTES = {
     INTERACTIVE: 'interactive',
     INIT: 'init',
     BUILD: 'build',
+    PUSH: 'push',
+    REGISTER: 'register',
 }
 const CTRLS = {
     playbookInit: require('../ctrls/PlaybookInitCtrl'),
     playbookBuild: require('../ctrls/PlaybookBuildCtrl'),
+    //todo playbookPush: require('../ctrls/PlaybookPushCtrl'),
+    //todo playbookRegister: require('../ctrls/PlaybookRegisterCtrl'),
 }
 
 
-module.exports = (args) => {
+module.exports = async (args) => {
 
     const cmd = args.length > 2 ? args[2] : 'interactive';
     switch(cmd){
@@ -32,6 +36,20 @@ module.exports = (args) => {
             console.log('🐸  Building started ... ');
             CTRLS.playbookBuild.buildPlaybook(args);
         
+            break;
+
+        case ROUTES.PUSH:
+            
+            console.log('🍋  Push started ... ');
+            //todo CTRLS.playbookPush.pushPlaybook(args);
+        
+            break;
+
+        case ROUTES.REGISTER:
+
+            console.log('🦊  Register the storybook started ... ');
+            //todo CTRLS.playbookRegister.registerPlaybook(args);
+
             break;
 
         default:

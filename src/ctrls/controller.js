@@ -28,27 +28,27 @@ class Controller{
     }
 
     /**
-     * Get view from the views folder 
+     * !not used Get view from the views folder 
      *
      * @param {string} playbookTemplate - path to the file 
      * @returns {string} playbookContent - contents of the file 
      * @memberof Controller
      */
-    getView(playbookTemplate){
-        const playbookContent = fs.readFileSync(playbookTemplate, {encoding:'utf8'});
-        return playbookContent;
-    }
+    // getView(playbookTemplate){
+    //     const playbookContent = fs.readFileSync(playbookTemplate, {encoding:'utf8'});
+    //     return playbookContent;
+    // }
 
     /**
-     * Get Template via Constant
+     * !not used Get Template via Constant
      *
      * @param {TEMPLATE} playbookTemplate - path to the file 
      * @returns {string} playbookContent - contents of the file 
      * @memberof Controller
      */
-    getTemplate(playbookTemplate){
-        return this.getView(playbookTemplate);
-    }
+    // getTemplate(playbookTemplate){
+    //     return this.getView(playbookTemplate);
+    // }
 
     /**
      * Typewriter effect slow prints the contents as it emulates a developer typing the file out. 

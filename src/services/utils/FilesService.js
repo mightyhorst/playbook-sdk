@@ -1,6 +1,7 @@
 const fs = require('fs');
 const glob = require('glob');
 const chalk = require('chalk');
+const path = require('path');
 
 /**
  * @requires Models 
@@ -68,8 +69,9 @@ class FileService{
          * @step find all paths 
          * @requires glob 
          */
-        var filePaths = glob.sync(process.cwd() + filePattern, {});
-            filePaths = filePaths.concat( glob.sync(process.cwd() + `/**/${filePattern}`, {}) );
+        // var filePaths = glob.sync(fromFolder, filePattern, {});
+            // filePaths = filePaths.concat( glob.sync(fromFolder + `/**/${filePattern}`, {}) );
+        const filePaths = glob.sync(fromFolder + `/**/${filePattern}`, {}) ;
 
         /** 
          * @step map file paths to file model so includes contents too 
@@ -145,7 +147,25 @@ class FileService{
      *
      * @memberof FileService
      */
+    ls(folderPath){
 
+        const folderName = folderPath.split('/').pop();
+        console.log( chalk.bgBlue('List files and folders from: ')+chalk.bgMagenta.bold(folderName) + chalk.bgBlue.white(folderPath) );
+
+        fs.readdirSync(folderPath).forEach(file => {
+            console.log('• '+fileModel.path.replace(folderPath,''));
+        });
+    }
+    lsAll(folderPath){
+
+        const folderName = folderPath.split('/').pop();
+        console.log('\n'+ chalk.bgBlue('List ALL files and folders from: ')+chalk.bgMagenta.bold(folderName) +'\n'+ chalk.blue(folderPath));
+
+        const fileModels = this.findAll(folderPath, '*');
+        fileModels.forEach(fileModel => {
+            console.log('• '+fileModel.path.replace(folderPath,''));
+        })
+    }
 
 }
 
