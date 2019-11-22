@@ -139,7 +139,7 @@ class PlaybookInitCtrl extends Controller{
          */ 
         let createdPlaybookFileModel; 
         try{
-            createdPlaybookFileModel = FileService.createFile(process.cwd(), 'hello.playbook.js', chosenExampleModel.playbookFileModel.content);
+            createdPlaybookFileModel = FileService.createFile(playbookFolder, playbookName, chosenExampleModel.playbookFileModel.contents);
         }
         catch(err){
             console.log('💀 Sorry, I had problems creating the playbook.js file. ', chalk.red(err.message));
@@ -147,7 +147,21 @@ class PlaybookInitCtrl extends Controller{
         }
 
 
-        return 
+        /**
+         * @step 3. Create PlaybookJs file 
+         */ 
+        let createdPlaybookFileModel; 
+        try{
+            createdPlaybookFileModel = FileService.createFile(playbookFolder, playbookName, chosenExampleModel.playbookFileModel.contents);
+        }
+        catch(err){
+            console.log('💀 Sorry, I had problems creating the playbook.js file. ', chalk.red(err.message));
+            return; 
+        }
+
+        
+        return;
+
         /** 
          * !refactor 
          * **/
