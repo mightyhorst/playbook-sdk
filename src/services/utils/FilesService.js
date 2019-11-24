@@ -43,12 +43,12 @@ class FileService{
     /**
      * Copy folder from source path to destination 
      *
-     * @param {*} source
-     * @param {*} destination
+     * @param {FolderModel} source - path to the folder
+     * @param {string} destination - path to the folder
      */
-    copyFolder(source, destination) {
+    copyFolder(sourceFolderModel, destination) {
         rimraf.sync(destination);
-        copyRecursiveSync(source, destination);
+        copyRecursiveSync(sourceFolderModel.path, destination);
         return new FolderModel(destination);
     }
 
@@ -155,16 +155,17 @@ class FileService{
     ls(folderPath){
 
         const folderName = folderPath.split('/').pop();
-        console.log( chalk.bgBlue('List files and folders from: ')+chalk.bgMagenta.bold(folderName) + chalk.bgBlue.white(folderPath) );
+        console.log( chalk.blue('List files and folders from: ')+chalk.bgMagenta.bold(folderName) + chalk.bgBlue.white(folderPath) );
 
         fs.readdirSync(folderPath).forEach(file => {
             console.log('• '+fileModel.path.replace(folderPath,''));
         });
     }
-    lsAll(folderPath){
+    lsAll(folderPath, txtOptionalMsg){
 
+        txtOptionalMsg = txtOptionalMsg ? txtOptionalMsg : 'List ALL files and folders from: '; 
         const folderName = folderPath.split('/').pop();
-        console.log('\n'+ chalk.bgBlue('List ALL files and folders from: ')+chalk.bgMagenta.bold(folderName) +'\n'+ chalk.blue(folderPath));
+        console.log('\n'+ chalk.green(txtOptionalMsg)+chalk.bgMagenta.bold(folderName) +'\n'+ chalk.blue(folderPath));
 
         const fileModels = this.findAll(folderPath, '*');
         fileModels.forEach(fileModel => {

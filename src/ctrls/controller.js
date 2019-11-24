@@ -9,6 +9,7 @@ var term = require( 'terminal-kit').terminal;
  */
 const FileService = require('../services/utils/FilesService');
 const PlaybookService = require('../services/PlaybookService');
+const TypeWriterService = require('../services/typewriter/TypeWriterService');
 
 /**
  * @constant VIEWS 
@@ -60,23 +61,23 @@ class Controller{
      * @memberof Controller
      */
     typeWriter(txt, speed){
-        var i = 0;
-        var txt = txt || 'Lorem ipsum dummy text blabla.';
-        var speed = speed || 10;
+        // var i = 0;
+        // var txt = txt || 'Lorem ipsum dummy text blabla.';
+        // var speed = speed || 10;
 
 
-        const start = () => {
-            if (i < txt.length) {
-                process.stdout.write( txt.charAt(i) );
-                i++;
-                setTimeout(start, speed);
-            }            
-        }
+        // const start = () => {
+        //     if (i < txt.length) {
+        //         process.stdout.write( txt.charAt(i) );
+        //         i++;
+        //         setTimeout(start, speed);
+        //     }            
+        // }
 
-        return {
-            start
-        }
-            
+        // return {
+        //     start
+        // }
+        return TypeWriterService.typeWriter(txt, speed);
     }
 
     /**

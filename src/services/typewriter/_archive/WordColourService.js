@@ -1,3 +1,7 @@
+/**
+ * ! not used 
+ */
+
 const COLOURS = {
     MAGENTA: 'magenta',
     GREEN: 'green',

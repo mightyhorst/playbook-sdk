@@ -30,11 +30,11 @@ const InitMenuView = require('../views/menus/InitMenuView');
 
 /**
  * @requires Services 
- * !@param WordColorService - not used - color the words helper 
+ * @param WordColorService - not used - color the words helper 
  * @param FileService - helper for nice cmd line file tools 
  * @param ExamplesService - helper for importing Examples  
  */
-// const WordColorService = require('../services/prettyprinter/WordColourService');
+const WordColorService = require('../services/typewriter/WordColourService');
 const FileService = require('../services/utils/FilesService');
 const ExamplesService = require('../services/ExamplesService');
 
@@ -152,14 +152,14 @@ class PlaybookInitCtrl extends Controller{
         /**
          * @step 4. Copy Playbbok folder 
          */ 
-        let createdPlaybookFolderModel, source, destination; 
+        let createdPlaybookFolderModel, sourceFolderModel, destination; 
         try{
-            source = chosenExampleModel.docsFolderModel.path; 
+            sourceFolderModel = chosenExampleModel.docsFolderModel; 
             destination = path.join(playbookFolder, 'playbook');
 
-            console.log(`Copying from: \n${chalk.blue(source)} \nto: \n${chalk.green(destination)}`);
+            console.log(`Copying from: \n${chalk.blue(sourceFolderModel.path)} \nto: \n${chalk.green(destination)}`);
 
-            createdPlaybookFolderModel = FileService.copyFolder(source, destination);
+            createdPlaybookFolderModel = FileService.copyFolder(sourceFolderModel, destination);
         }
         catch(err){
             console.log(`💀 Sorry, I had problems copying the playbook folder from ${chalk.blue(source)} to ${chalk.green(destination)} . `, chalk.red(err.message));
@@ -167,7 +167,36 @@ class PlaybookInitCtrl extends Controller{
             return; 
         }
 
-        
+        /**
+         * @step 5. Print the new directory structure 
+         */
+        try{
+            FileService.lsAll(createdPlaybookFolderModel.path, '🥝  Created a new playbook folder: ');
+        }
+        catch(err){
+            console.log(`💀 Sorry, I had problems listing the newly created playbook folder: ${createdPlaybookFolderModel.path}`, chalk.red(err.message));
+            if(debug) console.error(err);
+            return; 
+        }
+
+
+        /**
+         * @step 6. Typewriter the playbook init 
+         */
+        try{
+            
+            const printerContent = WordColorService.codeColour(createdPlaybookFileModel.path);
+
+            var slowTyper = this.typeWriter(printerContent);
+            slowTyper.start();
+        }
+        catch(err){
+            console.log(`💀 Sorry, I had problems type writing: `, chalk.red(err.message));
+            if(debug) console.error(err);
+            return; 
+        }
+
+
         return;
 
         /** 
