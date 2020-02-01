@@ -104,6 +104,28 @@ class FileService{
     }
 
     /**
+     * Create Folder helper
+     *
+     * @param {*} folderPath
+     * @param {*} folderName
+     * @returns {FolderModel} folderModel
+     * @memberof FileService
+     */
+    createFolder(folderPath, folderName)
+    {
+        const fullFolderPath = path.join(folderPath, folderName);
+        try
+        {
+            fs.mkdirSync(fullFolderPath, { recursive : true });
+            return new FolderModel(fullFolderPath);
+        }
+        catch(err)
+        {
+            console.log(`Error is writing the file: ${chalk.red('err.message')}. Arguments: ${chalk.magenta(JSON.stringify(arguments))}`);
+        }
+    }
+
+    /**
      * Create File helper 
      *
      * @param {string} filePath - path to the folder 
