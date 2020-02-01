@@ -1,4 +1,5 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![npm version](http://img.shields.io/npm/v/masterclass-playbook.svg?style=flat)](https://www.npmjs.com/package/masterclass-playbook "View this project on npm")
 
 
 # Playbook SDK
