@@ -160,6 +160,12 @@ class PlaybookInitCtrl extends Controller{
             console.log(`Copying from: \n${chalk.blue(sourceFolderModel.path)} \nto: \n${chalk.green(destination)}`);
 
             createdPlaybookFolderModel = FileService.copyFolder(sourceFolderModel, destination);
+
+            /**
+             * @step 4.1. Creta e.playbook config folder and config.json file 
+             */ 
+            const folderPlaybookConfig = FileService.createFolder(createdPlaybookFolderModel.path, '.playbook');
+            const fileConfig = FileService.createFile(folderPlaybookConfig.path, 'config.json', '{\n\t"playbook":{\n\n\t}\n}')
         }
         catch(err){
             console.log(`💀 Sorry, I had problems copying the playbook folder from ${chalk.blue(source)} to ${chalk.green(destination)} . `, chalk.red(err.message));

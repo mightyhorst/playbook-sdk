@@ -146,6 +146,24 @@ class FileService{
     }
 
     /**
+     *
+     *
+     * @param {string} folderPath - path to where this folder is installed
+     * @param {string} folderName - name of the folder
+     * @returns {FolderModel} folderModel - folder model 
+     * @memberof FileService
+     */
+    createFolder(folderPath, folderName){
+        const fullFilePath = path.join(folderPath, folderName);
+        try{
+            fs.mkdirSync(fullFilePath);
+            return new FolderModel(fullFilePath);
+        }catch(err){
+            console.log(`Error is writing the file: ${chalk.red('err.message')}. Arguments: ${chalk.magenta(JSON.stringify(arguments))}`);
+        }
+    }
+
+    /**
      * @todo implement 
      *
      * @returns

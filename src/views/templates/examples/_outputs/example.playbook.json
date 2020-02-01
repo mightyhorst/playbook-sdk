@@ -1,0 +1,846 @@
+{
+    "config": {
+        "cli": {
+            "use": "rastasheep/ubuntu-sshd:14.04",
+            "as": "@ubuntu",
+            "isDefault": true,
+            "// @description": "default - optional to switch between different environments"
+        }
+    },
+    "categories": [
+        {
+            "id": 1,
+            "title": "React",
+            "scenes": [
+                {
+                    "id": 2,
+                    "title": "Setting up React",
+                    "steps": [
+                        {
+                            "id": 3,
+                            "title": "Install your Apps",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "panel": "description",
+                                    "start": 2000,
+                                    "duration": 4000,
+                                    "continueFromLastStep": false,
+                                    "startDescription": "",
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Hello World"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The smallest React example looks like this:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render(\n  <h1>Hello, world!</h1>,\n  document.getElementById('root')\n);\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It displays a heading saying \"Hello, world!\" on the page."
+                                        },
+                                        {
+                                            "pause": 2000
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Try it yourself"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Why don't you try it yourself in the code editor. Try change the title to 'Hello Playbook'"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "panel": "code",
+                                    "start": 2000,
+                                    "duration": 10000,
+                                    "startCode": {
+                                        "start": "<html>\n<head>\n<script src=\"react.js\"></script></head>\n<body>\n \n\t<script type=\"babel\">\n\t[[[REPLACE_ME]]]\n\t \n</script>\n</body>\n</html>",
+                                        "findReplace": "[[[REPLACE_ME]]]"
+                                    },
+                                    "code": {
+                                        "template": "services/basic.hbs",
+                                        "data": {
+                                            "helloWorld": "Hello, World!"
+                                        },
+                                        "output": "services/hello.service.js"
+                                    }
+                                },
+                                {
+                                    "panel": "code",
+                                    "start": 2000,
+                                    "duration": 10000,
+
+                                    "layout": {
+                                        "template": "/path/to/hbs",
+                                        "data": {
+                                            "helloWorld": "Hello, World!"
+                                        },
+                                        "output": "services/hello.service.js"
+                                        
+                                    },
+                                    
+                                    "partials": [
+                                        {
+                                            "partialId": "partialReactSnippet",
+                                            "default": "comment to show before typewriter",
+                                            "template": "services/basic.hbs",
+                                            "data": {
+                                                "helloWorld": "Hello, World!"
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "panel": "test",
+                                    "start": 25000,
+                                    "duration": 20000,
+                                    "test": {
+                                        "template": "unit.angular.service.spec",
+                                        "data": {
+                                            "name": "HereIsAName_enteredFromThe_Sxd"
+                                        }
+                                    }
+                                },
+                                {
+                                    "panel": "cli",
+                                    "start": 1000,
+                                    "duration": 5000,
+                                    "cmds": [
+                                        {
+                                            "execute": "cd /root && echo \"This is from the playbook.json\" > playbook.test.cli.txt"
+                                        },
+                                        {
+                                            "execute": "ls -a"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 4,
+                                    "panel": "description",
+                                    "start": 2000,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "h2",
+                                            "txt": "next: introducing-jsx.html",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Hello World",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The smallest React example looks like this:",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "ReactDOM.render(\n  <h1>Hello, world!</h1>,\n  document.getElementById('root')\n);\n",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It displays a heading saying \"Hello, world!\" on the page.",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "title": "Quick start",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 6,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Install your apps",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "All you will need is a Text Editor or IDE (we suggest Visual Code by Microsoft)",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "And the terminal. ",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "If you're on a Mac, you will find it under Utilities > Terminal ",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Utilities > Terminal",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "title": "JSX Syntax",
+                    "steps": [
+                        {
+                            "id": 8,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 9,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "hr",
+                                            "txt": "",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "id: introducing-jsx\ntitle: Introducing JSX\npermalink: docs/introducing-jsx.html\nprev: hello-world.html",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "next: rendering-elements.html",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "h1",
+                                            "txt": "Introducing JSX",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Consider this variable declaration:",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "const element = <h1>Hello, world!</h1>;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "const element = <h1>Hello, world!</h1>;\n",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This funny tag syntax is neither a string nor HTML.",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to describe what the UI should look like. JSX may remind you of a template language, but it comes with the full power of JavaScript.",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "JSX produces React \"elements\". We will explore rendering them to the DOM in the next section",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Below, you can find the basics of JSX necessary to get you started.",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Why JSX?",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "React embraces the fact that rendering logic is inherently coupled with other UI logic: how events are handled, how the state changes over time, and how the data is prepared for display.",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Instead of artificially separating technologies by putting markup and logic in separate files, React separates concerns with loosely coupled units called \"components\" that contain both. We will come back to components in a further section, but if you're not yet comfortable putting markup in JS, this talk might convince you otherwise.",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "technologies",
+                                                    "kids": []
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "separates concerns",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "em",
+                                                            "txt": "concerns",
+                                                            "kids": []
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "further section",
+                                                    "kids": []
+                                                },
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "this talk",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "React doesn't require using JSX, but most people find it helpful as a visual aid when working with UI inside the JavaScript code. It also allows React to show more useful error and warning messages.",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "With that out of the way, let's get started!",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": 10,
+                            "title": "Step 2",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 11,
+                                    "panel": "description",
+                                    "start": 2000,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Embedding Expressions in JSX",
+                                            "kids": []
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In the example below, we declare a variable called name and then use it inside JSX by wrapping it in curly braces:",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "name",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "const name = 'Write Your Name Here';\nconst element = <h1>Hello, {name}</h1>;\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "const name = 'Write Your Name Here';\nconst element = <h1>Hello, {name}</h1>;\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "You can put any valid JavaScript expression inside the curly braces in JSX. For example, 2 + 2, user.firstName, or formatName(user) are all valid JavaScript expressions.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "JavaScript expression",
+                                                    "kids": []
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "2 + 2",
+                                                    "kids": []
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "user.firstName",
+                                                    "kids": []
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "formatName(user)",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In the example below, we embed the result of calling a JavaScript function, formatName(user), into an <h1> element.",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "formatName(user)",
+                                                    "kids": []
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<h1>",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "function formatName(user) {\n  return user.firstName + ' ' + user.lastName;\n}\n\nconst user = {\n  firstName: 'Harper',\n  lastName: 'Perez'\n};\n\nconst element = (\n  <h1>\n    Hello, {formatName(user)}!\n  </h1>\n);\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "function formatName(user) {\n  return user.firstName + ' ' + user.lastName;\n}\n\nconst user = {\n  firstName: 'Harper',\n  lastName: 'Perez'\n};\n\nconst element = (\n  <h1>\n    Hello, {formatName(user)}!\n  </h1>\n);\n\nReactDOM.render(\n  element,\n  document.getElementById('root')\n);\n",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We split JSX over multiple lines for readability. While it isn't required, when doing this, we also recommend wrapping it in parentheses to avoid the pitfalls of automatic semicolon insertion.",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "automatic semicolon insertion",
+                                                    "kids": []
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "title": "Rendering Elements",
+                    "steps": [
+                        {
+                            "id": 13,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 14,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 15,
+                    "title": "Components and Properties",
+                    "steps": [
+                        {
+                            "id": 16,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 17,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 18,
+                    "title": "State and Lifecycle",
+                    "steps": [
+                        {
+                            "id": 19,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 20,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 21,
+                    "title": "Handling Events",
+                    "steps": [
+                        {
+                            "id": 22,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 23,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 24,
+                    "title": "Conditional Rendering",
+                    "steps": [
+                        {
+                            "id": 25,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 26,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 27,
+                    "title": "Lists and Keys",
+                    "steps": [
+                        {
+                            "id": 28,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 29,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 30,
+                    "title": "Forms",
+                    "steps": [
+                        {
+                            "id": 31,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 32,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 33,
+                    "title": "Lifting State Up",
+                    "steps": [
+                        {
+                            "id": 34,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 35,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 36,
+                    "title": "Lifting State Up",
+                    "steps": [
+                        {
+                            "id": 37,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 38,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 39,
+                    "title": "Composition vs Inheritance",
+                    "steps": [
+                        {
+                            "id": 40,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 41,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 42,
+                    "title": "Thinking in React",
+                    "steps": [
+                        {
+                            "id": 43,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 44,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 45,
+            "title": "Redux",
+            "scenes": [
+                {
+                    "id": 46,
+                    "title": "Introduction to redux",
+                    "steps": [
+                        {
+                            "id": 47,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 48,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 49,
+            "title": "React and Redux",
+            "scenes": [
+                {
+                    "id": 50,
+                    "title": "Using Redux with React",
+                    "steps": [
+                        {
+                            "id": 51,
+                            "title": "Step 1",
+                            "gitData": {
+                                "branch": "/feature/branch"
+                            },
+                            "timeline": [
+                                {
+                                    "id": 52,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 4000,
+                                    "description": [
+                                        {
+                                            "tag": "p",
+                                            "txt": "01.mdx",
+                                            "kids": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
