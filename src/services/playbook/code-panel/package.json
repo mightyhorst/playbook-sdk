@@ -1,0 +1,25 @@
+{
+  "name": "masterclass-playbook-services-code-panel",
+  "description": "A service to compile the playbook code panel",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"@todo\"",
+    "commit": "git-cz"
+  },
+  "author": {
+    "name": "Nick Mitchell",
+    "email": "nick@kitset.io",
+    "url": "https://master-class.io/playbooks"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mitni455/playbook-sdk.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+  }
+}

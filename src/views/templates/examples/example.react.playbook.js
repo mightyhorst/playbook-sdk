@@ -5,25 +5,24 @@
 * @param {string} OUTPUT_FILE - Where to store the playbook json
 **/
 const path = require('path');
-const INPUT_FOLDER = path.join(__dirname, 'inputs/tutorials/04_react/01_quickstart/');
-const OUTPUT_FILE = path.join(__dirname, 'outputs/playbook.hello.json');
+const INPUT_FOLDER = path.join(__dirname, './playbook/docs/');
+const OUTPUT_FILE = path.join(__dirname, './react.playbook.json');
 
 
 /**
+* @requires global.playbook 
 * @requires PlaybookSdk 
 * @description create playbook json like a storybook
 * @filename playbook.sdk.js
 **/
-const PlaybookSdk = require('../src/playbook.sdk');
-const playbook = PlaybookSdk.playbook;
+// const PlaybookSdk = require('../src/playbook.sdk');
+// const playbook = PlaybookSdk.playbook;
 
 /**
 * @method Playbook 
 * @description Build a plybook using the builder pattern 
-* @param {} name - desc
-* @returns {} name - desc
-* @throws {} name - desc
-* @todo todo
+* @param {string} name - desc
+* @returns {PlaybookSdk} playbook - playbook instance 
 **/
 playbook('Hello World')
 	.addConfig("cli", {

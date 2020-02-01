@@ -47,7 +47,7 @@ convertMdToHtml = new showdown.Converter();
 **/    
 function md2html(markdown) {
 	var html = convertMdToHtml.makeHtml(markdown);
-	console.log('html -->\n', html);
+	// console.log('html -->\n', html);
 	
 	return html;
 }

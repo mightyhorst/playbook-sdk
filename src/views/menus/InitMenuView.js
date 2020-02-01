@@ -45,10 +45,19 @@ class InitMenuView{
         /**
          * @param keyPlaybookFolder - path to install the playbook (default cwd)
          */
+        const defaultFolder = './';
         const questionPlaybookFolder = new QuestionInputModel(
             'keyPlaybookFolder', 
             'Where shall we install the playbook file and folders? (hit enter for this folder)',
-            './'
+            defaultFolder,
+            (val)=>{
+                return val.substring(0,2) === defaultFolder ? true: 'Please start with '+defaultFolder;
+                // return val.length > 1 ? true: 'Please enter more than 1 letters';
+            },
+            (val)=>{
+                if(val === defaultFolder) return val; 
+                return val ? chalk.grey(defaultFolder) + chalk.green('learn2code-graphql') + chalk.grey('/')  : '';
+            },
         );
 
         this.questions = [
