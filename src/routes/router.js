@@ -6,12 +6,14 @@ const ROUTES = {
     BUILD: 'build',
     PUSH: 'push',
     REGISTER: 'register',
+    MAGIC: 'magic'
 }
 const CTRLS = {
     playbookInit: require('../ctrls/PlaybookInitCtrl'),
     playbookBuild: require('../ctrls/PlaybookBuildCtrl'),
     //todo playbookPush: require('../ctrls/PlaybookPushCtrl'),
     //todo playbookRegister: require('../ctrls/PlaybookRegisterCtrl'),
+    playbookMagic: require('../ctrls/PlaybookMagicCtrl')
 }
 
 
@@ -51,7 +53,12 @@ module.exports = async (args) => {
             //todo CTRLS.playbookRegister.registerPlaybook(args);
 
             break;
+        case ROUTES.MAGIC:
 
+            console.log('🦄  Magic started ... ')
+            CTRLS.playbookMagic.convertGit2Playbook(args);
+
+            break;
         default:
             console.log('❌  unknown command: '+ cmd);
             break;
