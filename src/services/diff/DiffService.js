@@ -51,5 +51,45 @@ module.exports = {
 
         // console.log(diff, { diff });
 
+    },
+    generateMasterTemplateAndPartials : (oldContent, newContent) => {
+        let templateData = {
+            masterTemplate : "",
+            partials : {
+
+            }
+        }
+
+        if (oldContent)
+        {
+            var diff = Diff.diffLines(oldContent, newContent);
+            let partialCount = 1;
+        
+            diff.forEach((part) => {
+
+                if (part.added)
+                {
+                    const partialName = "partial_" + partialCount++;
+                    templateData.partials[partialName] = part.value;
+                    templateData.masterTemplate += "{{" + partialName + "}}"
+                }
+                else if (part.removed)
+                {
+
+                }
+                else
+                {
+                    templateData.masterTemplate += part.value;
+                }
+
+            })
+        }
+        else
+        {
+            templateData.masterTemplate = newContent;
+        }
+
+        return templateData;
+
     }
 }
