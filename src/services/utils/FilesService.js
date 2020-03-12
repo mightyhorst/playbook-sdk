@@ -156,10 +156,21 @@ class FileService{
     createFolder(folderPath, folderName){
         const fullFilePath = path.join(folderPath, folderName);
         try{
-            fs.mkdirSync(fullFilePath);
+            fs.mkdirSync(fullFilePath, { recursive : true });
             return new FolderModel(fullFilePath);
         }catch(err){
-            console.log(`Error is writing the file: ${chalk.red('err.message')}. Arguments: ${chalk.magenta(JSON.stringify(arguments))}`);
+            console.log(`Error is writing the file: ${chalk.red(err.message)}. Arguments: ${chalk.magenta(JSON.stringify(arguments))}`);
+        }
+    }
+
+    deleteFolder(folderPath) {
+        try
+        {
+            rimraf.sync(folderPath);
+        }
+        catch(err)
+        {
+            console.log(`Error is writing the file: ${chalk.red(err.message)}. Arguments: ${chalk.magenta(JSON.stringify(arguments))}`);
         }
     }
 
