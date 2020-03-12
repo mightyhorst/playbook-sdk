@@ -1,6 +1,7 @@
 const Git = require("nodegit");
 const path = require("path");
 const _ = require('lodash');
+const Url = require('url-parse');
 
 /**
  * @requires Models
@@ -17,18 +18,142 @@ const DiffService = require('../diff/DiffService');
 
 class NodeGitService
 {
-    async createBlueprintsFolder(githubUrl)
+    /**
+     * Clones an existing repo (un/initialised) to tmp blueprints and creates a branch for new blueprint files
+     *
+     * @param {*} githubUrl
+     * @param {*} isBlueprintRepo
+     * @returns {
+     *              repo: {Git.Repository},
+     *              url: {String},
+     *              folderPath : {String},
+     *              index : {String},
+     *              branch : {String}
+     *          }
+     * @memberof NodeGitService
+     */
+    async createOrCloneBlueprintRepoFromGithubUrl(githubUrl, isBlueprintRepo)
+    {
+        const blueprintUrl = new Url(githubUrl)
+        let blueprintFolder;
+        let repo;
+
+        const signature = Git.Signature.now("Foo bar", "dom@kitset.io");
+
+        // -- Lets attempt to clone the repo if it is a blueprint repo. If it isn't then lets generate the blueprint repo name and attempt to clone that
+        if (!isBlueprintRepo)
+        {
+            blueprintUrl.pathname += "-blueprint";
+        }
+
+        const blueprintPathnameSplit = blueprintUrl.pathname.split("/");
+        const blueprintRepoName = blueprintPathnameSplit[blueprintPathnameSplit.length - 1];
+        const blueprintFolderPath = path.resolve(__dirname, ('../../../../sxd-git-projects/' + blueprintRepoName))
+
+        // -- First we need to ensure there is a repo that we can write to. We will not dynamically create a repo (maybe we can do this later but we will need to use the github API directly)
+        try
+        {
+            let credentialsBreak = 0;
+            repo = await Git.Clone(
+                "git@github.com:" + blueprintUrl.pathname.slice(1) + ".git", 
+                blueprintFolderPath, 
+                {
+                    fetchOpts : {
+                        callbacks : {
+                            credentials : function (url, username) {
+                                console.log("Cloning - retrieving credentials for the blueprint repo '" + url + "'")
+                                if (credentialsBreak > 10)
+                                {
+                                    throw {
+                                        message : "Auth failed for the url '" + url + "'. Ensure you have the passphrase for ~/.ssh/id_rsa set in keychain using 'ssh-add -K ~/.ssh/id_rsa' or ensure you the owner/part of the github blueprint repo"
+                                    }
+                                }
+                                return Git.Cred.sshKeyFromAgent(username);
+                            }
+                        }
+                    }
+                }
+            )
+        }
+        catch(err)
+        {
+            let errMessage = "Error cloning the blueprint github repo! - " + err.message;
+            throw errMessage;
+        }
+
+        // -- Next attempt to fetch previous commits. If there are no commits then the repo requires initializing
+        try
+        {
+            let commitOids = await this.getCommitHistory(repo);
+        }
+        catch(err)
+        {
+            // -- There are no previous commits. Lets initialize the repo with a readme file and push that to master
+            
+            // -- Create a README.md file for this repo
+            const readmeFileModel = FilesService.createFile(
+                blueprintFolderPath,
+                "README.md",
+                "Generated with playbook magic"
+            )
+
+            // -- Load the repo index so we can add files
+            const blueprintRepoIndex = await repo.refreshIndex();
+
+            // -- Add the readme to commit
+            await blueprintRepoIndex.addByPath("README.md");
+            await blueprintRepoIndex.write();
+            const oid = await blueprintRepoIndex.writeTree();
+
+            await repo.createCommit("HEAD", signature, signature, "initial commit", oid, []);
+
+            await this.pushRepo(repo);
+
+        }
+        const branchName = "magic/sdk-blueprint-" + Date.now();
+        
+        // -- Create a new branch that we can our new blueprint files to
+        await this.createAndCheckoutBranch(repo, branchName);
+
+        // -- Load the repo index so we can add files
+        const blueprintRepoIndex = await repo.refreshIndex();
+
+        return {
+            repo : repo,
+            url : blueprintUrl.toString(),
+            folderPath : blueprintFolderPath,
+            index : blueprintRepoIndex,
+            branch : branchName,
+        };
+    }
+
+
+    /**
+     * Takes an app from a github URL and generates the playbook.js file with code master/partials in a blueprints repo.
+     * The repo will push to a branch and auto delete itself locally
+     *
+     * @param {*} githubUrl
+     * @param {*} blueprintRepoData
+     * @returns
+     * @memberof NodeGitService
+     */
+    async createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData)
     {
         // -- This is temporary to ensure we have a directory to clone to. We should resort to /tmp later
         FilesService.createFolder(path.resolve(__dirname, '../../../../'), "git-projects");
 
         try
         {
+            // -- Get the repo name from the github URL
+            const appRepoUrl = new Url(githubUrl);
+            const appPathnameSplit = appRepoUrl.pathname.split('/');
+            const appFolderPath = path.resolve(__dirname, '../../../../git-projects/' + appPathnameSplit.join("_"));
+
             // -- Open the repo
             let repo;
             try
             {
-                repo = await Git.Clone(githubUrl, path.resolve(__dirname, '../../../../git-projects/nodegit-tester'))
+                repo = await Git.Clone(githubUrl, appFolderPath)
             }
             catch(err)
             {
@@ -67,11 +192,6 @@ class NodeGitService
                 const playbookModel = new PlaybookModel("LOOK IVE CHANGED TODO - Get the name from github url", "playbook.js");
                 const categoryModel = playbookModel.addCategory("TODO - Create a category name");
                 const sceneModel = categoryModel.addScene("TODO - Create a scene name");
-
-                // -- Before we iterate over the commits. Lets initialise a temp blueprints folder for storing all the partials etc
-                const blueprintsRootFolderModel = FilesService.createFolder(path.resolve(__dirname, '../../../../sxd-git-projects'), 'nodegit-tester-blueprint');
-                
-                // const partialsRootFolderModel = FilesService.createFolder(path.resolve(blueprintsRootFolderModel.path, 'docs/code'), 'partials');
                 
                 let completedStepsByMergeCommit = [];
 
@@ -102,7 +222,7 @@ class NodeGitService
                         const stepModel = sceneModel.addStep(stepName);
 
                         // -- Create a new step folder in the blueprints folder
-                        const stepFolderModel = FilesService.createFolder(blueprintsRootFolderModel.path, stepName);
+                        const stepFolderModel = FilesService.createFolder(blueprintRepoData.folderPath, stepName);
 
                         for (let commitInStepI = 0; commitInStepI < commitsForStepImplementation.length; commitInStepI++)
                         {
@@ -178,6 +298,12 @@ class NodeGitService
                                                                             templateData.masterTemplate
                                                                         )
 
+                                        // -- Add the new file to the repo index for committing
+                                        await this.addAndCommitFile(blueprintRepoData.repo,
+                                                              blueprintRepoData.index,
+                                                              masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                              "feat(" + masterTemplateFileModel.name + "): " + stepName + " - Initialising a master template for printing code in masterclass");
+
                                         // -- Add the master template as a code entry in the playbook.js file
                                         const timelineCodeModel = stepModel.addCode(changedFileStartTime, avgDuration, masterTemplateFileModel.path);
                                         
@@ -197,6 +323,11 @@ class NodeGitService
                                                                                 partialId + ".hbs",
                                                                                 partialContent
                                                                             )
+                                                // -- Add the partial file to the repo index for committing
+                                                await this.addAndCommitFile(blueprintRepoData.repo,
+                                                                            blueprintRepoData.index,
+                                                                            partialFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                                            "feat(" + partialFileModel.name + "): " + stepName + " - Initialising a partial file for use in a master template");
                                                 
                                                 // -- Add the code partial to the code timeline. This will include it in the playbook.js file
                                                 timelineCodeModel.addPartial(partialStartTime, avgPartialDuration, partialId, partialFileModel.path);
@@ -227,9 +358,24 @@ class NodeGitService
                 const playbookJsContent = playbookModel.printJsContent();
 
                 // -- Save the playbookJs file to the blueprint root folder
-                FilesService.createFile(blueprintsRootFolderModel.path, 'playbook.js', playbookJsContent);
+                const playbookJsFileModel = FilesService.createFile(blueprintRepoData.folderPath, 'playbook.js', playbookJsContent);
 
-                return blueprintsRootFolderModel;
+                // -- Add and commit the playbook js file
+                await this.addAndCommitFile(blueprintRepoData.repo,
+                                            blueprintRepoData.index,
+                                            playbookJsFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                            "feat(" + playbookJsFileModel.name + "): Initialising the playbook js file that can be used to generate the playbook json file");
+
+                // -- Now push the repo
+                await this.pushRepo(blueprintRepoData.repo, 
+                                    undefined,
+                                    blueprintRepoData.branch);
+
+                // -- Once pushed, delete the local blueprints and app folder
+                FilesService.deleteFolder(appFolderPath)
+                FilesService.deleteFolder(blueprintRepoData.folderPath)
+                
+                return blueprintRepoData.url + "/tree/" + blueprintRepoData.branch;
             }
             else
             {
@@ -242,6 +388,13 @@ class NodeGitService
         }
     }
 
+    /**
+     * Get an array of commit ids from oldest to newest
+     *
+     * @param {*} repo
+     * @returns {Array<string>}
+     * @memberof NodeGitService
+     */
     async getCommitHistory(repo)
     {
         // -- Fetch the latest commit on master
@@ -269,6 +422,80 @@ class NodeGitService
         }
 
         return commitOids;
+    }
+
+    /**
+     * Creates and checkout a branch in a repo
+     *
+     * @param {*} repo
+     * @param {*} branch
+     * @memberof NodeGitService
+     */
+    async createAndCheckoutBranch(repo, branch)
+    {
+        const headCommit = await repo.getHeadCommit();
+        const blueprintBranchRef = await Git.Branch.create(repo, branch, headCommit, 0);
+        await repo.checkoutRef(blueprintBranchRef);
+    }
+
+    /**
+     * Adds an individual file and commits it to the supplied index
+     *
+     * @param {*} repo
+     * @param {*} index
+     * @param {*} relativeFilePath
+     * @param {*} commitMessage
+     * @returns
+     * @memberof NodeGitService
+     */
+    async addAndCommitFile(repo, index, relativeFilePath, commitMessage)
+    {    
+        var signature = Git.Signature.now("Dominic Trang", "dom@kitset.io");
+
+        // -- Add the readme to commit
+        await index.addByPath(relativeFilePath);
+        await index.write();
+        const oid = await index.writeTree();
+        const headRef = await Git.Reference.nameToId(repo, "HEAD");
+        const parentCommit = await repo.getCommit(headRef);
+        
+        const commitId = await repo.createCommit("HEAD", signature, signature, commitMessage, oid, [parentCommit]);
+
+        return commitId;
+    }
+
+    /**
+     * Push a branch to a github repo
+     *
+     * @param {*} repo
+     * @param {string} [remoteId="origin"]
+     * @param {string} [localBranch="master"]
+     * @param {*} [remoteBranch=localBranch]
+     * @memberof NodeGitService
+     */
+    async pushRepo(repo, remoteId = "origin", localBranch = "master", remoteBranch = localBranch)
+    {
+        let credentialsBreak = 0;
+
+        const remote = await repo.getRemote(remoteId);
+
+        await remote.push(
+            // ["refs/heads/sdk-branch:refs/heads/master"], // -- This merges the local-branch:remote-branch. So sdk-branch pushes to master
+            ["refs/heads/"+ localBranch + ":refs/heads/" + remoteBranch],
+            {
+                callbacks: {
+                    credentials: function(url, username) {
+                        console.log("Cloning - retrieving credentials for the repo '" + url + "'")
+                        credentialsBreak++;
+                        if (credentialsBreak > 10)
+                        {
+                            throw "Auth failed. Ensure you have the passphrase for ~/.ssh/id_rsa set in keychain using 'ssh-add -K ~/.ssh/id_rsa' or ensure you the owner/part of the github blueprint repo"
+                        }
+                        return Git.Cred.sshKeyFromAgent(username);
+                    }
+                }
+            }
+        )
     }
 }
 
