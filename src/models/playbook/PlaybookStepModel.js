@@ -54,9 +54,9 @@ export class PlaybookStepModel
      * @returns {PlaybookTimelineCodeModel}
      * @memberof PlaybookStepModel
      */
-    addCode(start, duration, filePath, compileData)
+    addCode(start, duration, templateFilePath, outputFilePath, compileData)
     {
-        const timelineCodeModel = new PlaybookTimelineCodeModel(start, duration, filePath, compileData);
+        const timelineCodeModel = new PlaybookTimelineCodeModel(start, duration, templateFilePath, outputFilePath, compileData);
         this.timelineCodeModels.push(timelineCodeModel);
 
         return timelineCodeModel;
