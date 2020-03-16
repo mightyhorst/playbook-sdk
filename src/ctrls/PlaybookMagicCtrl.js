@@ -43,43 +43,67 @@ class PlaybookMagicCtrl extends Controller {
      */
     async convertGit2Playbook(args)
     {
-        /**
-         * @step 1. Get the user repo if not yet provided or the url is not a valid github url
-         */
-        let githubUrl = args[3];
-
-        console.log("**************************************************")
-        console.log("I've forced the github to read from https://github.com/Domnom/nodegit-tester for a simple example");
-        console.log("**************************************************")
-        githubUrl = "https://github.com/Domnom/nodegit-tester";
-
-        if (!githubUrl || !ValidationService.isGithubUrl(githubUrl))
+        try
         {
-            // -- Prompt user for a github repo
-            // githubUrl = inquirer.prompt("YO WHERE THE GITHUB URL AT")
-            let githubUrlAnswer = await inquirer.prompt({
-                type : "input",
-                name : "githubUrl",
-                default: "https://github.com/Domnom/nodegit-tester",
-                message: "What github repo would you like to convert?",
-                validate: (val)=>{
-                    return ValidationService.isGithubUrl(val) ? true: 'Please enter a valid github URL';
-                },
+            /**
+             * @step 1. Get the user repo if not yet provided or the url is not a valid github url
+             */
+            let githubUrl = args[3];
+            let blueprintGithubUrl = args[4];
 
-            })
+            // -- Prompt for the app github URL if it has not been provided
+            if (!githubUrl || !ValidationService.isGithubUrl(githubUrl))
+            {
+                let githubUrlAnswer = await inquirer.prompt({
+                    type : "input",
+                    name : "githubUrl",
+                    default: "https://github.com/Domnom/nodegit-tester",
+                    message: "What github repo would you like to convert?",
+                    validate: (val)=>{
+                        return ValidationService.isGithubUrl(val) ? true: 'Please enter a valid github URL';
+                    },
+                })
 
-            githubUrl = githubUrlAnswer.githubUrl;
+                githubUrl = githubUrlAnswer.githubUrl;
+            }
+
+            if (!blueprintGithubUrl || !ValidationService.isGithubUrl(githubUrl))
+            {
+                let blueprintGithubUrlAnswer = await inquirer.prompt({
+                    type : "input",
+                    name : "blueprintGithubUrl",
+                    default: "https://github.com/Domnom/nodegit-tester-blueprint",
+                    message: "What github repo would you like to save the blueprints to?",
+                    validate: (val)=>{
+                        return ValidationService.isGithubUrl(val) ? true: 'Please enter a valid github URL';
+                    },
+                })
+
+                blueprintGithubUrl = blueprintGithubUrlAnswer.blueprintGithubUrl;
+            }
+
+            /**
+             * @step 2. Create or clone a git repo to store/update the blueprints 
+             */
+            const blueprintRepoData = await NodeGitService.createOrCloneBlueprintRepoFromGithubUrl((blueprintGithubUrl ? blueprintGithubUrl : githubUrl), !!blueprintGithubUrl);
+            
+            
+            /**
+             * @step 3. Create the blueprints folder with the github URL
+             */
+            const blueprintRepoBranchUrl = await NodeGitService.createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData);
+
+
+            process.stderr.write("\n============ Processing complete ============\n\n")
+            process.stderr.write(`You can view your blueprints at the branch "${blueprintRepoData.branch}" found in the repo:\n`["green"]);
+            process.stderr.write((blueprintRepoBranchUrl + "\n")["yellow"]);
+            process.stderr.write("\n=============================================\n\n")
+        }
+        catch(err)
+        {
+            console.error(err);
         }
         
-        /**
-         * @step 2. Create the blueprints folder 
-         */
-        const blueprintsFolderModel = await NodeGitService.createBlueprintsFolder(githubUrl);
-
-        process.stderr.write("\n============ Processing complete ============\n")
-        process.stderr.write("\nYou can now view your blueprints folder at this path:\n\n"["green"]);
-        process.stderr.write((blueprintsFolderModel.path + "\n")["yellow"]);
-        process.stderr.write("\n=============================================\n\n")
         return;
     }
 
