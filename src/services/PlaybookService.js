@@ -8,6 +8,7 @@ var term = require( 'terminal-kit').terminal;
  * @requires Services 
  */
 const FileService = require('../services/utils/FilesService');
+const NodeGitService = require('../services/nodegit/NodeGitService');
 
 /**
  * @constant VIEWS 
@@ -24,6 +25,43 @@ class PlaybookService{
 
     constructor(){
         
+    }
+
+
+    async buildPlaybookJsonFromGithub(blueprintGithubUrl, blueprintRepoData)
+    {
+        try
+        {
+            let blueprintFolderPath = blueprintRepoData ? blueprintRepoData.folderPath : undefined;
+            // -- If there is no blueprint folder path provided, use the github URL to fetch the repo
+            if (!blueprintFolderPath)
+            {
+                const blueprintPathnameSplit = blueprintUrl.pathname.split("/");
+                blueprintFolderPath = path.resolve(__dirname, ('../../../sxd-git-projects/' + blueprintPathnameSplit.join('_')))
+                
+                const repo = await NodeGitService.cloneRepo(blueprintGithubUrl, blueprintFolderPath);
+            }
+            
+            // -- Check to see if the blueprints folder contains a playbook.js file
+            const playbookFiles = FileService.findAll(blueprintFolderPath, 'playbook.js');
+
+            if (playbookFiles.length > 0)
+            {
+                // -- Currently, we will only run the first playbook.js file found. This should exist in the root and we will push this file to the repo
+                require(playbookFiles[0].path);
+
+                // -- Push the hard-saved playbook.json file that is in the root of the blueprints folder to the repo
+                await NodeGitService.addAndCommitFile(blueprintRepoData.repo,
+                                                      blueprintRepoData.index,
+                                                      'playbook.json',
+                                                      "feat(playbook.json): The compiled playbook.js file. Used by masterclass.io");
+            }
+
+        }
+        catch(err)
+        {
+            throw err;
+        }
     }
 
     
