@@ -92,6 +92,10 @@ class Controller{
         const fileModels =  PlaybookService.findAllPlaybooks();
         return fileModels;
     }
+
+    deleteFolder(folderPath) {
+        FileService.deleteFolder(folderPath);
+    }
 }
 
 module.exports = Controller;
