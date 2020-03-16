@@ -52,13 +52,14 @@ export class PlaybookModel {
     {
         let indent = TextIndentService.indent(indentSize);
 
-        let content = 'playbook("' + this.name + '")\n';
+        let content = 'const path = require("path");\n\n';
+            content += 'playbook("' + this.name + '")\n';
 
         this.categoryModels.forEach((category) => {
             content += category.printJsContent(indentSize);
         })
 
-        content += indent + '.write("' + this.outputFileName + '");'
+        content += indent + '.write(path.join(__dirname, "' + this.outputFileName + '"));'
 
         return content;
     }
