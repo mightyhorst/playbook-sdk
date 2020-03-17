@@ -125,6 +125,7 @@ class NodeGitService
             // -- Get the repo name from the github URL
             const appRepoUrl = new Url(githubUrl);
             const appPathnameSplit = appRepoUrl.pathname.split('/');
+            const appOwner = appPathnameSplit[appPathnameSplit.length - 2];
             const appFolderPath = path.resolve(__dirname, '../../../../git-projects/' + appPathnameSplit.join("_"));
 
             // -- Open the repo
@@ -201,6 +202,18 @@ class NodeGitService
 
                         // -- Create a new step folder in the blueprints folder
                         const stepFolderModel = FilesService.createFolder(blueprintRepoData.folderPath, stepName);
+
+                        // -- Attempt to read the branch name of this merge and use a cli command to execute a git checkout -b command
+                        const mergeMessageSplit = commitMessage.split(" from " + appOwner + "/");
+
+                        if (mergeMessageSplit.length > 1)
+                        {
+                            const mergedBranchName = mergeMessageSplit[mergeMessageSplit.length - 1].slice(0, (mergeMessageSplit[mergeMessageSplit.length - 1]).indexOf("\n"));
+
+                            const cliModel = stepModel.addCli(0, 100);
+
+                            cliModel.addCommand("git checkout -b " + mergedBranchName);
+                        }
 
                         for (let commitInStepI = 0; commitInStepI < commitsForStepImplementation.length; commitInStepI++)
                         {
