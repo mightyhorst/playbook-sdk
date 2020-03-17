@@ -224,3 +224,90 @@ export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
         return content;
     }
 }
+
+
+
+/**
+ * Creates a .addCli entry in the playbook.js file. Allows the author to add executable commands to the cli panel in masterclass
+ *
+ * @export
+ * @class PlaybookTimelineCliModel
+ * @extends {PlaybookTimelineModel}
+ */
+export class PlaybookTimelineCliModel extends PlaybookTimelineModel {
+
+    cliCommandModels = [];
+
+    constructor(start, duration)
+    {
+        super(start, duration);
+    }
+
+    addCommand(command)
+    {
+        const cliCommandModel = new PlaybookTimelineCliCommandModel(command);
+
+        this.cliCommandModels.push(cliCommandModel);
+
+        return cliCommandModel;
+    }
+
+    /**
+     * Prints the .addCli entry to a timeline
+     *
+     * @param {number} [indentSize=1]
+     * @returns {string}
+     * @memberof PlaybookTimelineCliModel
+     */
+    printJsContent(indentSize = 4)
+    {
+        const indent1 = TextIndentService.indent(indentSize);
+        const indent2 = TextIndentService.indent(indentSize + 1);
+
+        let content = indent1 + '.addCli()\n';
+
+        this.cliCommandModels.forEach((cliCommandModel) => {
+
+            content += cliCommandModel.printJsContent(indentSize + 1);
+
+        })
+
+        content += super.printJsContent(indentSize);
+        
+        return content;
+    }
+}
+
+/**
+ * Creates a .withCommand entry in the playbook.js file. This will be a command that is to be executed by the cli panel
+ *
+ * @export
+ * @class PlaybookTimelineCliCommandModel
+ */
+export class PlaybookTimelineCliCommandModel {
+
+    command;
+
+    constructor(command)
+    {
+        this.command = command;
+    }
+
+    /**
+     * Prints .withCommand entry as a child to the .addCli entry
+     *
+     * @param {number} [indentSize=5]
+     * @returns
+     * @memberof PlaybookTimelineCliCommandModel
+     */
+    printJsContent(indentSize = 5)
+    {
+        const indent1 = TextIndentService.indent(indentSize);
+        const indent2 = TextIndentService.indent(indentSize + 1);
+
+        let content = indent1 + ".withCommand('" + this.command + "')\n";
+
+        return content;
+    }
+
+}
