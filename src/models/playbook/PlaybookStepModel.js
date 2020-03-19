@@ -8,7 +8,8 @@ import * as TextIndentService from '../../services/utils/TextIndentService';
  */
 import {
     PlaybookTimelineDescriptionModel, 
-    PlaybookTimelineCodeModel
+    PlaybookTimelineCodeModel,
+    PlaybookTimelineCliModel
 } from './PlaybookTimelineModel';
 
 /**
@@ -24,6 +25,7 @@ export class PlaybookStepModel
 
     timelineDescriptionModels = [];
     timelineCodeModels = [];
+    timelineCliModels = [];
     
 
     constructor(name, commitId)
@@ -50,7 +52,11 @@ export class PlaybookStepModel
     /**
      * Creates a PlaybookTimelineCodeModel that represents ".addCode()" in the playbook.js file
      *
-     * @param {*} name
+     * @param {*} start
+     * @param {*} duration
+     * @param {*} templateFilePath
+     * @param {*} outputFilePath
+     * @param {*} compileData
      * @returns {PlaybookTimelineCodeModel}
      * @memberof PlaybookStepModel
      */
@@ -60,6 +66,22 @@ export class PlaybookStepModel
         this.timelineCodeModels.push(timelineCodeModel);
 
         return timelineCodeModel;
+    }
+
+    /**
+     * Creates a PlaybookTimelineCliModel that represends the ".addCli()" in the playbook.js file
+     *
+     * @param {*} start
+     * @param {*} duration
+     * @returns
+     * @memberof PlaybookStepModel
+     */
+    addCli(start, duration)
+    {
+        const timelineCliModel = new PlaybookTimelineCliModel(start, duration);
+        this.timelineCliModels.push(timelineCliModel);
+
+        return timelineCliModel;
     }
     
     /**
@@ -81,6 +103,10 @@ export class PlaybookStepModel
 
         this.timelineCodeModels.forEach((timelineCodeModel) => {
             content += timelineCodeModel.printJsContent(indentSize + 1);
+        })
+
+        this.timelineCliModels.forEach((timelineCliModel) => {
+            content += timelineCliModel.printJsContent(indentSize + 1);
         })
 
         return content;

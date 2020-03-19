@@ -351,6 +351,54 @@ class PlaybookSdk{
 		return this;
 	}
 
+
+	/**
+	 * Add entry point for commands to be printed to the cli panel in masterclass
+	 *
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	addCli() 
+	{
+		const category = this.playbookJson.categories.find(cat => cat.id === this.last.category);
+		const scene = category.scenes.find(scene => scene.id === this.last.scene);
+		const step = scene.steps.find(step => step.id === this.last.step);
+
+		const id = this.nextId++;
+
+		step.timeline.push({
+			id: id,
+			"panel": "cli",
+			"start": DEFAULTS.start,
+			"duration": DEFAULTS.duration,
+			"cmds" : []
+		})
+
+		this.last.timeline = id;
+
+		return this;
+
+	}
+
+	
+	withCommand(command) 
+	{
+		const category = this.playbookJson.categories.find(cat => cat.id === this.last.category);
+		const scene = category.scenes.find(scene => scene.id === this.last.scene);
+		const step = scene.steps.find(step => step.id === this.last.step);
+		const time = step.timeline.find(time => time.id === this.last.timeline);
+
+		if (time.hasOwnProperty('cmds'))
+		{
+			time.cmds.push({
+				"execute" : command
+			})
+		}
+
+		return this;
+	}
+	
+
 	/**
 	 * Add timeline for granular control over how quick the printing is and when it starts 
 	 *
