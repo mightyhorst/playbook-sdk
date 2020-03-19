@@ -47,38 +47,16 @@ class NodeGitService
         }
 
         const blueprintPathnameSplit = blueprintUrl.pathname.split("/");
-        const blueprintRepoName = blueprintPathnameSplit[blueprintPathnameSplit.length - 1];
-        const blueprintFolderPath = path.resolve(__dirname, ('../../../../sxd-git-projects/' + blueprintRepoName))
+        const blueprintFolderPath = path.resolve(__dirname, ('../../../../sxd-git-projects/' + blueprintPathnameSplit.join('_')))
 
         // -- First we need to ensure there is a repo that we can write to. We will not dynamically create a repo (maybe we can do this later but we will need to use the github API directly)
         try
         {
-            let credentialsBreak = 0;
-            repo = await Git.Clone(
-                "git@github.com:" + blueprintUrl.pathname.slice(1) + ".git", 
-                blueprintFolderPath, 
-                {
-                    fetchOpts : {
-                        callbacks : {
-                            credentials : function (url, username) {
-                                console.log("Cloning - retrieving credentials for the blueprint repo '" + url + "'")
-                                if (credentialsBreak > 10)
-                                {
-                                    throw {
-                                        message : "Auth failed for the url '" + url + "'. Ensure you have the passphrase for ~/.ssh/id_rsa set in keychain using 'ssh-add -K ~/.ssh/id_rsa' or ensure you the owner/part of the github blueprint repo"
-                                    }
-                                }
-                                return Git.Cred.sshKeyFromAgent(username);
-                            }
-                        }
-                    }
-                }
-            )
+            repo = await this.cloneRepo("git@github.com:" + blueprintUrl.pathname.slice(1) + ".git", blueprintFolderPath);
         }
         catch(err)
         {
-            let errMessage = "Error cloning the blueprint github repo! - " + err.message;
-            throw errMessage;
+            throw err;
         }
 
         // -- Next attempt to fetch previous commits. If there are no commits then the repo requires initializing
@@ -130,7 +108,7 @@ class NodeGitService
 
     /**
      * Takes an app from a github URL and generates the playbook.js file with code master/partials in a blueprints repo.
-     * The repo will push to a branch and auto delete itself locally
+     * This will commit all files generated and delete the local app repo
      *
      * @param {*} githubUrl
      * @param {*} blueprintRepoData
@@ -153,11 +131,11 @@ class NodeGitService
             let repo;
             try
             {
-                repo = await Git.Clone(githubUrl, appFolderPath)
+                repo = await this.cloneRepo(githubUrl, appFolderPath);
             }
             catch(err)
             {
-                repo = await Git.Repository.open(path.resolve(__dirname, '../../../../git-projects/nodegit-tester/.git'))
+                repo = await Git.Repository.open(path.resolve(__dirname, '../../../../git-projects/' + appPathnameSplit.join("_") + '/.git'))
             }
             
 
@@ -189,7 +167,7 @@ class NodeGitService
 
             if (commitOids.length > 0)
             {
-                const playbookModel = new PlaybookModel("LOOK IVE CHANGED TODO - Get the name from github url", "playbook.js");
+                const playbookModel = new PlaybookModel("LOOK IVE CHANGED TODO - Get the name from github url", "playbook.json");
                 const categoryModel = playbookModel.addCategory("TODO - Create a category name");
                 const sceneModel = categoryModel.addScene("TODO - Create a scene name");
                 
@@ -207,7 +185,7 @@ class NodeGitService
                     const commitMessage = commit.message();
                     
                     // -- The commit will either be a branch commit or a merge pull request. For the merge pull requests, we will need to generate a new "step"
-                    if (commitMessage.indexOf("Merge pull request") === 0 || commitOidI === 0)
+                    if (this.isMergeRequest(commitMessage, commitOidI, "github"))
                     {
                         // -- Catcher to force the first commit (repo init) to run its own step
                         if (commitOidI === 0)
@@ -300,12 +278,15 @@ class NodeGitService
 
                                         // -- Add the new file to the repo index for committing
                                         await this.addAndCommitFile(blueprintRepoData.repo,
-                                                              blueprintRepoData.index,
-                                                              masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
-                                                              "feat(" + masterTemplateFileModel.name + "): " + stepName + " - Initialising a master template for printing code in masterclass");
+                                                                    blueprintRepoData.index,
+                                                                    masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                                    "feat(" + masterTemplateFileModel.name + "): " + stepName + " - Initialising a master template for printing code in masterclass");
 
                                         // -- Add the master template as a code entry in the playbook.js file
-                                        const timelineCodeModel = stepModel.addCode(changedFileStartTime, avgDuration, masterTemplateFileModel.path);
+                                        const timelineCodeModel = stepModel.addCode(changedFileStartTime, 
+                                                                                    avgDuration, 
+                                                                                    masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                                                    patchFilePath);
                                         
                                         // -- Create the partial data files 
                                         if (!_.isEmpty(templateData.partials))
@@ -330,7 +311,10 @@ class NodeGitService
                                                                             "feat(" + partialFileModel.name + "): " + stepName + " - Initialising a partial file for use in a master template");
                                                 
                                                 // -- Add the code partial to the code timeline. This will include it in the playbook.js file
-                                                timelineCodeModel.addPartial(partialStartTime, avgPartialDuration, partialId, partialFileModel.path);
+                                                timelineCodeModel.addPartial(partialStartTime, 
+                                                                             avgPartialDuration, 
+                                                                             partialId, 
+                                                                             partialFileModel.path.slice(blueprintRepoData.folderPath.length + 1));
 
                                                 // -- Set the partial start time to the end of this partial so they do not play at the same time
                                                 partialStartTime += avgPartialDuration;
@@ -367,15 +351,14 @@ class NodeGitService
                                             "feat(" + playbookJsFileModel.name + "): Initialising the playbook js file that can be used to generate the playbook json file");
 
                 // -- Now push the repo
-                await this.pushRepo(blueprintRepoData.repo, 
-                                    undefined,
-                                    blueprintRepoData.branch);
+                // await this.pushRepo(blueprintRepoData.repo, 
+                //                     undefined,
+                //                     blueprintRepoData.branch);
 
-                // -- Once pushed, delete the local blueprints and app folder
+                // -- Delete the local app folder
                 FilesService.deleteFolder(appFolderPath)
-                FilesService.deleteFolder(blueprintRepoData.folderPath)
                 
-                return blueprintRepoData.url + "/tree/" + blueprintRepoData.branch;
+                return blueprintRepoData;
             }
             else
             {
@@ -422,6 +405,41 @@ class NodeGitService
         }
 
         return commitOids;
+    }
+
+    async cloneRepo(url, path)
+    {
+        try
+        {
+            let credentialsBreak = 0;
+            const repo = await Git.Clone(
+                url, 
+                path, 
+                {
+                    fetchOpts : {
+                        callbacks : {
+                            credentials : function (url, username) {
+                                console.log("Cloning - retrieving credentials for the repo '" + url + "'")
+                                if (credentialsBreak > 10)
+                                {
+                                    throw {
+                                        message : "Auth failed for the url '" + url + "'. Ensure you have the passphrase for ~/.ssh/id_rsa set in keychain using 'ssh-add -K ~/.ssh/id_rsa' or ensure you the owner/part of the github blueprint repo"
+                                    }
+                                }
+                                return Git.Cred.sshKeyFromAgent(username);
+                            }
+                        }
+                    }
+                }
+            )
+
+            return repo;
+        }
+        catch(err)
+        {
+            let errMessage = "Error cloning the blueprint github repo! - " + err.message;
+            throw errMessage;
+        }
     }
 
     /**
@@ -475,27 +493,56 @@ class NodeGitService
      */
     async pushRepo(repo, remoteId = "origin", localBranch = "master", remoteBranch = localBranch)
     {
-        let credentialsBreak = 0;
+        try
+        {
+            let credentialsBreak = 0;
 
-        const remote = await repo.getRemote(remoteId);
+            const remote = await repo.getRemote(remoteId);
 
-        await remote.push(
-            // ["refs/heads/sdk-branch:refs/heads/master"], // -- This merges the local-branch:remote-branch. So sdk-branch pushes to master
-            ["refs/heads/"+ localBranch + ":refs/heads/" + remoteBranch],
-            {
-                callbacks: {
-                    credentials: function(url, username) {
-                        console.log("Cloning - retrieving credentials for the repo '" + url + "'")
-                        credentialsBreak++;
-                        if (credentialsBreak > 10)
-                        {
-                            throw "Auth failed. Ensure you have the passphrase for ~/.ssh/id_rsa set in keychain using 'ssh-add -K ~/.ssh/id_rsa' or ensure you the owner/part of the github blueprint repo"
+            await remote.push(
+                // ["refs/heads/sdk-branch:refs/heads/master"], // -- This merges the local-branch:remote-branch. So sdk-branch pushes to master
+                ["refs/heads/"+ localBranch + ":refs/heads/" + remoteBranch],
+                {
+                    callbacks: {
+                        credentials: function(url, username) {
+                            console.log("Cloning - retrieving credentials for the repo '" + url + "'")
+                            credentialsBreak++;
+                            if (credentialsBreak > 10)
+                            {
+                                throw "Auth failed. Ensure you have the passphrase for ~/.ssh/id_rsa set in keychain using 'ssh-add -K ~/.ssh/id_rsa' or ensure you the owner/part of the github blueprint repo"
+                            }
+                            return Git.Cred.sshKeyFromAgent(username);
                         }
-                        return Git.Cred.sshKeyFromAgent(username);
                     }
                 }
-            }
-        )
+            )
+        }
+        catch(err)
+        {
+            throw err;
+        }
+    }
+
+
+    /**
+     * 
+     * @todo Auto detect git remote flavor from either url or commit message
+     * @param {*} commitMessage
+     * @param {*} commitOidI
+     * @param {string} [gitRemoteFlavor="github"]
+     * @returns
+     * @memberof NodeGitService
+     */
+    isMergeRequest(commitMessage, commitOidI, gitRemoteFlavor = "github")
+    {
+        switch(gitRemoteFlavor)
+        {
+            case "gitlab":
+                return commitMessage.indexOf("Merge pull request") === 0 || commitOidI === 0;
+            case "github":
+            default:
+                return commitMessage.indexOf("Merge pull request") === 0 || commitOidI === 0;
+        }
     }
 }
 

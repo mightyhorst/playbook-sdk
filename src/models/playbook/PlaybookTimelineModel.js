@@ -66,7 +66,7 @@ export class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
     {
         const indent = TextIndentService.indent(indentSize);
 
-        let content = indent + '.addDescriptionFromMdFile("' + this.filePath + '")\n';
+        let content = indent + '.addDescriptionFromMdFile(path.join(__dirname, "' + this.filePath + '"))\n';
 
         content += super.printJsContent(indentSize);
 
@@ -77,15 +77,17 @@ export class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
 
 export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
     
-    filePath;
+    templateFilePath;
+    outputFilePath;
     compileData;
     partialModels = [];
 
-    constructor(start, duration, filePath, compileData)
+    constructor(start, duration, templateFilePath, outputFilePath, compileData)
     {
         super(start, duration);
 
-        this.filePath = filePath;
+        this.templateFilePath = templateFilePath;
+        this.outputFilePath = outputFilePath;
         this.compileData = compileData;
     }
 
@@ -95,14 +97,14 @@ export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
      * @param {*} start
      * @param {*} duration
      * @param {*} partialId
-     * @param {*} filePath
+     * @param {*} templateFilePath
      * @param {*} compileData
      * @returns {PlaybookTimelineCodePartialModel}
      * @memberof PlaybookTimelineCodeModel
      */
-    addPartial(start, duration, partialId, filePath, compileData)
+    addPartial(start, duration, partialId, templateFilePath, compileData)
     {
-        const partialModel = new PlaybookTimelineCodePartialModel(start, duration, partialId, filePath, compileData);
+        const partialModel = new PlaybookTimelineCodePartialModel(start, duration, partialId, templateFilePath, compileData);
 
         this.partialModels.push(partialModel);
 
@@ -121,7 +123,7 @@ export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
         const indent1 = TextIndentService.indent(indentSize);
         const indent2 = TextIndentService.indent(indentSize + 1);
 
-        let content = indent1 + '.addCode("' + this.filePath + '"';
+        let content = indent1 + '.addCode("' + this.templateFilePath + '", "' + this.outputFilePath + '"';
         
         const lastHbsKey = _.findLastKey(this.compileData);
 
@@ -167,15 +169,15 @@ export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
 export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
 {
     partialId;
-    filePath;
+    templateFilePath;
     compileData;
 
-    constructor(start, duration, partialId, filePath, compileData)
+    constructor(start, duration, partialId, templateFilePath, compileData)
     {
         super(start, duration);
 
         this.partialId = partialId;
-        this.filePath = filePath;
+        this.templateFilePath = templateFilePath;
         this.compileData = compileData;
     }
 
@@ -191,7 +193,7 @@ export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
         const indent1 = TextIndentService.indent(indentSize);
         const indent2 = TextIndentService.indent(indentSize + 1);
 
-        let content = indent1 + '.withPartial("' + this.partialId + '", "' + this.filePath + '"';
+        let content = indent1 + '.withPartial("' + this.partialId + '", "' + this.templateFilePath + '", ' + this.start + ", " + this.duration;
 
         const lastHbsKey = _.findLastKey(this.compileData);
         if (this.compileData && !_.isEmpty(this.compileData))
@@ -218,8 +220,6 @@ export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
         {
             content += ")\n";
         }
-
-        content += super.printJsContent(indentSize);
 
         return content;
     }

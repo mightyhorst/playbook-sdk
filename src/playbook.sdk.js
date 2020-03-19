@@ -304,6 +304,53 @@ class PlaybookSdk{
 
 		return this;
 	}
+
+	addCode(templateFile, outputFile, compileData) {
+
+		const category = this.playbookJson.categories.find(cat => cat.id === this.last.category);
+		const scene = category.scenes.find(scene => scene.id === this.last.scene);
+		const step = scene.steps.find(step => step.id === this.last.step);
+
+		const id = this.nextId++;
+
+		step.timeline.push({
+			id: id,
+			"panel": "code",
+			"start": DEFAULTS.start,
+			"duration": DEFAULTS.duration,
+			"code" : {
+				"template" : templateFile,
+				"partial_sections" : [],
+				"output" : outputFile
+			}
+		})
+
+		this.last.timeline = id;
+
+		return this;
+	}
+
+	withPartial(partialId, partialFile, start, duration, compileData) {
+		
+		const category = this.playbookJson.categories.find(cat => cat.id === this.last.category);
+		const scene = category.scenes.find(scene => scene.id === this.last.scene);
+		const step = scene.steps.find(step => step.id === this.last.step);
+		const time = step.timeline.find(time => time.id === this.last.timeline);
+
+		if (time.hasOwnProperty('code') && time.code.hasOwnProperty("partial_sections"))
+		{
+			time.code.partial_sections.push({
+				"partial_id" : partialId,
+				"start" : start,
+				"duration" : duration,
+				"template" : partialFile,
+				"template_data" : {}
+			})
+		}
+
+		return this;
+	}
+
 	/**
 	 * Add timeline for granular control over how quick the printing is and when it starts 
 	 *

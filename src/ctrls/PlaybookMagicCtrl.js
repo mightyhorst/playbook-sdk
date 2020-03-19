@@ -16,6 +16,7 @@ const QuestionInputModel = require('../models/menus/QuestionInputModel');
  */
 const ValidationService = require('../services/utils/ValidationService');
 const NodeGitService = require('../services/nodegit/NodeGitService');
+const PlaybookService = require('../services/PlaybookService');
 
  /**
  * Playbook Magic handler 
@@ -72,7 +73,7 @@ class PlaybookMagicCtrl extends Controller {
                 let blueprintGithubUrlAnswer = await inquirer.prompt({
                     type : "input",
                     name : "blueprintGithubUrl",
-                    default: "https://github.com/Domnom/nodegit-tester-blueprint",
+                    default: "https://github.com/Domnom/test-blueprint",
                     message: "What github repo would you like to save the blueprints to?",
                     validate: (val)=>{
                         return ValidationService.isGithubUrl(val) ? true: 'Please enter a valid github URL';
@@ -85,18 +86,50 @@ class PlaybookMagicCtrl extends Controller {
             /**
              * @step 2. Create or clone a git repo to store/update the blueprints 
              */
-            const blueprintRepoData = await NodeGitService.createOrCloneBlueprintRepoFromGithubUrl((blueprintGithubUrl ? blueprintGithubUrl : githubUrl), !!blueprintGithubUrl);
-            
+            let blueprintRepoData = await NodeGitService.createOrCloneBlueprintRepoFromGithubUrl((blueprintGithubUrl ? blueprintGithubUrl : githubUrl), !!blueprintGithubUrl);
             
             /**
              * @step 3. Create the blueprints folder with the github URL
              */
-            const blueprintRepoBranchUrl = await NodeGitService.createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData);
+            blueprintRepoData = await NodeGitService.createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData);
 
+            /**
+             * @step 4. Ask if we want to build the playbook.json
+             */
+            let buildPlaybookJsonFileAnswer = await inquirer.prompt({
+                type : "confirm",
+                name : "buildPlaybookJsonFile",
+                message : "Would you like to generate the playbook.json file?"
+            })
+
+            const buildPlaybookJsonFile = buildPlaybookJsonFileAnswer.buildPlaybookJsonFile
+
+            if (buildPlaybookJsonFile)
+            {
+                global.playbook = require('../playbook.sdk').playbook;
+                await PlaybookService.buildPlaybookJsonFromGithub(blueprintGithubUrl, blueprintRepoData);
+            }
+            else
+            {
+                process.stderr.write("\nIf you would like to generate the playbook.json then run the command 'playbook build'\n")
+            }
+
+            /**
+             * @step 5. Push blueprint repo
+             */
+            await NodeGitService.pushRepo(blueprintRepoData.repo, 
+                                          undefined,
+                                          blueprintRepoData.branch);
+
+
+            /**
+             * @step 6. Cleanup blueprint folder
+             */
+            this.deleteFolder(blueprintRepoData.folderPath);
 
             process.stderr.write("\n============ Processing complete ============\n\n")
             process.stderr.write(`You can view your blueprints at the branch "${blueprintRepoData.branch}" found in the repo:\n`["green"]);
-            process.stderr.write((blueprintRepoBranchUrl + "\n")["yellow"]);
+            process.stderr.write((blueprintRepoData.url + "/tree/" + blueprintRepoData.branch + "\n")["yellow"]);
             process.stderr.write("\n=============================================\n\n")
         }
         catch(err)
