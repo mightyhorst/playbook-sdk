@@ -305,7 +305,7 @@ export class PlaybookTimelineCliCommandModel {
         const indent1 = TextIndentService.indent(indentSize);
         const indent2 = TextIndentService.indent(indentSize + 1);
 
-        let content = indent1 + ".withCommand('" + this.command + "')\n";
+        let content = indent1 + '.withCommand("' + this.command + '")\n';
 
         return content;
     }
