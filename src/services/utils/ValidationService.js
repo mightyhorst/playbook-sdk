@@ -33,6 +33,35 @@ class ValidationService
             return false;
         }
     }
+
+    isInt(value, throwMsg = "Value is not a number!")
+    {
+        const valueAsInt = parseInt(value);
+
+        if (isNaN(valueAsInt))
+        {
+            throw throwMsg;
+        }
+    }
+
+    /**
+     * Checks if the 2 values have the same unit. Currently supports:
+     * %
+     * px
+     *
+     * @param {*} value1
+     * @param {*} value2
+     * @memberof ValidationService
+     */
+    isSameUnit(value1, value2)
+    {
+        return this.isPercent(value1) === this.isPercent(value2)
+    }
+
+    isPercent(value)
+    {
+        return value.indexOf("%") >= 0
+    }
 }
 
 module.exports = new ValidationService();

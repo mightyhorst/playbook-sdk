@@ -8,5 +8,8 @@ module.exports = {
         }
 
         return indent;
+    },
+    formatToStringOrNum: (value) => {
+        return isNaN(value) ? '"' + value + '"' : value;
     }
 }

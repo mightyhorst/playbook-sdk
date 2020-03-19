@@ -194,3 +194,104 @@ const diffModel:IDiffModel = {
 	}
 }
 ```
+
+
+### Playbook.js
+Start a playbook.js file by using `.playbook(title)`
+
+#### Playbook
+#### Child Functions
+```javascript
+.addCategory("title")
+.write("playbook.json")
+```
+
+#### Categories
+#### Child Functions
+```javascript
+.addScene(title)
+```
+
+#### Scenes
+#### Child Functions
+```javascript
+.addStep(title)
+```
+
+#### Steps
+#### Child Functions
+```javascript
+.addDescriptionFromMdFile(filePath)
+.addCode(start, duration, templateFilePath, outputFilePath, compileData)
+.addCli(start, duration)
+```
+
+### Timeline - all
+#### Child Functions
+```javascript
+.withTime(start, duration)
+
+// -- Transitions
+.addTransition(start, end)
+.isMin()
+.isNotMin()
+.isMax()
+.isNotMax()
+.isClosed()
+.isOpen()
+.move(left, top)
+.moveLeft(left)
+.moveRight(right)
+.moveTop(top)
+.moveBottom(bottom)
+.setPosition(left, top)
+.changeDimension(width, height)
+.changeWidth(width)
+.changeHeight(height)
+.setDimension(width, height)
+```
+
+#### Notes
+With transitions, the main units are 'px' and '%'. In order to set a transition for a given property (e.g height) then the same unit needs to be used `height = 20% -> height = 35%`. View the below panel models to see the default window setting values + units
+
+### Description
+#### Window settings
+```javascript
+isClosed = false;
+top = "0px";
+left = "0px";
+width = "45%";
+height = "100%";
+```
+#### Child Functions
+```javascript
+
+```
+
+### Code
+#### Window settings
+```javascript
+isClosed = false;
+top = "0px";
+left = "50%";
+width = "45%";
+height = "80%";
+```
+#### Child Functions
+```javascript
+.addPartial(start, duration, partialId, templateFilePath, compileData)
+```
+
+### Cli
+#### Window settings
+```javascript
+isClosed = true;
+top = "0px";
+left = "50%";
+width = "45%";
+height = "20%";
+```
+#### Child Functions
+```javascript
+.addCommand(command)
+```
