@@ -194,3 +194,67 @@ const diffModel:IDiffModel = {
 	}
 }
 ```
+
+
+### Playbook.js
+Start a playbook.js file by using `.playbook(title)`
+
+#### Playbook
+```javascript
+.addCategory("title")
+.write("playbook.json")
+```
+
+#### Categories
+```javascript
+.addScene(title)
+```
+
+#### Scenes
+```javascript
+.addStep(title)
+```
+
+#### Steps
+```javascript
+.addDescriptionFromMdFile(filePath)
+.addCode(start, duration, templateFilePath, outputFilePath, compileData)
+.addCli(start, duration)
+```
+
+### Timeline - all
+```javascript
+.withTime(start, duration)
+.addTransition(start, end)
+.isMin()
+.isNotMin()
+.isMax()
+.isNotMax()
+.isClosed()
+.isOpen()
+.move(left, top)
+.moveLeft(left)
+.moveRight(right)
+.moveTop(top)
+.moveBottom(bottom)
+.setPosition(left, top)
+.changeDimension(width, height)
+.changeWidth(width)
+.changeHeight(height)
+.setDimension(width, height)
+```
+
+### Description
+```javascript
+
+```
+
+### Code
+```javascript
+.addPartial(start, duration, partialId, templateFilePath, compileData)
+```
+
+### Cli
+```javascript
+.addCommand(command)
+```
