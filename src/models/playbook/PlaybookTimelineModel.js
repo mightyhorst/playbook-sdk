@@ -5,21 +5,320 @@ import _ from 'lodash';
  */
 import * as TextIndentService from '../../services/utils/TextIndentService';
 
+
+export class PlaybookWindowSettingsModel
+{
+    isMin;
+    isNotMin;
+    isMax;
+    isNotMax;
+    isClosed;
+
+    constructor()
+    {
+
+    }
+    
+    position = {
+        left : undefined,
+        top : undefined
+    }
+    positionMoving = {
+        left : undefined,
+        top : undefined,
+        right : undefined,
+        bottom : undefined
+    }
+    
+    
+    dimension = {
+        width : undefined,
+        height : undefined
+    }
+    dimensionChanging = {
+        width : undefined,
+        height : undefined    
+    }
+
+    isMin()
+    {
+        this.isMin = true;
+    }
+
+    isNotMin()
+    {
+        this.isNotMin = true;
+    }
+
+    isMax()
+    {
+        this.isMin = false;
+        this.isMax = true;
+    }
+
+    isNotMax()
+    {
+        this.isNotMax = true;
+    }
+
+    isClosed()
+    {
+        this.isClosed = true;
+    }
+
+    isOpen()
+    {
+        this.isClosed = false;
+    }
+
+    move(left, top)
+    {
+        if (left != null)
+        {
+            this.moveLeft(left);
+        }
+        if (top != null)
+        {
+            this.moveTop(top);
+        }
+    }
+
+    moveLeft(left)
+    {
+        this.positionMoving.left = left;
+    }
+
+    moveRight(right)
+    {
+        this.positionMoving.right = right;
+    }
+
+    moveTop(top)
+    {
+        this.positionMoving.top = top;
+    }
+
+    moveBottom(bottom)
+    {
+        this.positionMoving.bottom = bottom;
+    }
+
+    setPosition(left, top)
+    {
+        if (left != null)
+        {
+            this.position.left = left;
+        }
+        if (top != null)
+        {
+            this.position.top = top;
+        }
+    }
+
+    changeDimension(width, height)
+    {
+        if (width != null)
+        {
+            this.changeWidth(width);
+        }
+        if (height != null)
+        {
+            this.changeHeight(height);
+        }
+    }
+
+    changeWidth(width)
+    {
+        this.dimensionChanging.width = width;
+    }
+
+    changeHeight(height)
+    {
+        this.dimensionChanging.height = height;
+    }
+
+    setDimension(width, height)
+    {
+        if (width != null)
+        {
+            this.dimension.width = width;
+        }
+        if (height != null)
+        {
+            this.dimension.height = height;
+        }
+    }
+
+    printJsContent(indentSize = 5)
+    {
+        const indent1 = TextIndentService.indent(indentSize);
+        const indent2 = TextIndentService.indent(indentSize + 1);
+
+        let content = "";
+
+        /*
+            .isMin
+         */
+        if (this.isMin != null)
+        {
+            content += indent1 + ".isMin()\n";
+        }
+        /*
+            .isNotMin
+         */
+        if (this.isNotMin != null)
+        {
+            content += indent1 + ".isNotMin()\n";
+        }
+        /*
+            .isMax
+         */
+        if (this.isMax != null)
+        {
+            content += indent1 + ".isMax()\n";
+        }
+        /*
+            .isNotMax
+         */
+        if (this.isNotMax != null)
+        {
+            content += indent1 + ".isNotMax()\n";
+        }
+        /*
+            .isClosed
+         */
+        if (this.isClosed != null)
+        {
+            content += indent1 + ".isClosed()\n";
+        }
+
+        /*
+            .position
+         */
+        if (this.position.left != null || this.position.top != null)
+        {
+            let leftVal;
+            let topVal;
+
+            if (this.position.left != null)
+            {
+                leftVal = TextIndentService.formatToStringOrNum(this.position.left);
+            }
+            if (this.position.top != null)
+            {
+                topVal = TextIndentService.formatToStringOrNum(this.position.top);
+            }
+            content += indent1 + ".setPosition(" + (leftVal != null ? leftVal : "null") + ", " + (topVal != null ? topVal : "null") + ")\n";
+        }
+
+        /*
+            .move
+            .moveLeft
+            .moveTop
+            .moveRight
+            .moveBottom
+         */
+        if (this.positionMoving.left != null && this.positionMoving.top != null && this.positionMoving.right != null && this.positionMoving.bottom != null)
+        {
+            let leftVal = TextIndentService.formatToStringOrNum(this.positionMoving.left);
+            let topVal = TextIndentService.formatToStringOrNum(this.positionMoving.top);
+            let rightVal = TextIndentService.formatToStringOrNum(this.positionMoving.right);
+            let bottomVal = TextIndentService.formatToStringOrNum(this.positionMoving.bottom);
+
+            content += indent1 + ".move(" + leftVal + ", " + topVal + ", " + rightVal + ", " + bottomVal + ")\n";
+        }
+        else
+        {
+            if (this.positionMoving.left != null)
+            {
+                content += indent1 + ".moveLeft(" + TextIndentService.formatToStringOrNum(this.positionMoving.left) + ")\n";
+            }
+            if (this.positionMoving.top != null)
+            {
+                content += indent1 + ".moveTop(" + TextIndentService.formatToStringOrNum(this.positionMoving.top) + ")\n";
+            }
+            if (this.positionMoving.right != null)
+            {
+                content += indent1 + ".moveRight(" + TextIndentService.formatToStringOrNum(this.positionMoving.right) + ")\n";
+            }
+            if (this.positionMoving.bottom != null)
+            {
+                content += indent1 + ".moveBottom(" + TextIndentService.formatToStringOrNum(this.positionMoving.bottom) + ")\n";
+            }
+        }
+        
+        /*
+            .setDimension
+         */
+        if (this.dimension.width != null || this.dimension.height != null)
+        {
+            let widthVal;
+            let heightVal;
+
+            if (this.dimension.width != null)
+            {
+                widthVal = TextIndentService.formatToStringOrNum(this.dimension.width);
+            }
+            if (this.dimension.height != null)
+            {
+                heightVal = TextIndentService.formatToStringOrNum(this.dimension.height);
+            }
+            content += indent1 + ".setDimension(" + (widthVal != null ? widthVal : "null") + ", " + (heightVal != null ? heightVal : "null") + ")\n";
+        }
+
+        /*
+            .changeDimension
+            .changeWidth
+            .changeHeight
+         */
+        if (this.dimensionChanging.width != null && this.dimension.height != null)
+        {
+            let widthVal = TextIndentService.formatToStringOrNum(this.dimensionChanging.width);
+            let heightVal = TextIndentService.formatToStringOrNum(this.dimensionChanging.height);
+
+            content += indent1 + ".changeDimension(" + widthVal + ", " + heightVal + ")\n";
+        }
+        else
+        {
+            if (this.dimensionChanging.width != null)
+            {
+                content += indent1 + ".changeWidth(" + TextIndentService.formatToStringOrNum(this.dimensionChanging.width) + ")\n"
+            }
+            if (this.dimensionChanging.height != null)
+            {
+                content += indent1 + ".changeHeight(" + TextIndentService.formatToStringOrNum(this.dimensionChanging.height) + ")\n"
+            }
+        }
+
+        return content;
+    }
+}
+
 /**
  * Base parent for all timeline based models. This will handle the start and duration section
  *
  * @export
  * @class PlaybookTimelineModel
  */
-export class PlaybookTimelineModel
+export class PlaybookTimelineModel extends PlaybookWindowSettingsModel
 {
     start;
     duration;
+    transitions = [];
 
     constructor(start, duration)
     {
+        super();
         this.start = start;
         this.duration = duration;
+    }
+
+    addTransition(start, end)
+    {
+        let transition = new PlaybookTimelineTransitionModel(start, end);
+        this.transitions.push(transition);
+
+        return transition;
     }
 
     /**
@@ -34,13 +333,62 @@ export class PlaybookTimelineModel
         const indent1 = TextIndentService.indent(indentSize);
         const indent2 = TextIndentService.indent(indentSize + 1);
 
-        let content = indent1 + '.withTime({\n';
-            content += indent2 + '"start" : ' + this.start + ',\n';
-            content += indent2 + '"duration" : ' + this.duration + '\n';
-            content += indent1 + "})\n";
+        // -- Print window settings
+        let content = super.printJsContent(indentSize + 1);
+
+        // -- Print the transitions
+        for (var transitionI = 0; transitionI < this.transitions.length; transitionI++)
+        {
+            const transition = this.transitions[transitionI];
+
+            content += transition.printJsContent(indentSize + 1)
+        }
+
+        // -- Append the timeline time
+        content += indent1 + '.withTime({\n';
+        content += indent2 + '"start" : ' + this.start + ',\n';
+        content += indent2 + '"duration" : ' + this.duration + '\n';
+        content += indent1 + "})\n";
 
         return content;
     }
+}
+
+
+
+export class PlaybookTimelineTransitionModel extends PlaybookWindowSettingsModel {
+
+    start;
+    end;
+
+    constructor(start, end)
+    {
+        super();
+        if (isNaN(start))
+        {
+            throw "The transition start time must be a number!";
+        }
+        if (isNaN(end))
+        {
+            throw "The transition end time must be a number!";
+        }
+
+        this.start = start;
+        this.end = end;
+    }
+
+    printJsContent(indentSize = 5)
+    {
+        const indent1 = TextIndentService.indent(indentSize);
+        const indent2 = TextIndentService.indent(indentSize + 1);
+
+        let content = indent1 + ".addTransition(" + this.start + ", " + this.end + ")\n";
+
+        content += super.printJsContent(indentSize + 1);
+
+        return content;
+    }
+
 }
 
 
