@@ -165,8 +165,30 @@ class NodeGitService
             //     "randomData" : "This should be working"
             // });
             
+            await this.iterateCommitsAndGenerateBlueprintContent(commitOids, blueprintRepoData, repo, appOwner, appFolderPath);
+            return blueprintRepoData;
+            
+        }
+        catch(err)
+        {
+            console.error("There was an error with connecting to your repo: ", err);
+        }
+    }
 
-            if (commitOids.length > 0)
+
+    /**
+     * Iterates over an array of commits from a repo and generates the beginning of the playbook.js file
+     *
+     * @param {*} commitOids
+     * @param {*} blueprintRepoData
+     * @returns
+     * @memberof NodeGitService
+     */
+    async iterateCommitsAndGenerateBlueprintContent(commitOids, blueprintRepoData, repo, appOwner, appFolderPath)
+    {
+        try
+        {
+            if (commitOids.length > 0 && blueprintRepoData && repo && appOwner && appFolderPath)
             {
                 const playbookModel = new PlaybookModel("LOOK IVE CHANGED TODO - Get the name from github url", "playbook.json");
                 const categoryModel = playbookModel.addCategory("TODO - Create a category name");
@@ -204,140 +226,19 @@ class NodeGitService
                         const stepFolderModel = FilesService.createFolder(blueprintRepoData.folderPath, stepName);
 
                         // -- Attempt to read the branch name of this merge and use a cli command to execute a git checkout -b command
-                        const mergeMessageSplit = commitMessage.split(" from " + appOwner + "/");
+                        const mergedBranchName = this.getBranchNameFromCommitMessage(commitMessage, appOwner, "github");
 
-                        if (mergeMessageSplit.length > 1)
+                        if (mergedBranchName)
                         {
-                            const mergedBranchName = mergeMessageSplit[mergeMessageSplit.length - 1].slice(0, (mergeMessageSplit[mergeMessageSplit.length - 1]).indexOf("\n"));
-
                             const cliModel = stepModel.addCli(0, 100);
-
                             cliModel.addCommand("git checkout -b " + mergedBranchName);
                         }
-
+                        
                         for (let commitInStepI = 0; commitInStepI < commitsForStepImplementation.length; commitInStepI++)
                         {
                             const commitInStep = commitsForStepImplementation[commitInStepI];
 
-                            // -- We will need to get the files changed for each commit
-                            const diffList = await commitInStep.getDiff();
-
-                            for (let diffI = 0; diffI < diffList.length; diffI++)
-                            {
-                                const diff = diffList[diffI];
-
-                                const patches = await diff.patches();
-                                
-                                let changedFileStartTime= 0;
-
-                                for (let patchI = 0; patchI < patches.length; patchI++)
-                                {
-                                    const patch = patches[patchI];
-
-                                    // -- We can use a patch to get the path of the modified file
-                                    const patchFilePath = patch.newFile().path();
-                                    const patchFolderPath = path.dirname(patchFilePath);
-                                    const patchFileExtName = path.extname(patchFilePath);
-                                    const patchFileName = path.basename(patchFilePath, patchFileExtName)
-
-                                    // -- Fetch the current file contents
-                                    const currentMergeFileEntry = await commit.getEntry(patchFilePath);
-                                    const currentMergeFileBlob = await currentMergeFileEntry.getBlob();
-                                    const currentMergeFileContent = currentMergeFileBlob.toString();
-                                    const avgDuration = Math.ceil((currentMergeFileContent.length / 30) / 100) * 100;
-
-                                    if (patchFileExtName === ".md" || patchFileExtName === ".mdx")
-                                    {
-                                        // -- Create a description timeline entry in the playbook.js for .md and .mdx files
-                                        stepModel.addDescriptionFromMdFile(changedFileStartTime, avgDuration, patchFilePath);
-                                    }
-                                    else
-                                    {
-                                        let previousMergeFileContent;
-
-                                        // -- Lets use the file path to check if this file has been created by a previous step (updated)
-                                        if (completedStepsByMergeCommit.length > 0 && patch.isModified())
-                                        {
-                                            let previousMergeCommit = completedStepsByMergeCommit[completedStepsByMergeCommit.length - 1]
-
-                                            // -- A previous merge commit exists. Fetch this file inside the previous merge commit so we can create a diff
-                                            try
-                                            {
-                                                const previousMergeFileEntry = await previousMergeCommit.getEntry(patchFilePath);
-                                                const previousMergeFileBlob = await previousMergeFileEntry.getBlob();
-                                                previousMergeFileContent = previousMergeFileBlob.toString();
-                                            }
-                                            catch(err)
-                                            {
-                                                // -- This should be called if the entry doesn't exist. This is okay as it may be a new file added to the master branch
-                                                console.error("There was an error fetching a file from a previous merge!", err);
-                                            }
-                                        }
-
-                                        
-
-                                        const templateData = DiffService.generateMasterTemplateAndPartials(previousMergeFileContent, currentMergeFileContent);
-                                        
-                                        // -- Create the new master template file
-                                        const masterTemplateFolderModel = FilesService.createFolder(
-                                                                            path.join(path.join(stepFolderModel.path, 'code'), path.dirname(patchFolderPath)), 
-                                                                            path.basename(patchFolderPath)
-                                                                        );
-                                        const masterTemplateFileModel = FilesService.createFile(
-                                                                            masterTemplateFolderModel.path,
-                                                                            patchFileName + ".hbs",
-                                                                            templateData.masterTemplate
-                                                                        )
-
-                                        // -- Add the new file to the repo index for committing
-                                        await this.addAndCommitFile(blueprintRepoData.repo,
-                                                                    blueprintRepoData.index,
-                                                                    masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
-                                                                    "feat(" + masterTemplateFileModel.name + "): " + stepName + " - Initialising a master template for printing code in masterclass");
-
-                                        // -- Add the master template as a code entry in the playbook.js file
-                                        const timelineCodeModel = stepModel.addCode(changedFileStartTime, 
-                                                                                    avgDuration, 
-                                                                                    masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
-                                                                                    patchFilePath);
-                                        
-                                        // -- Create the partial data files 
-                                        if (!_.isEmpty(templateData.partials))
-                                        {
-                                            const partialTemplateFolderModel = FilesService.createFolder(masterTemplateFolderModel.path, patchFileName + "_partials");
-                                            let partialStartTime = 0;
-
-                                            for (let partialId in templateData.partials)
-                                            {
-                                                const partialContent = templateData.partials[partialId];
-                                                const avgPartialDuration = Math.ceil((partialContent.length / 30) / 100) * 100;
-                                                
-                                                const partialFileModel = FilesService.createFile(
-                                                                                partialTemplateFolderModel.path,
-                                                                                partialId + ".hbs",
-                                                                                partialContent
-                                                                            )
-                                                // -- Add the partial file to the repo index for committing
-                                                await this.addAndCommitFile(blueprintRepoData.repo,
-                                                                            blueprintRepoData.index,
-                                                                            partialFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
-                                                                            "feat(" + partialFileModel.name + "): " + stepName + " - Initialising a partial file for use in a master template");
-                                                
-                                                // -- Add the code partial to the code timeline. This will include it in the playbook.js file
-                                                timelineCodeModel.addPartial(partialStartTime, 
-                                                                             avgPartialDuration, 
-                                                                             partialId, 
-                                                                             partialFileModel.path.slice(blueprintRepoData.folderPath.length + 1));
-
-                                                // -- Set the partial start time to the end of this partial so they do not play at the same time
-                                                partialStartTime += avgPartialDuration;
-
-                                            }
-                                        }
-                                    }
-                                    changedFileStartTime += avgDuration;
-                                }
-                            }
+                            await this.handleCommitForBlueprintCreation(commitInStep, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel)
                         }
 
                         // -- Once the step has been handled, add the step to an array of completed steps
@@ -363,11 +264,6 @@ class NodeGitService
                                             playbookJsFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
                                             "feat(" + playbookJsFileModel.name + "): Initialising the playbook js file that can be used to generate the playbook json file");
 
-                // -- Now push the repo
-                // await this.pushRepo(blueprintRepoData.repo, 
-                //                     undefined,
-                //                     blueprintRepoData.branch);
-
                 // -- Delete the local app folder
                 FilesService.deleteFolder(appFolderPath)
                 
@@ -376,12 +272,301 @@ class NodeGitService
             else
             {
                 console.error("There are no commits in this repo!")
+                return;
+            }
+        } 
+        catch(err) 
+        {
+            throw err;
+        }
+    }
+
+    /**
+     * Handle the commit object of a repo
+     *
+     * @param {*} commit
+     * @param {*} blueprintRepoData
+     * @param {*} stepModel
+     * @param {*} stepName
+     * @param {*} completedStepsByMergeCommit
+     * @param {*} stepFolderModel
+     * @returns
+     * @memberof NodeGitService
+     */
+    async handleCommitForBlueprintCreation(commit, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel)
+    {
+        try
+        {
+            if (commit && blueprintRepoData && stepModel && stepName && completedStepsByMergeCommit && stepFolderModel)
+            {
+                // -- We will need to get the files changed for each commit
+                const diffList = await commit.getDiff();
+
+                for (let diffI = 0; diffI < diffList.length; diffI++)
+                {
+                    const diff = diffList[diffI];
+
+                    await this.handleDiffForBlueprintCreation(commit, diff, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel)
+                }
+            }
+            else
+            {
+                console.error("handleCommitForBlueprintCreation is missing required method arguments!");
+                return;
             }
         }
         catch(err)
         {
-            console.error("There was an error with connecting to your repo: ", err);
+            throw err;
         }
+    }
+
+    /**
+     * Handle the diff object fetched by the commit object
+     *
+     * @param {*} commit
+     * @param {*} diff
+     * @param {*} blueprintRepoData
+     * @param {*} stepModel
+     * @param {*} stepName
+     * @param {*} completedStepsByMergeCommit
+     * @param {*} stepFolderModel
+     * @returns
+     * @memberof NodeGitService
+     */
+    async handleDiffForBlueprintCreation(commit, diff, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel)
+    {
+        try
+        {
+            if (commit && diff && blueprintRepoData && stepModel && stepName && completedStepsByMergeCommit && stepFolderModel)
+            {
+                const patches = await diff.patches();
+                    
+                let changedFileStartTime= 0;
+
+                for (let patchI = 0; patchI < patches.length; patchI++)
+                {
+                    const patch = patches[patchI];
+
+                    const avgDuration = await this.handlePatchForBlueprintCreation(commit, patch, blueprintRepoData, stepModel, stepName, changedFileStartTime, completedStepsByMergeCommit, stepFolderModel)
+
+                    if (avgDuration)
+                    {
+                        changedFileStartTime += avgDuration;
+                    }
+                }
+            }
+            else
+            {
+                console.error("handleDiffForBlueprintCreation is missing required method arguments!");
+                return;
+            }
+        }
+        catch(err)
+        {
+            throw err;
+        }
+    }
+
+    /**
+     * Handle the patch object fetched by the diff object of a commit
+     *
+     * @param {*} commit
+     * @param {*} patch
+     * @param {*} blueprintRepoData
+     * @param {*} stepModel
+     * @param {*} stepName
+     * @param {*} changedFileStartTime
+     * @param {*} completedStepsByMergeCommit
+     * @param {*} stepFolderModel
+     * @returns
+     * @memberof NodeGitService
+     */
+    async handlePatchForBlueprintCreation(commit, patch, blueprintRepoData, stepModel, stepName, changedFileStartTime, completedStepsByMergeCommit, stepFolderModel)
+    {
+        try
+        {
+            if (commit && patch && blueprintRepoData && stepModel && stepName && changedFileStartTime != null && completedStepsByMergeCommit && stepFolderModel)
+            {
+                // -- We can use a patch to get the path of the modified file
+                const patchFilePath = patch.newFile().path();
+                const patchFolderPath = path.dirname(patchFilePath);
+                const patchFileExtName = path.extname(patchFilePath);
+                const patchFileName = path.basename(patchFilePath, patchFileExtName)
+
+                // -- Fetch the current file contents
+                const currentMergeFileEntry = await commit.getEntry(patchFilePath);
+                const currentMergeFileBlob = await currentMergeFileEntry.getBlob();
+                const currentMergeFileContent = currentMergeFileBlob.toString();
+                const avgDuration = Math.ceil((currentMergeFileContent.length / 30) / 100) * 100;
+
+                // -- Using the modified file, decide
+                if (patchFileExtName === ".md" || patchFileExtName === ".mdx")
+                {
+                    // -- Create a description timeline entry in the playbook.js for .md and .mdx files
+                    this.createDescriptionModel(stepModel, changedFileStartTime, avgDuration, patchFilePath);
+                }
+                else
+                {
+                    await this.createCodeModel(patch, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, avgDuration, currentMergeFileContent, changedFileStartTime)
+                }
+                return avgDuration;
+            }
+            else
+            {
+                console.error("Missing required method arguments!");
+                return;
+            }
+        }
+        catch(err)
+        {
+            throw err;
+        }
+    }
+
+    /**
+     * Handle the creation of a description panel entry in playbook.js
+     *
+     * @param {*} stepModel
+     * @param {*} changedFileStartTime
+     * @param {*} avgDuration
+     * @param {*} patchFilePath
+     * @returns
+     * @memberof NodeGitService
+     */
+    createDescriptionModel(stepModel, changedFileStartTime, avgDuration, patchFilePath)
+    {
+        if (stepModel && changedFileStartTime != null && avgDuration != null && patchFilePath)
+        {
+            stepModel.addDescriptionFromMdFile(changedFileStartTime, avgDuration, patchFilePath);
+        }
+        else
+        {
+            console.error("createDescriptionModel is missing required method arguments!");
+            return;
+        }
+    }
+
+    /**
+     * Handle the create of a code panel entry in playbook.js
+     *
+     * @param {*} patch
+     * @param {*} blueprintRepoData
+     * @param {*} stepModel
+     * @param {*} stepName
+     * @param {*} completedStepsByMergeCommit
+     * @param {*} stepFolderModel
+     * @param {*} patchFolderPath
+     * @param {*} patchFilePath
+     * @param {*} patchFileName
+     * @param {*} avgDuration
+     * @param {*} currentMergeFileContent
+     * @param {*} changedFileStartTime
+     * @returns
+     * @memberof NodeGitService
+     */
+    async createCodeModel(patch, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, avgDuration, currentMergeFileContent, changedFileStartTime)
+    {
+        if (patch && blueprintRepoData && stepModel && stepName && completedStepsByMergeCommit && stepFolderModel && patchFolderPath && patchFilePath && patchFileName && avgDuration && currentMergeFileContent && changedFileStartTime != null)
+        {
+            let previousMergeFileContent;
+
+            // -- Lets use the file path to check if this file has been created by a previous step (updated)
+            if (completedStepsByMergeCommit.length > 0 && patch.isModified())
+            {
+                let previousMergeCommit = completedStepsByMergeCommit[completedStepsByMergeCommit.length - 1]
+
+                // -- A previous merge commit exists. Fetch this file inside the previous merge commit so we can create a diff
+                try
+                {
+                    const previousMergeFileEntry = await previousMergeCommit.getEntry(patchFilePath);
+                    const previousMergeFileBlob = await previousMergeFileEntry.getBlob();
+                    previousMergeFileContent = previousMergeFileBlob.toString();
+                }
+                catch(err)
+                {
+                    // -- This should be called if the entry doesn't exist. This is okay as it may be a new file added to the master branch
+                    console.error("There was an error fetching a file from a previous merge!", err);
+                }
+            }
+
+            
+
+            const templateData = DiffService.generateMasterTemplateAndPartials(previousMergeFileContent, currentMergeFileContent);
+            
+            // -- Create the new master template file
+            const masterTemplateFolderModel = FilesService.createFolder(
+                                                path.join(path.join(stepFolderModel.path, 'code'), path.dirname(patchFolderPath)), 
+                                                path.basename(patchFolderPath)
+                                            );
+            const masterTemplateFileModel = FilesService.createFile(
+                                                masterTemplateFolderModel.path,
+                                                patchFileName + ".hbs",
+                                                templateData.masterTemplate
+                                            )
+
+            // -- Add the new file to the repo index for committing
+            await this.addAndCommitFile(blueprintRepoData.repo,
+                                        blueprintRepoData.index,
+                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                        "feat(" + masterTemplateFileModel.name + "): " + stepName + " - Initialising a master template for printing code in masterclass");
+
+            // -- Add the master template as a code entry in the playbook.js file
+            const timelineCodeModel = stepModel.addCode(changedFileStartTime, 
+                                                        avgDuration, 
+                                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                        patchFilePath);
+            
+            // -- Create the partial data files 
+            if (!_.isEmpty(templateData.partials))
+            {
+                const partialTemplateFolderModel = FilesService.createFolder(masterTemplateFolderModel.path, patchFileName + "_partials");
+                let partialStartTime = 0;
+
+                for (let partialId in templateData.partials)
+                {
+                    const partialContent = templateData.partials[partialId];
+                    const avgPartialDuration = Math.ceil((partialContent.length / 30) / 100) * 100;
+                    
+                    const partialFileModel = FilesService.createFile(
+                                                    partialTemplateFolderModel.path,
+                                                    partialId + ".hbs",
+                                                    partialContent
+                                                )
+                    // -- Add the partial file to the repo index for committing
+                    await this.addAndCommitFile(blueprintRepoData.repo,
+                                                blueprintRepoData.index,
+                                                partialFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                "feat(" + partialFileModel.name + "): " + stepName + " - Initialising a partial file for use in a master template");
+                    
+                    // -- Add the code partial to the code timeline. This will include it in the playbook.js file
+                    timelineCodeModel.addPartial(partialStartTime, 
+                                                    avgPartialDuration, 
+                                                    partialId, 
+                                                    partialFileModel.path.slice(blueprintRepoData.folderPath.length + 1));
+
+                    // -- Set the partial start time to the end of this partial so they do not play at the same time
+                    partialStartTime += avgPartialDuration;
+
+                }
+            }
+        }
+        else
+        {
+            console.error("createCodeModel is missing required method arguments!");
+            return;
+        }
+    }
+
+    /**
+     * Handle the creation of a cli panel entry in playbook.js
+     *
+     * @param {*} stepModel
+     * @memberof NodeGitService
+     */
+    async createCliModel(stepModel)
+    {
+
     }
 
     /**
@@ -555,6 +740,35 @@ class NodeGitService
             case "github":
             default:
                 return commitMessage.indexOf("Merge pull request") === 0 || commitOidI === 0;
+        }
+    }
+
+
+    getBranchNameFromCommitMessage(commitMessage, appOwner, gitRemoveFlavor = "github")
+    {
+        if (commitMessage && appOwner)
+        {
+            switch(gitRemoveFlavor)
+            {
+                case "github":
+                default:
+                    const mergeMessageSplit = commitMessage.split(" from " + appOwner + "/");
+
+                    if (mergeMessageSplit.length > 1)
+                    {
+                        const branchName = mergeMessageSplit[mergeMessageSplit.length - 1].slice(0, (mergeMessageSplit[mergeMessageSplit.length - 1]).indexOf("\n"));
+
+                        return branchName;
+                    }
+                    else
+                    {
+                        return;
+                    }
+            }
+        }
+        else
+        {
+            return;
         }
     }
 }
