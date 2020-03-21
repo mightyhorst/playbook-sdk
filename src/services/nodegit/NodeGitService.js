@@ -19,40 +19,62 @@ const DiffService = require('../diff/DiffService');
 class NodeGitService
 {
     /**
+     * Builds the app and blueprint folder paths and deletes the existing folders at those paths (incase the tool crashed in a previous run)
+     *
+     * @param {*} appGithubUrl
+     * @param {*} blueprintGithubUrl
+     * @returns {
+     *              appFolderPath : <string>,
+     *              blueprintFolderPath : <string>
+     *          }
+     * @memberof NodeGitService
+     */
+    prepareAppAndBlueprintFolderPaths(appGithubUrl, blueprintGithubUrl)
+    {
+        const appUrl = new Url(appGithubUrl);
+        const appPathnameSplit = appUrl.pathname.split("/");
+        const appFolderPath = path.resolve(__dirname, '../../../../git-projects/' + appPathnameSplit.join("_"));
+
+        const blueprintUrl = new Url(blueprintGithubUrl);
+        const blueprintPathnameSplit = blueprintUrl.pathname.split("/");
+        const blueprintFolderPath = path.resolve(__dirname, ('../../../../sxd-git-projects/' + blueprintPathnameSplit.join('_')))
+        
+        FilesService.deleteFolder(appFolderPath);
+        FilesService.deleteFolder(blueprintFolderPath);  
+
+        return {
+            appFolderPath : appFolderPath,
+            blueprintFolderPath : blueprintFolderPath
+        }
+    }
+
+    /**
      * Clones an existing repo (un/initialised) to tmp blueprints and creates a branch for new blueprint files
      *
      * @param {*} githubUrl
      * @param {*} isBlueprintRepo
      * @returns {
      *              repo: {Git.Repository},
-     *              url: {String},
      *              folderPath : {String},
      *              index : {String},
      *              branch : {String}
      *          }
      * @memberof NodeGitService
      */
-    async createOrCloneBlueprintRepoFromGithubUrl(githubUrl, isBlueprintRepo)
+    async createOrCloneBlueprintRepoFromGithubUrl(githubUrl, blueprintFolderPath)
     {
-        const blueprintUrl = new Url(githubUrl)
         let blueprintFolder;
         let repo;
 
         const signature = Git.Signature.now("Foo bar", "dom@kitset.io");
 
-        // -- Lets attempt to clone the repo if it is a blueprint repo. If it isn't then lets generate the blueprint repo name and attempt to clone that
-        if (!isBlueprintRepo)
-        {
-            blueprintUrl.pathname += "-blueprint";
-        }
+        // -- Before we begin, lets attempt to delete the current folder located at the blueprintFolderPath. This is to ensure that if the tool crashed earlier and nothing was cleaned up, that the folder are prepared
 
-        const blueprintPathnameSplit = blueprintUrl.pathname.split("/");
-        const blueprintFolderPath = path.resolve(__dirname, ('../../../../sxd-git-projects/' + blueprintPathnameSplit.join('_')))
 
-        // -- First we need to ensure there is a repo that we can write to. We will not dynamically create a repo (maybe we can do this later but we will need to use the github API directly)
+        // -- Next we need to ensure there is a repo that we can write to. We will not dynamically create a repo (maybe we can do this later but we will need to use the github API directly)
         try
         {
-            repo = await this.cloneRepo("git@github.com:" + blueprintUrl.pathname.slice(1) + ".git", blueprintFolderPath);
+            repo = await this.cloneRepo(githubUrl, blueprintFolderPath);
         }
         catch(err)
         {
@@ -98,7 +120,6 @@ class NodeGitService
 
         return {
             repo : repo,
-            url : blueprintUrl.toString(),
             folderPath : blueprintFolderPath,
             index : blueprintRepoIndex,
             branch : branchName,
@@ -115,18 +136,17 @@ class NodeGitService
      * @returns
      * @memberof NodeGitService
      */
-    async createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData)
+    async createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData, appFolderPath)
     {
         // -- This is temporary to ensure we have a directory to clone to. We should resort to /tmp later
         FilesService.createFolder(path.resolve(__dirname, '../../../../'), "git-projects");
-
+        // githubUrl = "git@github.com:mitni455/master-class-trello-clone.git";
         try
         {
             // -- Get the repo name from the github URL
             const appRepoUrl = new Url(githubUrl);
             const appPathnameSplit = appRepoUrl.pathname.split('/');
             const appOwner = appPathnameSplit[appPathnameSplit.length - 2];
-            const appFolderPath = path.resolve(__dirname, '../../../../git-projects/' + appPathnameSplit.join("_"));
 
             // -- Open the repo
             let repo;
@@ -136,7 +156,7 @@ class NodeGitService
             }
             catch(err)
             {
-                repo = await Git.Repository.open(path.resolve(__dirname, '../../../../git-projects/' + appPathnameSplit.join("_") + '/.git'))
+                throw err;
             }
             
 
@@ -166,12 +186,15 @@ class NodeGitService
             // });
             
             await this.iterateCommitsAndGenerateBlueprintContent(commitOids, blueprintRepoData, repo, appOwner, appFolderPath);
-            return blueprintRepoData;
             
         }
         catch(err)
         {
             console.error("There was an error with connecting to your repo: ", err);
+        }
+        finally
+        {
+            return blueprintRepoData;
         }
     }
 
@@ -206,7 +229,7 @@ class NodeGitService
                     const commit = await repo.getCommit(commitOid);
 
                     const commitMessage = commit.message();
-                    
+
                     // -- The commit will either be a branch commit or a merge pull request. For the merge pull requests, we will need to generate a new "step"
                     if (this.isMergeRequest(commitMessage, commitOidI, "github"))
                     {
@@ -263,11 +286,7 @@ class NodeGitService
                                             blueprintRepoData.index,
                                             playbookJsFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
                                             "feat(" + playbookJsFileModel.name + "): Initialising the playbook js file that can be used to generate the playbook json file");
-
-                // -- Delete the local app folder
-                FilesService.deleteFolder(appFolderPath)
                 
-                return blueprintRepoData;
             }
             else
             {
@@ -277,7 +296,17 @@ class NodeGitService
         } 
         catch(err) 
         {
+            console.error("iterateCommitsAndGenerateBlueprintContent", err);
             throw err;
+        }
+        finally
+        {
+            if (appFolderPath)
+            {
+                // -- Delete the local app folder
+                FilesService.deleteFolder(appFolderPath)
+            }
+            return blueprintRepoData;
         }
     }
 
@@ -382,6 +411,7 @@ class NodeGitService
      * @returns
      * @memberof NodeGitService
      */
+    doOnce = true;
     async handlePatchForBlueprintCreation(commit, patch, blueprintRepoData, stepModel, stepName, changedFileStartTime, completedStepsByMergeCommit, stepFolderModel)
     {
         try
@@ -393,30 +423,33 @@ class NodeGitService
                 const patchFolderPath = path.dirname(patchFilePath);
                 const patchFileExtName = path.extname(patchFilePath);
                 const patchFileName = path.basename(patchFilePath, patchFileExtName)
-
-                // -- Fetch the current file contents
-                const currentMergeFileEntry = await commit.getEntry(patchFilePath);
-                const currentMergeFileBlob = await currentMergeFileEntry.getBlob();
-                const currentMergeFileContent = currentMergeFileBlob.toString();
-                const avgDuration = Math.ceil((currentMergeFileContent.length / 30) / 100) * 100;
-
-                // -- Using the modified file, decide
-                if (patchFileExtName === ".md" || patchFileExtName === ".mdx")
+                
+                if (!(this.isIgnoredPath(patchFolderPath) || this.isIgnoredFile(patchFileName + patchFileExtName)) && !patch.isDeleted())
                 {
-                    // -- Create a description timeline entry in the playbook.js for .md and .mdx files
-                    this.createDescriptionModel(stepModel, changedFileStartTime, avgDuration, patchFilePath);
+                    // -- Fetch the current file contents
+                    const currentMergeFileEntry = await commit.getEntry(patchFilePath);
+                    const currentMergeFileBlob = await currentMergeFileEntry.getBlob();
+                    const currentMergeFileContent = currentMergeFileBlob.toString();
+                    const avgDuration = Math.ceil((currentMergeFileContent.length / 30) / 100) * 100;
+
+                    // -- Using the modified file, decide
+                    if (patchFileExtName === ".md" || patchFileExtName === ".mdx")
+                    {
+                        // -- Create a description timeline entry in the playbook.js for .md and .mdx files
+                        await this.createDescriptionModel(blueprintRepoData, stepModel, stepName, changedFileStartTime, avgDuration, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, patchFileExtName, currentMergeFileContent);
+                    }
+                    else
+                    {
+                        await this.createCodeModel(patch, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, avgDuration, currentMergeFileContent, changedFileStartTime)
+                    }
+                    return avgDuration;
                 }
-                else
-                {
-                    await this.createCodeModel(patch, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, avgDuration, currentMergeFileContent, changedFileStartTime)
-                }
-                return avgDuration;
             }
             else
             {
                 console.error("Missing required method arguments!");
-                return;
             }
+            return;
         }
         catch(err)
         {
@@ -434,11 +467,28 @@ class NodeGitService
      * @returns
      * @memberof NodeGitService
      */
-    createDescriptionModel(stepModel, changedFileStartTime, avgDuration, patchFilePath)
+    async createDescriptionModel(blueprintRepoData, stepModel, stepName, changedFileStartTime, avgDuration, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, patchFileExtName, currentMergeFileContent)
     {
-        if (stepModel && changedFileStartTime != null && avgDuration != null && patchFilePath)
+        if (stepModel && changedFileStartTime != null && avgDuration != null && stepFolderModel && patchFolderPath && patchFilePath)
         {
-            stepModel.addDescriptionFromMdFile(changedFileStartTime, avgDuration, patchFilePath);
+            // -- We will need to create the folder that we store this description file to
+            const descriptionFolderModel = FilesService.createFolder(path.join(path.join(stepFolderModel.path, 'description'), 
+                                                                     path.dirname(patchFolderPath)), 
+                                                                     path.basename(patchFolderPath));
+                                                                     
+            const descriptionFileModel = FilesService.createFile(descriptionFolderModel.path,
+                                                                 patchFileName + patchFileExtName,
+                                                                 currentMergeFileContent);
+
+            stepModel.addDescriptionFromMdFile(changedFileStartTime, 
+                                               avgDuration, 
+                                               descriptionFileModel.path.slice(blueprintRepoData.folderPath.length + 1));
+
+            // -- Add the new file to the repo index for committing
+            await this.addAndCommitFile(blueprintRepoData.repo,
+                                        blueprintRepoData.index,
+                                        descriptionFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                        "docs(" + descriptionFileModel.name + "): " + stepName + " - Moving your description file for use in masterclass");
         }
         else
         {
@@ -467,7 +517,7 @@ class NodeGitService
      */
     async createCodeModel(patch, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, avgDuration, currentMergeFileContent, changedFileStartTime)
     {
-        if (patch && blueprintRepoData && stepModel && stepName && completedStepsByMergeCommit && stepFolderModel && patchFolderPath && patchFilePath && patchFileName && avgDuration && currentMergeFileContent && changedFileStartTime != null)
+        if (patch && blueprintRepoData && stepModel && stepName && completedStepsByMergeCommit && stepFolderModel && patchFolderPath && patchFilePath && patchFileName  && avgDuration != null && currentMergeFileContent != null && changedFileStartTime != null)
         {
             let previousMergeFileContent;
 
@@ -486,7 +536,7 @@ class NodeGitService
                 catch(err)
                 {
                     // -- This should be called if the entry doesn't exist. This is okay as it may be a new file added to the master branch
-                    console.error("There was an error fetching a file from a previous merge!", err);
+                    console.error("Warning: Error fetching a file from a previous merge! NOT AN ISSUE: ", err);
                 }
             }
 
@@ -553,7 +603,13 @@ class NodeGitService
         }
         else
         {
+            console.error("patchFolderPath: ", patchFolderPath)
+            console.error("patchFilePath: ", patchFilePath)
+            console.error("patchFileName: ", patchFileName)
+            console.error("currentMergeFileContent: ", currentMergeFileContent)
+            console.error("changedFileStartTime: ", changedFileStartTime);
             console.error("createCodeModel is missing required method arguments!");
+
             return;
         }
     }
@@ -611,7 +667,7 @@ class NodeGitService
         {
             let credentialsBreak = 0;
             const repo = await Git.Clone(
-                url, 
+                this.createSshUrlFromHttps(url), 
                 path, 
                 {
                     fetchOpts : {
@@ -703,7 +759,7 @@ class NodeGitService
                 {
                     callbacks: {
                         credentials: function(url, username) {
-                            console.log("Cloning - retrieving credentials for the repo '" + url + "'")
+                            console.log("Pushing - retrieving credentials for the repo '" + url + "'")
                             credentialsBreak++;
                             if (credentialsBreak > 10)
                             {
@@ -770,6 +826,48 @@ class NodeGitService
         {
             return;
         }
+    }
+
+    /**
+     * Return true if the path contains a folder that should be ignored
+     *
+     * @param {*} path
+     * @memberof NodeGitService
+     */
+    isIgnoredPath(path)
+    {
+        return path.indexOf("node_modules") === 0;
+    }
+
+    /**
+     * Return true if the file name should be ignored
+     *
+     * @param {*} fileName
+     * @returns
+     * @memberof NodeGitService
+     */
+    isIgnoredFile(fileName)
+    {
+        switch (fileName)
+        {
+            case "yarn.lock":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Converts a https url to a github ssh url
+     *
+     * @param {*} urlString
+     * @returns
+     * @memberof NodeGitService
+     */
+    createSshUrlFromHttps(urlString)
+    {
+        const url = new Url(urlString);
+        return "git@github.com:" + url.pathname.slice(1) + ".git";
     }
 }
 

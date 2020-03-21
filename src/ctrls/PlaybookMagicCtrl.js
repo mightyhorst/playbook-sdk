@@ -44,6 +44,7 @@ class PlaybookMagicCtrl extends Controller {
      */
     async convertGit2Playbook(args)
     {
+        let appAndBlueprintFolderPaths;
         let blueprintRepoData;
         try
         {
@@ -85,19 +86,24 @@ class PlaybookMagicCtrl extends Controller {
             }
 
             /**
-             * @step 2. Create or clone a git repo to store/update the blueprints 
+             * @step 2. Prepare app and blueprint folder paths and cleanup any old mess
              */
-            blueprintRepoData = await NodeGitService.createOrCloneBlueprintRepoFromGithubUrl((blueprintGithubUrl ? blueprintGithubUrl : githubUrl), !!blueprintGithubUrl);
+            appAndBlueprintFolderPaths = NodeGitService.prepareAppAndBlueprintFolderPaths(githubUrl, blueprintGithubUrl);
+
+            /**
+             * @step 3. Create or clone a git repo to store/update the blueprints 
+             */
+            blueprintRepoData = await NodeGitService.createOrCloneBlueprintRepoFromGithubUrl((blueprintGithubUrl ? blueprintGithubUrl : githubUrl), appAndBlueprintFolderPaths.blueprintFolderPath);
             
             if (blueprintRepoData)
             {
                 /**
-                 * @step 3. Create the blueprints folder with the github URL
+                 * @step 4. Create the blueprints folder with the github URL
                  */
-                blueprintRepoData = await NodeGitService.createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData);
+                blueprintRepoData = await NodeGitService.createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData, appAndBlueprintFolderPaths.appFolderPath);
 
                 /**
-                 * @step 4. Ask if we want to build the playbook.json
+                 * @step 5. Ask if we want to build the playbook.json
                  */
                 let buildPlaybookJsonFileAnswer = await inquirer.prompt({
                     type : "confirm",
@@ -118,31 +124,29 @@ class PlaybookMagicCtrl extends Controller {
                 }
 
                 /**
-                 * @step 5. Push blueprint repo
+                 * @step 6. Push blueprint repo
                  */
                 await NodeGitService.pushRepo(blueprintRepoData.repo, 
-                                            undefined,
-                                            blueprintRepoData.branch);
+                                              undefined,
+                                              blueprintRepoData.branch);
 
                 process.stderr.write("\n============ Processing complete ============\n\n")
                 process.stderr.write(`You can view your blueprints at the branch "${blueprintRepoData.branch}" found in the repo:\n`["green"]);
-                process.stderr.write((blueprintRepoData.url + "/tree/" + blueprintRepoData.branch + "\n")["yellow"]);
+                process.stderr.write((blueprintGithubUrl + "/tree/" + blueprintRepoData.branch + "\n")["yellow"]);
                 process.stderr.write("\n=============================================\n\n")
             }
         }
         catch(err)
         {
             console.error(err);
+            throw err;
         }
         finally
         {
-            if (blueprintRepoData)
-            {
-                /**
-                 * @step 6. Cleanup blueprint folder
-                 */
-                this.deleteFolder(blueprintRepoData.folderPath);  
-            }
+            /**
+             * @step 7. Cleanup blueprint folder
+             */
+            this.deleteFolder(appAndBlueprintFolderPaths.blueprintFolderPath);  
             
         }
         
