@@ -1,7 +1,7 @@
 /**
  * @requires Services
  */
-import * as TextIndentService from '../../services/utils/TextIndentService';
+import * as TextService from '../../services/utils/TextService';
 
 /**
  * @requires Models
@@ -44,8 +44,8 @@ export class PlaybookSceneModel
      */
     printJsContent(indentSize = 2)
     {
-        const indent = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         let content = indent + '.addScene("' + this.name + '")\n';
 
