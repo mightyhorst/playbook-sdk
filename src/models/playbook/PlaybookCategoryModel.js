@@ -1,7 +1,7 @@
 /**
  * @requires Services
  */
-import * as TextIndentService from '../../services/utils/TextIndentService';
+import * as TextService from '../../services/utils/TextService';
 
 /**
  * @requires Models
@@ -48,7 +48,7 @@ export class PlaybookCategoryModel {
      */
     printJsContent(indentSize = 1)
     {
-        const indent = TextIndentService.indent(indentSize);
+        const indent = TextService.indent(indentSize);
 
         let content = indent + '.addCategory("' + this.name + '")\n';
 
