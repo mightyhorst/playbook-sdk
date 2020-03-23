@@ -116,6 +116,7 @@ class PlaybookMagicCtrl extends Controller {
                 if (buildPlaybookJsonFile)
                 {
                     global.playbook = require('../playbook.sdk').playbook;
+                    global.step = require('../playbook.sdk').step;
                     await PlaybookService.buildPlaybookJsonFromGithub(blueprintGithubUrl, blueprintRepoData);
                 }
                 else
