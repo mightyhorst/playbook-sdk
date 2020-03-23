@@ -7,7 +7,8 @@ const Url = require('url-parse');
  * @requires Models
  */
 import {
-    PlaybookModel
+    PlaybookModel,
+    PlaybookStepModel
 } from '../../models/playbook/index';
 
 /**
@@ -241,9 +242,10 @@ class NodeGitService
 
                         // -- We will now create a new step and use the build up of commits to implement this step
                         const stepName = "step-" + (completedStepsByMergeCommit.length + 1)
+                        const stepVariableName = stepName.replace(/-/g, "_");
 
                         // -- Add a Step to the playbook.js file
-                        const stepModel = sceneModel.addStep(stepName);
+                        const stepModel = new PlaybookStepModel(stepName);
 
                         // -- Create a new step folder in the blueprints folder
                         const stepFolderModel = FilesService.createFolder(blueprintRepoData.folderPath, stepName);
@@ -266,6 +268,21 @@ class NodeGitService
 
                         // -- Once the step has been handled, add the step to an array of completed steps
                         completedStepsByMergeCommit.push(commit)
+
+                        // -- Save the step playbook.js data to its own playbook.js file in its step folder
+                        const playbookJsStepFileModel = FilesService.createFile(stepFolderModel.path,
+                                                                                'playbook-' + stepName + '.js',
+                                                                                stepModel.printJsContent())
+
+                        // -- Register the step model to both the playbook and scene models
+                        playbookModel.addStep(playbookJsStepFileModel.path.slice(blueprintRepoData.folderPath.length + 1), stepVariableName)
+                        sceneModel.addStep(stepVariableName);
+
+                        // -- Add and commit this file
+                        await this.addAndCommitFile(blueprintRepoData.repo,
+                                                    blueprintRepoData.index,
+                                                    playbookJsStepFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                    "feat(" + playbookJsStepFileModel.name + "): Initialising the playbook step js file which is used by the main playbook.js file");
 
                         commitsForStepImplementation = [];
                     }
@@ -482,7 +499,7 @@ class NodeGitService
 
             stepModel.addDescriptionFromMdFile(changedFileStartTime, 
                                                avgDuration, 
-                                               descriptionFileModel.path.slice(blueprintRepoData.folderPath.length + 1));
+                                               descriptionFileModel.path.slice(blueprintRepoData.folderPath.length + 1 + stepName.length));
 
             // -- Add the new file to the repo index for committing
             await this.addAndCommitFile(blueprintRepoData.repo,
@@ -545,15 +562,13 @@ class NodeGitService
             const templateData = DiffService.generateMasterTemplateAndPartials(previousMergeFileContent, currentMergeFileContent);
             
             // -- Create the new master template file
-            const masterTemplateFolderModel = FilesService.createFolder(
-                                                path.join(path.join(stepFolderModel.path, 'code'), path.dirname(patchFolderPath)), 
-                                                path.basename(patchFolderPath)
-                                            );
-            const masterTemplateFileModel = FilesService.createFile(
-                                                masterTemplateFolderModel.path,
-                                                patchFileName + ".hbs",
-                                                templateData.masterTemplate
-                                            )
+            const masterTemplateFolderModel = FilesService.createFolder(path.join(path.join(stepFolderModel.path, 'code'), 
+                                                                        path.dirname(patchFolderPath)), 
+                                                                        path.basename(patchFolderPath));
+
+            const masterTemplateFileModel = FilesService.createFile(masterTemplateFolderModel.path,
+                                                                    patchFileName + ".hbs",
+                                                                    templateData.masterTemplate)
 
             // -- Add the new file to the repo index for committing
             await this.addAndCommitFile(blueprintRepoData.repo,
@@ -564,7 +579,7 @@ class NodeGitService
             // -- Add the master template as a code entry in the playbook.js file
             const timelineCodeModel = stepModel.addCode(changedFileStartTime, 
                                                         avgDuration, 
-                                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1 + stepName.length),
                                                         patchFilePath);
             
             // -- Create the partial data files 

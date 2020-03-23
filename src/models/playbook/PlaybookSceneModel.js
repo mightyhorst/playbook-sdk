@@ -30,12 +30,9 @@ export class PlaybookSceneModel
      * @returns {PlaybookStepModel}
      * @memberof PlaybookSceneModel
      */
-    addStep(name, commitId)
+    addStep(name)
     {
-        const step = new PlaybookStepModel(name, commitId);
-        this.stepModels.push(step);
-
-        return step;
+        this.stepModels.push(name);
     }
 
     /**
@@ -48,11 +45,12 @@ export class PlaybookSceneModel
     printJsContent(indentSize = 2)
     {
         const indent = TextIndentService.indent(indentSize);
+        const indent2 = TextIndentService.indent(indentSize + 1);
 
         let content = indent + '.addScene("' + this.name + '")\n';
 
-        this.stepModels.forEach((step) => {
-            content += step.printJsContent(indentSize + 1);
+        this.stepModels.forEach((stepName) => {
+            content += indent2 + '.addStepFromModel(' + stepName + ')\n';
         })
 
         return content;

@@ -18,6 +18,7 @@ export class PlaybookModel {
     name;
     outputFileName;
     categoryModels = [];
+    stepModels = [];
 
 
     constructor(name, outputFileName)
@@ -41,6 +42,14 @@ export class PlaybookModel {
         return category;
     }
 
+    addStep(path, name)
+    {
+        this.stepModels.push({
+            path : path,
+            name : name
+        });
+    }
+
     /**
      * Prints the playbook.js entry and any categories that are a part of this playbook
      *
@@ -52,8 +61,14 @@ export class PlaybookModel {
     {
         let indent = TextIndentService.indent(indentSize);
 
+
         let content = 'const path = require("path");\n\n';
-            content += 'playbook("' + this.name + '")\n';
+
+        this.stepModels.forEach((stepModel) => {
+            content += "const " + stepModel.name + " = require('./" + stepModel.path + "\');\n";
+        });
+
+        content += '\nplaybook("' + this.name + '")\n';
 
         this.categoryModels.forEach((category) => {
             content += category.printJsContent(indentSize);
