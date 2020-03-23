@@ -91,11 +91,12 @@ export class PlaybookStepModel
      * @returns {string}
      * @memberof PlaybookStepModel
      */
-    printJsContent(indentSize = 3)
+    printJsContent(indentSize = 4)
     {
         const indent = TextIndentService.indent(indentSize);
 
-        let content = indent + '.addStep("' + this.name + '")\n';
+        let content = "const path = require('path');\n\n"
+            content += 'module.exports = step("' + this.name + '")\n';
 
         this.timelineDescriptionModels.forEach((timelineDescriptionModel) => {
             content += timelineDescriptionModel.printJsContent(indentSize + 1);
