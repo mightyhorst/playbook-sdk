@@ -193,6 +193,19 @@ class PlaybookSdk{
 		return this;
 	}
 
+	addStepFromModel(stepSdkModel)
+	{
+		const category = this.playbookJson.categories.find(cat => cat.id === this.last.category);
+		const scene = category.scenes.find(scene => scene.id === this.last.scene);
+
+		if(!scene.hasOwnProperty('steps')){
+			scene.steps = [];
+		}
+
+		scene.steps.push(stepSdkModel.toString());
+
+		return this;
+	}
 	/**
 	 * Add a Step 
 	 *
@@ -1093,9 +1106,871 @@ class PlaybookSdk{
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Define the timeline that will be played in masterclass. This will provide instructions 
+ * on what to play and when to play content for all panels featured on the masterclass app
+ *
+ * @class StepSdk
+ */
+class StepSdk
+{
+	nextId = 1; 
+	name;
+	last = {
+		timeline: null
+	};
+	stepData;
+
+	constructor(title, gitBranch)
+	{
+		this.stepData = {
+			title : title,
+			gitData : {
+				branch : gitBranch
+			},
+			windowSettings : {
+				description : {
+					isClosed : false,
+					top : "0px",
+					left : "0px",
+					width : "45%",
+					height : "100%",
+					transitions : []
+				},
+				code : {
+					isClosed : false,
+					top : "0px",
+					left : "50%",
+					width : "45%",
+					height : "80%",
+					transitions : []
+				},
+				cli : {
+					isClosed : true,
+					bottom : "0px",
+					left : "50%",
+					width : "45%",
+					height : "20%",
+					transitions : []
+				}
+			},
+			timeline: []
+		}
+	}
+
+	/**
+	 * Add description in Markdown syntax.
+	 * This will be converted to HTML for the playbook.json output 
+	 *
+	 * @param {*} markdownFn
+	 * @param {*} config
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	addDescriptionFromMd(markdownFn, config){
+		var markdown = markdownFn();
+		var html = md2html(markdown);
+		return this.addDescription(html, config);
+	}
+
+	/**
+	 * Add a path to a MDX file to be parsed into HTML for the playbook.json description panel 
+	 *
+	 * @param {*} markdownFile
+	 * @param {*} config
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	addDescriptionFromMdFile(markdownFile, config){
+		const markdown = fs.readFileSync(markdownFile, 'utf8');
+		var html = md2html(markdown);
+		return this.addDescription(html, config);
+	}
+
+	/**
+	 * AddHTML to the description panel to be pretty printed 
+	 *
+	 * @param {*} fnOrStringOrDomOrReact
+	 * @param {*} config
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	addDescription(fnOrStringOrDomOrReact, config){
+
+		let strHtml;
+
+		switch(typeof(fnOrStringOrDomOrReact)){
+			case 'string':
+				strHtml = fnOrStringOrDomOrReact;
+				break;
+			case 'function':
+				strHtml = fnOrStringOrDomOrReact();
+				break;
+			case 'object': 
+				if(fnOrStringOrDomOrReact instanceof HTMLElement){
+					strHtml = fnOrStringOrDomOrReact.outerHTML;
+				}
+				break;
+		}
+
+		// const doc = new DOMParser().parseFromString(strHtml, "text/xml");
+		// const dom = doc.firstElementChild;
+
+		const wrapper= document.createElement('div');
+		wrapper.innerHTML= strHtml;
+
+		const descriptionJson = htmlToList(wrapper);
+
+		const id = this.nextId++;
+
+		this.stepData.timeline.push({
+			id: id, 
+			"panel": "description", 
+			"start": DEFAULTS.start,
+			"duration": DEFAULTS.duration,
+			"description": descriptionJson
+		});
+
+		this.last.timeline = id;
+
+		return this;
+	}
+
+	addCode(templateFile, outputFile, compileData) {
+
+		const id = this.nextId++;
+
+		this.stepData.timeline.push({
+			id: id,
+			"panel": "code",
+			"start": DEFAULTS.start,
+			"duration": DEFAULTS.duration,
+			"code" : {
+				"template" : templateFile,
+				"partial_sections" : [],
+				"output" : outputFile
+			}
+		})
+
+		this.last.timeline = id;
+
+		return this;
+	}
+
+	withPartial(partialId, partialFile, start, duration, compileData) {
+		
+		const time = this._getTimeline();
+
+		if (time.hasOwnProperty('code') && time.code.hasOwnProperty("partial_sections"))
+		{
+			time.code.partial_sections.push({
+				"partial_id" : partialId,
+				"start" : start,
+				"duration" : duration,
+				"template" : partialFile,
+				"template_data" : {}
+			})
+		}
+
+		return this;
+	}
+
+
+	/**
+	 * Add entry point for commands to be printed to the cli panel in masterclass
+	 *
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	addCli() 
+	{
+		const id = this.nextId++;
+
+		this.stepData.timeline.push({
+			id: id,
+			"panel": "cli",
+			"start": DEFAULTS.start,
+			"duration": DEFAULTS.duration,
+			"cmds" : []
+		})
+
+		this.last.timeline = id;
+
+		return this;
+
+	}
+
+	
+	withCommand(command) 
+	{
+		const time = this._getTimeline()
+
+		if (time.hasOwnProperty('cmds'))
+		{
+			time.cmds.push({
+				"execute" : command
+			})
+		}
+
+		return this;
+	}
+	
+	/**
+	 * Adds a transition to the window settings of a window. This allows window movements for a given start and end time
+	 *
+	 * @param {*} start
+	 * @param {*} end
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	addTransition(start, end)
+	{
+		const time = this._getTimeline();
+
+		let panelName = time.panel;
+
+		if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+		{
+			this.stepData.windowSettings[panelName].transitions.push({
+				start : start,
+				end : end
+			})
+		}
+
+		return this;
+	}
+
+	/**
+	 * Sets the window to minimised
+	 *
+	 * @param {boolean} [isMin=true]
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	isMin(isMin = true)
+	{
+		const time = this._getTimeline();
+
+		let panelName = time.panel;
+
+		if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+		{
+			let windowSetting = this.stepData.windowSettings[panelName];
+			let transition = this._getLastTransition(windowSetting);
+
+			if (transition)
+			{
+				transition.isMin = isMin;
+				if (isMin && transition.hasOwnProperty('isMax'))
+				{
+					transition.isMax = false;
+				}
+			}
+			else
+			{
+				windowSetting.isMin = isMin;
+				if (isMin && windowSetting.hasOwnProperty('isMax'))
+				{
+					windowSetting.isMax = false;
+				}
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Un-minimises the window
+	 *
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	isNotMin()
+	{
+		return this.isMin(false);
+	}
+
+	/**
+	 * Sets the window to maximised
+	 *
+	 * @param {boolean} [isMax=true]
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	isMax(isMax = true)
+	{
+		const time = this._getTimeline();
+
+		let panelName = time.panel;
+
+		if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+		{
+			let windowSetting = this.stepData.windowSettings[panelName];
+			let transition = this._getLastTransition(windowSetting);
+
+			if (transition)
+			{
+				transition.isMax = isMax;
+				if (isMax && transition.hasOwnProperty('isMin'))
+				{
+					transition.isMin = false;
+				}
+			}
+			else
+			{
+				windowSetting.isMax = isMax;
+				if (isMax && windowSetting.hasOwnProperty('isMin'))
+				{
+					windowSetting.isMin = false;
+				}
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Un-maximises the window
+	 *
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	isNotMax()
+	{
+		return this.isMax(false);
+	}
+
+	/**
+	 * Sets the state of the window to open
+	 *
+	 * @memberof PlaybookSdk
+	 */
+	isOpen()
+	{
+		return this.isClosed(false);
+	}
+
+	/**
+	 * Sets the state of the window to closed
+	 *
+	 * @memberof PlaybookSdk
+	 */
+	isClosed(isClosed = true)
+	{
+		const time = this._getTimeline();
+
+		let panelName = time.panel;
+
+		if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+		{
+			let windowSetting = this.stepData.windowSettings[panelName];
+			let transition = this._getLastTransition(windowSetting);
+
+			if (transition)
+			{
+				transition.isClosed = isClosed;
+			}
+			else
+			{
+				windowSetting.isClosed = isClosed;
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Take the current position of the window and move it by the left and top values provided
+	 *
+	 * @param {*} left
+	 * @param {*} top
+	 * @param {*} opts
+	 * @memberof PlaybookSdk
+	 */
+	move(left, top, opts = { right: false, bottom: false })
+	{
+		const time = this._getTimeline();
+
+		try
+		{
+			let leftInt;
+			let topInt;
+			if (left != undefined || left != null)
+			{
+				ValidationService.isInt(left, "Left value is not valid! Must be a number, px, or %");
+				leftInt = parseInt(left);
+			}
+			if (top != undefined || top != null)
+			{
+				ValidationService.isInt(top, "Top value is not valid! Must be a number, px, or %");
+				topInt = parseInt(top);
+			}
+
+			const panelName = time.panel;
+
+			/*
+				Here we are setting the values. We will rebuild the value string to ensure only valid characters are used
+			*/
+			if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+			{
+				// -- Get the transition so we can set values
+				let windowSetting = this.stepData.windowSettings[panelName];
+				let transition = this._getLastTransition(windowSetting);
+				let objToUpdate = windowSetting;
+
+				if (transition)
+				{
+					// -- A transition was found so lets set the transition as the object to update
+					objToUpdate = transition;
+				}
+
+				// -- Handle the left value
+				if (leftInt != undefined)
+				{
+					// -- First validate that the existing value has matching units
+					const previousLeftValue = this._getPreviousTransitionProperty(windowSetting, "left");
+					const previousLeftIsPercent = ValidationService.isPercent(previousLeftValue);
+
+					if (ValidationService.isSameUnit(previousLeftValue, left))
+					{
+						objToUpdate.left = parseInt(previousLeftValue) + (opts.right ? (-1 * leftInt) : leftInt) + (previousLeftIsPercent ? "%" : "px");
+					}
+					else
+					{
+						throw "The left units do not match! Please use " + (previousLeftIsPercent ? "'%'" : "'px'") + " or modify your previous left values"
+					}
+				}
+				if (topInt != undefined)
+				{
+					// -- First validate that the existing value has matching units
+					const previousTopValue = this._getPreviousTransitionProperty(windowSetting, "top");
+					const previousTopIsPercent = ValidationService.isPercent(previousTopValue);
+
+					if (ValidationService.isSameUnit(previousTopValue, top))
+					{
+						objToUpdate.top = parseInt(previousTopValue) + (opts.bottom ? -1 * topInt : topInt) + (previousTopIsPercent ? "%" : "px");
+					}
+					else
+					{
+						throw "The top units do not match! Please use " + (previousTopIsPercent ? "'%'" : "'px'") + " or modify your previous top values"
+					}
+				}
+			}
+			return this;
+		}
+		catch(err)
+		{
+			throw err;
+		}
+	}
+
+	/**
+	 * Add/subtract the left value from the previous left value
+	 *
+	 * @param {*} left
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	moveLeft(left)
+	{
+		return this.move(left, undefined);
+	}
+
+	/**
+	 * Add/subtract the right value from the previous left value
+	 *
+	 * @param {*} right
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	moveRight(right)
+	{
+		return this.move(right, undefined, { right : true });
+	}
+
+	/**
+	 * Add/subtract the top value from the previous top value
+	 *
+	 * @param {*} top
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	moveTop(top)
+	{
+		return this.move(undefined, top);
+	}
+
+	/**
+	 * Add/subtract the bottom value from the previous top value
+	 *
+	 * @param {*} bottom
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	moveBottom(bottom)
+	{
+		return this.move(undefined, bottom, { bottom : true });
+	}
+
+	/**
+	 * Sets the left and top values of the window to the values provided
+	 *
+	 * @param {*} left
+	 * @param {*} top
+	 * @memberof PlaybookSdk
+	 */
+	setPosition(left, top)
+	{
+		const time = this._getTimeline();
+
+		try
+		{
+			let leftInt;
+			let topInt;
+			if (left != undefined || left != null)
+			{
+				ValidationService.isInt(left, "Left value is not valid! Must be a number, px, or %");
+				leftInt = parseInt(left);
+			}
+			if (top != undefined || top != null)
+			{
+				ValidationService.isInt(top, "Top value is not valid! Must be a number, px, or %");
+				topInt = parseInt(top);
+			}
+
+			const panelName = time.panel;
+
+			/*
+				Here we are setting the values. We will rebuild the value string to ensure only valid characters are used
+			*/
+			if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+			{
+				// -- Get the transition so we can set values
+				let windowSetting = this.stepData.windowSettings[panelName];
+				let transition = this._getLastTransition(windowSetting);
+				let objToUpdate = windowSetting;
+
+				if (transition)
+				{
+					// -- A transition was found so lets set the transition as the object to update
+					objToUpdate = transition;
+				}
+
+				// -- Setting the left and top value
+				if (leftInt != undefined)
+				{
+					objToUpdate.left = leftInt + (ValidationService.isPercent(left) ? "%" : "px");
+				}
+				if (topInt != undefined)
+				{
+					objToUpdate.top = topInt + (ValidationService.isPercent(top) ? "%" : "px");
+				}
+			}
+			return this;
+		}
+		catch(err)
+		{
+			throw err;
+		}
+	}
+
+	/**
+	 * Take the current window width and height and add/subtract the width and height values provided
+	 *
+	 * @param {*} width
+	 * @param {*} height
+	 * @memberof PlaybookSdk
+	 */
+	changeDimension(width, height)
+	{
+		const time = this._getTimeline();
+
+		try
+		{
+			let widthInt;
+			let heightInt;
+			if (width != undefined || width != null)
+			{
+				ValidationService.isInt(width, "Width value is not valid! Must be a number, px, or %");
+				widthInt = parseInt(width);
+			}
+			if (height != undefined || height != null)
+			{
+				ValidationService.isInt(height, "Height value is not valid! Must be a number, px, or %");
+				heightInt = parseInt(height);
+			}
+
+			const panelName = time.panel;
+
+			/*
+				Here we are setting the values. We will rebuild the value string to ensure only valid characters are used
+			*/
+			if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+			{
+				// -- Get the transition so we can set values
+				let windowSetting = this.stepData.windowSettings[panelName];
+				let transition = this._getLastTransition(windowSetting);
+				let objToUpdate = windowSetting;
+
+				if (transition)
+				{
+					// -- A transition was found so lets set the transition as the object to update
+					objToUpdate = transition;
+				}
+
+				// -- Handle the width value
+				if (widthInt != undefined)
+				{
+					// -- First validate that the existing value has matching units
+					const previousWidthValue = this._getPreviousTransitionProperty(windowSetting, "width");
+					const previousWidthIsPercent = ValidationService.isPercent(previousWidthValue);
+
+					if (ValidationService.isSameUnit(previousWidthValue, width))
+					{
+						objToUpdate.width = parseInt(previousWidthValue) + widthInt + (previousWidthIsPercent ? "%" : "px");
+					}
+					else
+					{
+						throw "The width units do not match! Please use " + (previousWidthIsPercent ? "'%'" : "'px'") + " or modify your previous width values"
+					}
+				}
+				if (heightInt != undefined)
+				{
+					// -- First validate that the existing value has matching units
+					const previousHeightValue = this._getPreviousTransitionProperty(windowSetting, "height");
+					const previousHeightIsPercent = ValidationService.isPercent(previousHeightValue);
+
+					if (ValidationService.isSameUnit(previousHeightValue, height))
+					{
+						objToUpdate.height = parseInt(previousHeightValue) + heightInt + (previousHeightIsPercent ? "%" : "px");
+					}
+					else
+					{
+						throw "The height units do not match! Please use " + (previousHeightIsPercent ? "'%'" : "'px'") + " or modify your previous height values"
+					}
+				}
+			}
+			return this;
+		}
+		catch(err)
+		{
+			throw err;
+		}
+	}
+
+	/**
+	 * Add/subtract the width from the previous width value
+	 *
+	 * @param {*} width
+	 * @memberof PlaybookSdk
+	 */
+	changeWidth(width)
+	{
+		return this.changeDimension(width, undefined);
+	}
+
+	/**
+	 * Add/subtract the height from the previous height value
+	 *
+	 * @param {*} height
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	changeHeight(height)
+	{
+		return this.changeDimension(undefined, height);
+	}
+
+	/**
+	 * Sets the width and height values of the window to the values provided
+	 *
+	 * @param {*} width
+	 * @param {*} height
+	 * @memberof PlaybookSdk
+	 */
+	setDimension(width, height)
+	{
+		const time = this._getTimeline();
+
+		try
+		{
+			let widthInt;
+			let heightInt;
+			if (width != undefined || width != null)
+			{
+				ValidationService.isInt(width, "Width value is not valid! Must be a number, px, or %");
+				widthInt = parseInt(width);
+			}
+			if (height != undefined || height != null)
+			{
+				ValidationService.isInt(height, "Height value is not valid! Must be a number, px, or %");
+				heightInt = parseInt(height);
+			}
+
+			const panelName = time.panel;
+
+			/*
+				Here we are setting the values. We will rebuild the value string to ensure only valid characters are used
+			*/
+			if (panelName && this.stepData.windowSettings.hasOwnProperty(panelName))
+			{
+				// -- Get the transition so we can set values
+				let windowSetting = this.stepData.windowSettings[panelName];
+				let transition = this._getLastTransition(windowSetting);
+				let objToUpdate = windowSetting;
+
+				if (transition)
+				{
+					// -- A transition was found so lets set the transition as the object to update
+					objToUpdate = transition;
+				}
+
+				// -- Setting the left and top value
+				if (widthInt != undefined)
+				{
+					objToUpdate.width = widthInt + (ValidationService.isPercent(width) ? "%" : "px");
+				}
+				if (heightInt != undefined)
+				{
+					objToUpdate.height = heightInt + (ValidationService.isPercent(height) ? "%" : "px");
+				}
+			}
+			return this;
+		}
+		catch(err)
+		{
+			throw err;
+		}
+	}
+
+
+	/**
+	 * Add timeline for granular control over how quick the printing is and when it starts 
+	 *
+	 * @param {*} config
+	 * @returns
+	 * @memberof PlaybookSdk
+	 */
+	withTime(config)
+	{
+		const time = this._getTimeline();
+
+		time.start = config.start;
+		time.duration = config.duration;
+
+		return this;
+	}
+
+
+	_getTimeline()
+	{
+		return this.stepData.timeline.find(time => time.id === this.last.timeline);
+	}
+	_getLastTransition(windowSetting)
+	{
+		if (windowSetting.transitions.length > 0)
+		{
+			return windowSetting.transitions[windowSetting.transitions.length - 1];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	_getPreviousTransitionProperty(windowSetting, property)
+	{
+		if (windowSetting.transitions.length > 0)
+		{
+			let value;
+
+			for (let i = windowSetting.transitions.length - 1; i >= 0; i--)
+			{
+				const transition = windowSetting.transitions[i];
+
+				// -- Check the transition to see if it has the property, if it does then return it
+				if (transition.hasOwnProperty(property))
+				{
+					value = transition[property];
+					break;
+				}
+			}
+
+			// -- If the value is not found, default to the window settings default value
+			if (value == undefined)
+			{
+				value = windowSetting[property];
+			}
+
+			return value;
+		}
+		else
+		{
+			return windowSetting[property];
+		}
+	}
+
+	toString()
+	{
+		return this.stepData;
+	}
+}
+
 module.exports = {
 	playbook: (name)=>{
 		return new PlaybookSdk();
+	},
+	step: (name) => {
+		return new StepSdk(name);
 	}
 }
 
