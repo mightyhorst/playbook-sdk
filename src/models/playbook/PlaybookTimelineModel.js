@@ -3,7 +3,7 @@ import _ from 'lodash';
 /**
  * @requires Services
  */
-import * as TextIndentService from '../../services/utils/TextIndentService';
+import * as TextService from '../../services/utils/TextService';
 
 
 export class PlaybookWindowSettingsModel
@@ -151,8 +151,8 @@ export class PlaybookWindowSettingsModel
 
     printJsContent(indentSize = 5)
     {
-        const indent1 = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent1 = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         let content = "";
 
@@ -202,11 +202,11 @@ export class PlaybookWindowSettingsModel
 
             if (this.position.left != null)
             {
-                leftVal = TextIndentService.formatToStringOrNum(this.position.left);
+                leftVal = TextService.formatToStringOrNum(this.position.left);
             }
             if (this.position.top != null)
             {
-                topVal = TextIndentService.formatToStringOrNum(this.position.top);
+                topVal = TextService.formatToStringOrNum(this.position.top);
             }
             content += indent1 + ".setPosition(" + (leftVal != null ? leftVal : "null") + ", " + (topVal != null ? topVal : "null") + ")\n";
         }
@@ -220,10 +220,10 @@ export class PlaybookWindowSettingsModel
          */
         if (this.positionMoving.left != null && this.positionMoving.top != null && this.positionMoving.right != null && this.positionMoving.bottom != null)
         {
-            let leftVal = TextIndentService.formatToStringOrNum(this.positionMoving.left);
-            let topVal = TextIndentService.formatToStringOrNum(this.positionMoving.top);
-            let rightVal = TextIndentService.formatToStringOrNum(this.positionMoving.right);
-            let bottomVal = TextIndentService.formatToStringOrNum(this.positionMoving.bottom);
+            let leftVal = TextService.formatToStringOrNum(this.positionMoving.left);
+            let topVal = TextService.formatToStringOrNum(this.positionMoving.top);
+            let rightVal = TextService.formatToStringOrNum(this.positionMoving.right);
+            let bottomVal = TextService.formatToStringOrNum(this.positionMoving.bottom);
 
             content += indent1 + ".move(" + leftVal + ", " + topVal + ", " + rightVal + ", " + bottomVal + ")\n";
         }
@@ -231,19 +231,19 @@ export class PlaybookWindowSettingsModel
         {
             if (this.positionMoving.left != null)
             {
-                content += indent1 + ".moveLeft(" + TextIndentService.formatToStringOrNum(this.positionMoving.left) + ")\n";
+                content += indent1 + ".moveLeft(" + TextService.formatToStringOrNum(this.positionMoving.left) + ")\n";
             }
             if (this.positionMoving.top != null)
             {
-                content += indent1 + ".moveTop(" + TextIndentService.formatToStringOrNum(this.positionMoving.top) + ")\n";
+                content += indent1 + ".moveTop(" + TextService.formatToStringOrNum(this.positionMoving.top) + ")\n";
             }
             if (this.positionMoving.right != null)
             {
-                content += indent1 + ".moveRight(" + TextIndentService.formatToStringOrNum(this.positionMoving.right) + ")\n";
+                content += indent1 + ".moveRight(" + TextService.formatToStringOrNum(this.positionMoving.right) + ")\n";
             }
             if (this.positionMoving.bottom != null)
             {
-                content += indent1 + ".moveBottom(" + TextIndentService.formatToStringOrNum(this.positionMoving.bottom) + ")\n";
+                content += indent1 + ".moveBottom(" + TextService.formatToStringOrNum(this.positionMoving.bottom) + ")\n";
             }
         }
         
@@ -257,11 +257,11 @@ export class PlaybookWindowSettingsModel
 
             if (this.dimension.width != null)
             {
-                widthVal = TextIndentService.formatToStringOrNum(this.dimension.width);
+                widthVal = TextService.formatToStringOrNum(this.dimension.width);
             }
             if (this.dimension.height != null)
             {
-                heightVal = TextIndentService.formatToStringOrNum(this.dimension.height);
+                heightVal = TextService.formatToStringOrNum(this.dimension.height);
             }
             content += indent1 + ".setDimension(" + (widthVal != null ? widthVal : "null") + ", " + (heightVal != null ? heightVal : "null") + ")\n";
         }
@@ -273,8 +273,8 @@ export class PlaybookWindowSettingsModel
          */
         if (this.dimensionChanging.width != null && this.dimension.height != null)
         {
-            let widthVal = TextIndentService.formatToStringOrNum(this.dimensionChanging.width);
-            let heightVal = TextIndentService.formatToStringOrNum(this.dimensionChanging.height);
+            let widthVal = TextService.formatToStringOrNum(this.dimensionChanging.width);
+            let heightVal = TextService.formatToStringOrNum(this.dimensionChanging.height);
 
             content += indent1 + ".changeDimension(" + widthVal + ", " + heightVal + ")\n";
         }
@@ -282,11 +282,11 @@ export class PlaybookWindowSettingsModel
         {
             if (this.dimensionChanging.width != null)
             {
-                content += indent1 + ".changeWidth(" + TextIndentService.formatToStringOrNum(this.dimensionChanging.width) + ")\n"
+                content += indent1 + ".changeWidth(" + TextService.formatToStringOrNum(this.dimensionChanging.width) + ")\n"
             }
             if (this.dimensionChanging.height != null)
             {
-                content += indent1 + ".changeHeight(" + TextIndentService.formatToStringOrNum(this.dimensionChanging.height) + ")\n"
+                content += indent1 + ".changeHeight(" + TextService.formatToStringOrNum(this.dimensionChanging.height) + ")\n"
             }
         }
 
@@ -330,8 +330,8 @@ export class PlaybookTimelineModel extends PlaybookWindowSettingsModel
      */
     printJsContent(indentSize = 4)
     {
-        const indent1 = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent1 = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         // -- Print window settings
         let content = super.printJsContent(indentSize + 1);
@@ -379,8 +379,8 @@ export class PlaybookTimelineTransitionModel extends PlaybookWindowSettingsModel
 
     printJsContent(indentSize = 5)
     {
-        const indent1 = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent1 = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         let content = indent1 + ".addTransition(" + this.start + ", " + this.end + ")\n";
 
@@ -412,7 +412,7 @@ export class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
      */
     printJsContent(indentSize = 4)
     {
-        const indent = TextIndentService.indent(indentSize);
+        const indent = TextService.indent(indentSize);
 
         let content = indent + '.addDescriptionFromMdFile(path.join(__dirname, "' + this.filePath + '"))\n';
 
@@ -468,8 +468,8 @@ export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
      */
     printJsContent(indentSize = 4)
     {
-        const indent1 = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent1 = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         let content = indent1 + '.addCode("' + this.templateFilePath + '", "' + this.outputFilePath + '"';
         
@@ -538,8 +538,8 @@ export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
      */
     printJsContent(indentSize = 5)
     {
-        const indent1 = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent1 = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         let content = indent1 + '.withPartial("' + this.partialId + '", "' + this.templateFilePath + '", ' + this.start + ", " + this.duration;
 
@@ -609,8 +609,8 @@ export class PlaybookTimelineCliModel extends PlaybookTimelineModel {
      */
     printJsContent(indentSize = 4)
     {
-        const indent1 = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent1 = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         let content = indent1 + '.addCli()\n';
 
@@ -650,8 +650,8 @@ export class PlaybookTimelineCliCommandModel {
      */
     printJsContent(indentSize = 5)
     {
-        const indent1 = TextIndentService.indent(indentSize);
-        const indent2 = TextIndentService.indent(indentSize + 1);
+        const indent1 = TextService.indent(indentSize);
+        const indent2 = TextService.indent(indentSize + 1);
 
         let content = indent1 + '.withCommand("' + this.command + '")\n';
 
