@@ -129,11 +129,13 @@ class PlaybookMagicCtrl extends Controller {
                  */
                 await NodeGitService.pushRepo(blueprintRepoData.repo, 
                                               undefined,
-                                              blueprintRepoData.branch);
+                                              blueprintRepoData.branch,
+                                              blueprintRepoData.branch,
+                                              blueprintRepoData.isInit);
 
                 process.stderr.write("\n============ Processing complete ============\n\n")
-                process.stderr.write(`You can view your blueprints at the branch "${blueprintRepoData.branch}" found in the repo:\n`["green"]);
-                process.stderr.write((blueprintGithubUrl + "/tree/" + blueprintRepoData.branch + "\n")["yellow"]);
+                process.stderr.write(`You can view your blueprints at the branch "${blueprintRepoData.isInit ? "master" : blueprintRepoData.branch}" found in the repo:\n`["green"]);
+                process.stderr.write((blueprintRepoData.isInit ? blueprintGithubUrl : (blueprintGithubUrl + "/tree/" + blueprintRepoData.branch + "\n"))["yellow"]);
                 process.stderr.write("\n=============================================\n\n")
             }
         }
