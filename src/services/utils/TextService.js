@@ -11,5 +11,15 @@ module.exports = {
     },
     formatToStringOrNum: (value) => {
         return isNaN(value) ? '"' + value + '"' : value;
+    },
+    numberFormatter: (num) => {
+        if ((num + "").length > 2)
+        {
+            return num;
+        }
+        else
+        {
+            return ("0" + num).slice(-2);
+        }
     }
 }

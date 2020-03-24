@@ -16,6 +16,7 @@ import {
  */
 const FilesService = require('../utils/FilesService');
 const DiffService = require('../diff/DiffService');
+const TextService = require('../utils/TextService');
 
 class NodeGitService
 {
@@ -241,7 +242,7 @@ class NodeGitService
                         }
 
                         // -- We will now create a new step and use the build up of commits to implement this step
-                        const stepName = "step-" + (completedStepsByMergeCommit.length + 1)
+                        const stepName = "step-" + TextService.numberFormatter(completedStepsByMergeCommit.length + 1)
                         const stepVariableName = stepName.replace(/-/g, "_");
 
                         // -- Add a Step to the playbook.js file

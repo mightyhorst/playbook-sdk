@@ -1,7 +1,7 @@
 /**
  * @requires Services
  */
-import * as TextIndentService from '../../services/utils/TextIndentService';
+import * as TextService from '../../services/utils/TextService';
 
 /**
  * @requires Models
@@ -93,7 +93,7 @@ export class PlaybookStepModel
      */
     printJsContent(indentSize = 4)
     {
-        const indent = TextIndentService.indent(indentSize);
+        const indent = TextService.indent(indentSize);
 
         let content = "const path = require('path');\n\n"
             content += 'module.exports = step("' + this.name + '")\n';

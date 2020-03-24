@@ -1,7 +1,7 @@
 /**
  * @requires Services
  */
-import * as TextIndentService from '../../services/utils/TextIndentService';
+import * as TextService from '../../services/utils/TextService';
 
 /**
  * @requires Models
@@ -59,7 +59,7 @@ export class PlaybookModel {
      */
     printJsContent(indentSize = 1)
     {
-        let indent = TextIndentService.indent(indentSize);
+        let indent = TextService.indent(indentSize);
 
 
         let content = 'const path = require("path");\n\n';
