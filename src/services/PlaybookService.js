@@ -3,6 +3,14 @@ const fs = require('fs');
 const glob = require('glob');
 const chalk = require('chalk');
 var term = require( 'terminal-kit').terminal;
+const rp = require('request-promise-native');
+
+/**
+ * @import Constants
+ */
+import {
+    MICROSERVICE_PLAYBOOK_URL
+} from '../constants/url.const';
 
 /**
  * @requires Services 
@@ -21,10 +29,85 @@ const NodeGitService = require('../services/nodegit/NodeGitService');
 const Models = require('../models/index');
 const FileModel = Models.FileModel;
 
+
 class PlaybookService{
 
     constructor(){
         
+    }
+
+    async getPlaybookEntry(playbookName, authour)
+    {
+        try
+        {
+            let result = await rp({
+                method : "GET",
+                uri : MICROSERVICE_PLAYBOOK_URL + "/playbook?authour=" + authour + "&playbook_name=" + playbookName,
+                json : true
+            });
+
+            return result;
+        }
+        catch(err)
+        {
+            if (err.hasOwnProperty("error"))
+            {
+                throw err.error;
+            }
+            throw err;
+        }
+    }
+
+    async createPlaybookEntry(playbookName, authour, appUrl, blueprintUrl)
+    {
+        try
+        {
+            let result = await rp({
+                method : "POST",
+                uri : MICROSERVICE_PLAYBOOK_URL + "/playbook", 
+                body : {
+                    playbook_name : playbookName,
+                    authour: authour,
+                    app_url : appUrl,
+                    blueprint_url : blueprintUrl
+                },
+                json : true
+            });
+
+            return result;
+        }
+        catch(err)
+        {
+            if (err.hasOwnProperty("error"))
+            {
+                throw err.error;
+            }
+            throw err;
+        }
+    }
+
+    async updatePlaybookEntry(playbookId, updateData)
+    {
+        if (!updateData) { updateData = {}; }
+        try
+        {
+            let result = await rp({
+                method : "PUT",
+                uri : MICROSERVICE_PLAYBOOK_URL + "/playbook/" + playbookId,
+                body : updateData,
+                json : true
+            })
+
+            return result;
+        }
+        catch(err)
+        {
+            if (err.hasOwnProperty("error"))
+            {
+                throw err.error;
+            }
+            throw err;
+        }
     }
 
 
@@ -52,7 +135,7 @@ class PlaybookService{
                                                         'playbook.json',
                                                         "feat(playbook.json): The compiled playbook.js file. Used by masterclass.io");
             }
-
+            
         }
         catch(err)
         {
