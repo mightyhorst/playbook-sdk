@@ -1005,8 +1005,6 @@ class PlaybookSdk{
 	 * @memberof PlaybookSdk
 	 */
 	print(){
-		console.log(this.playbookJson);
-
 		return JSON.stringify(this.playbookJson, 0, 4);
 	}
 	/**
@@ -1022,7 +1020,6 @@ class PlaybookSdk{
 
 		if(this.DEBUG){
 			const playbookFile = fs.readFileSync(optionalFilename, 'utf8');
-			console.log('playbookFile:\n', playbookFile);
 		}
 
 		return this;
