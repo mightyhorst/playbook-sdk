@@ -1,5 +1,6 @@
 const Git = require("nodegit");
 const path = require("path");
+const os = require('os');
 const _ = require('lodash');
 const Url = require('url-parse');
 
@@ -35,13 +36,15 @@ class NodeGitService
      */
     prepareAppAndBlueprintFolderPaths(appGithubUrl, blueprintGithubUrl)
     {
+        const homeDir = path.resolve(os.homedir(), ".playbook");
+
         const appUrl = new Url(appGithubUrl);
         const appPathnameSplit = appUrl.pathname.split("/");
-        const appFolderPath = path.resolve(__dirname, '../../../../git-projects/' + appPathnameSplit.join("_"));
+        const appFolderPath = path.resolve(homeDir, 'git-projects/' + appPathnameSplit.join("_"));
 
         const blueprintUrl = new Url(blueprintGithubUrl);
         const blueprintPathnameSplit = blueprintUrl.pathname.split("/");
-        const blueprintFolderPath = path.resolve(__dirname, ('../../../../sxd-git-projects/' + blueprintPathnameSplit.join('_')))
+        const blueprintFolderPath = path.resolve(homeDir, ('sxd-git-projects/' + blueprintPathnameSplit.join('_')))
         
         FilesService.deleteFolder(appFolderPath);
         FilesService.deleteFolder(blueprintFolderPath);  
@@ -149,7 +152,7 @@ class NodeGitService
     async createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData, appFolderPath)
     {
         // -- This is temporary to ensure we have a directory to clone to. We should resort to /tmp later
-        FilesService.createFolder(path.resolve(__dirname, '../../../../'), "git-projects");
+        FilesService.createFolder(path.resolve(os.homedir(), '.playbook'), "git-projects");
         // githubUrl = "git@github.com:mitni455/master-class-trello-clone.git";
         try
         {
