@@ -27,7 +27,9 @@ class NodeGitService
      * @param {*} blueprintGithubUrl
      * @returns {
      *              appFolderPath : <string>,
-     *              blueprintFolderPath : <string>
+     *              blueprintFolderPath : <string>,
+     *              authour : <string>,
+     *              playbookName : <string>
      *          }
      * @memberof NodeGitService
      */
@@ -46,7 +48,9 @@ class NodeGitService
 
         return {
             appFolderPath : appFolderPath,
-            blueprintFolderPath : blueprintFolderPath
+            blueprintFolderPath : blueprintFolderPath,
+            authour : appPathnameSplit[appPathnameSplit.length - 2],
+            playbookName : appPathnameSplit[appPathnameSplit.length - 1]
         }
     }
 
@@ -59,7 +63,8 @@ class NodeGitService
      *              repo: {Git.Repository},
      *              folderPath : {String},
      *              index : {String},
-     *              branch : {String}
+     *              branch : {String},
+     *              isInit : {Boolean}
      *          }
      * @memberof NodeGitService
      */
@@ -67,6 +72,7 @@ class NodeGitService
     {
         let blueprintFolder;
         let repo;
+        let isInit = false;
 
         const signature = Git.Signature.now("Foo bar", "dom@kitset.io");
 
@@ -91,7 +97,8 @@ class NodeGitService
         catch(err)
         {
             // -- There are no previous commits. Lets initialize the repo with a readme file and push that to master
-            
+            isInit = true;
+
             // -- Create a README.md file for this repo
             const readmeFileModel = FilesService.createFile(
                 blueprintFolderPath,
@@ -125,6 +132,7 @@ class NodeGitService
             folderPath : blueprintFolderPath,
             index : blueprintRepoIndex,
             branch : branchName,
+            isInit : isInit
         };
     }
 
@@ -563,8 +571,7 @@ class NodeGitService
             const templateData = DiffService.generateMasterTemplateAndPartials(previousMergeFileContent, currentMergeFileContent);
             
             // -- Create the new master template file
-            const masterTemplateFolderModel = FilesService.createFolder(path.join(path.join(stepFolderModel.path, 'code'), 
-                                                                        path.dirname(patchFolderPath)), 
+            const masterTemplateFolderModel = FilesService.createFolder(path.join(path.join(stepFolderModel.path, 'code'), path.dirname(patchFolderPath)), 
                                                                         path.basename(patchFolderPath));
 
             const masterTemplateFileModel = FilesService.createFile(masterTemplateFolderModel.path,
@@ -580,7 +587,7 @@ class NodeGitService
             // -- Add the master template as a code entry in the playbook.js file
             const timelineCodeModel = stepModel.addCode(changedFileStartTime, 
                                                         avgDuration, 
-                                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1 + stepName.length),
+                                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
                                                         patchFilePath);
             
             // -- Create the partial data files 
@@ -761,10 +768,16 @@ class NodeGitService
      * @param {*} [remoteBranch=localBranch]
      * @memberof NodeGitService
      */
-    async pushRepo(repo, remoteId = "origin", localBranch = "master", remoteBranch = localBranch)
+    async pushRepo(repo, remoteId = "origin", localBranch = "master", remoteBranch = localBranch, isInit = false)
     {
         try
         {
+            // -- If this is an init, auto-merge the local branch straight to the remote master branch
+            if (isInit)
+            {
+                remoteBranch = "master";
+            }
+
             let credentialsBreak = 0;
 
             const remote = await repo.getRemote(remoteId);

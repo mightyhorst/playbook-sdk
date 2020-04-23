@@ -40,6 +40,8 @@
     "jsdom": "^15.1.1",
     "lodash": "^4.17.15",
     "nodegit": "^0.26.2",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8",
     "rimraf": "^3.0.2",
     "showdown": "^1.9.0",
     "term.js": "0.0.7",
