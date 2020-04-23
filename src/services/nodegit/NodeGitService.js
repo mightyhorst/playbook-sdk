@@ -27,7 +27,9 @@ class NodeGitService
      * @param {*} blueprintGithubUrl
      * @returns {
      *              appFolderPath : <string>,
-     *              blueprintFolderPath : <string>
+     *              blueprintFolderPath : <string>,
+     *              authour : <string>,
+     *              playbookName : <string>
      *          }
      * @memberof NodeGitService
      */
@@ -46,7 +48,9 @@ class NodeGitService
 
         return {
             appFolderPath : appFolderPath,
-            blueprintFolderPath : blueprintFolderPath
+            blueprintFolderPath : blueprintFolderPath,
+            authour : appPathnameSplit[appPathnameSplit.length - 2],
+            playbookName : appPathnameSplit[appPathnameSplit.length - 1]
         }
     }
 
@@ -567,8 +571,7 @@ class NodeGitService
             const templateData = DiffService.generateMasterTemplateAndPartials(previousMergeFileContent, currentMergeFileContent);
             
             // -- Create the new master template file
-            const masterTemplateFolderModel = FilesService.createFolder(path.join(path.join(stepFolderModel.path, 'code'), 
-                                                                        path.dirname(patchFolderPath)), 
+            const masterTemplateFolderModel = FilesService.createFolder(path.join(path.join(stepFolderModel.path, 'code'), path.dirname(patchFolderPath)), 
                                                                         path.basename(patchFolderPath));
 
             const masterTemplateFileModel = FilesService.createFile(masterTemplateFolderModel.path,
@@ -584,7 +587,7 @@ class NodeGitService
             // -- Add the master template as a code entry in the playbook.js file
             const timelineCodeModel = stepModel.addCode(changedFileStartTime, 
                                                         avgDuration, 
-                                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1 + stepName.length),
+                                                        masterTemplateFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
                                                         patchFilePath);
             
             // -- Create the partial data files 
