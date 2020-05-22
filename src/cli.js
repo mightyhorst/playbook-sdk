@@ -23,6 +23,9 @@ export function cli(args) {
      🍑  ${chalk.blueBright('playbook serve')} - pushes the playbook.json and runs it 
      🥑  ${chalk.green('playbook wizard')} - you a wizard to create a playbook on the fly
      🦄  ${chalk.magentaBright('playbook magic')} - reverse engineer a playbook from a git repo
+     🔍  ${chalk.cyanBright('playbook validate')} - Validate a playbook.json in a git repo
+     📝  ${chalk.yellowBright("playbook draft")} - Create a draft version for a new/existing playbook. Allows the use of masterclass to preview the playbook.json
+     🎖   ${chalk.greenBright("playbook publish")} - Publish a new version or existing draft. Allows the public to preview your playbook and use it to learn
      
 
     ${chalk.gray('Subscribe...')}
