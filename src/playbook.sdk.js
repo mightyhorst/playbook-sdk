@@ -248,7 +248,7 @@ class PlaybookSdk{
 					height : "80%",
 					transitions : []
 				},
-				cli : {
+				terminal : {
 					isClosed : true,
 					bottom : "0px",
 					left : "50%",
@@ -395,12 +395,12 @@ class PlaybookSdk{
 
 
 	/**
-	 * Add entry point for commands to be printed to the cli panel in masterclass
+	 * Add entry point for commands to be printed to the terminal panel in masterclass
 	 *
 	 * @returns
 	 * @memberof PlaybookSdk
 	 */
-	addCli() 
+	addTerminal() 
 	{
 		const category = this.playbookJson.categories.find(cat => cat.id === this.last.category);
 		const scene = category.scenes.find(scene => scene.id === this.last.scene);
@@ -410,10 +410,12 @@ class PlaybookSdk{
 
 		step.timeline.push({
 			id: id,
-			"panel": "cli",
+			"panel": "terminal",
 			"start": DEFAULTS.start,
 			"duration": DEFAULTS.duration,
-			"cmds" : []
+			"terminal" : {
+				"commands" : []
+			}
 		})
 
 		this.last.timeline = id;
@@ -430,11 +432,9 @@ class PlaybookSdk{
 		const step = scene.steps.find(step => step.id === this.last.step);
 		const time = step.timeline.find(time => time.id === this.last.timeline);
 
-		if (time.hasOwnProperty('cmds'))
+		if (time.hasOwnProperty('terminal') && time.terminal.hasOwnProperty('commands'))
 		{
-			time.cmds.push({
-				"execute" : command
-			})
+			time.terminal.commands.push(command)
 		}
 
 		return this;
@@ -1192,7 +1192,7 @@ class StepSdk
 					height : "80%",
 					transitions : []
 				},
-				cli : {
+				terminal : {
 					isClosed : true,
 					bottom : "0px",
 					left : "50%",
@@ -1324,21 +1324,23 @@ class StepSdk
 
 
 	/**
-	 * Add entry point for commands to be printed to the cli panel in masterclass
+	 * Add entry point for commands to be printed to the terminal panel in masterclass
 	 *
 	 * @returns
 	 * @memberof PlaybookSdk
 	 */
-	addCli() 
+	addTerminal() 
 	{
 		const id = this.nextId++;
 
 		this.stepData.timeline.push({
 			id: id,
-			"panel": "cli",
+			"panel": "terminal",
 			"start": DEFAULTS.start,
 			"duration": DEFAULTS.duration,
-			"cmds" : []
+			"terminal" : {
+				"commands" : []
+			}
 		})
 
 		this.last.timeline = id;
@@ -1352,11 +1354,9 @@ class StepSdk
 	{
 		const time = this._getTimeline()
 
-		if (time.hasOwnProperty('cmds'))
+		if (time.hasOwnProperty('terminal') && time.terminal.hasOwnProperty('commands'))
 		{
-			time.cmds.push({
-				"execute" : command
-			})
+			time.terminal.commands.push(command)
 		}
 
 		return this;
