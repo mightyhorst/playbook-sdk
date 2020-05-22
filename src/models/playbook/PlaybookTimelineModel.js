@@ -576,15 +576,15 @@ export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
 
 
 /**
- * Creates a .addCli entry in the playbook.js file. Allows the author to add executable commands to the cli panel in masterclass
+ * Creates a .addTerminal entry in the playbook.js file. Allows the author to add executable commands to the cli panel in masterclass
  *
  * @export
- * @class PlaybookTimelineCliModel
+ * @class PlaybookTimelineTerminalModel
  * @extends {PlaybookTimelineModel}
  */
-export class PlaybookTimelineCliModel extends PlaybookTimelineModel {
+export class PlaybookTimelineTerminalModel extends PlaybookTimelineModel {
 
-    cliCommandModels = [];
+    terminalCommandModels = [];
 
     constructor(start, duration)
     {
@@ -593,30 +593,30 @@ export class PlaybookTimelineCliModel extends PlaybookTimelineModel {
 
     addCommand(command)
     {
-        const cliCommandModel = new PlaybookTimelineCliCommandModel(command);
+        const terminalCommandModel = new PlaybookTimelineTerminalCommandModel(command);
 
-        this.cliCommandModels.push(cliCommandModel);
+        this.terminalCommandModels.push(terminalCommandModel);
 
-        return cliCommandModel;
+        return terminalCommandModel;
     }
 
     /**
-     * Prints the .addCli entry to a timeline
+     * Prints the .addTerminal entry to a timeline
      *
      * @param {number} [indentSize=1]
      * @returns {string}
-     * @memberof PlaybookTimelineCliModel
+     * @memberof PlaybookTimelineTerminalModel
      */
     printJsContent(indentSize = 4)
     {
         const indent1 = TextService.indent(indentSize);
         const indent2 = TextService.indent(indentSize + 1);
 
-        let content = indent1 + '.addCli()\n';
+        let content = indent1 + '.addTerminal()\n';
 
-        this.cliCommandModels.forEach((cliCommandModel) => {
+        this.terminalCommandModels.forEach((terminalCommandModel) => {
 
-            content += cliCommandModel.printJsContent(indentSize + 1);
+            content += terminalCommandModel.printJsContent(indentSize + 1);
 
         })
 
@@ -630,9 +630,9 @@ export class PlaybookTimelineCliModel extends PlaybookTimelineModel {
  * Creates a .withCommand entry in the playbook.js file. This will be a command that is to be executed by the cli panel
  *
  * @export
- * @class PlaybookTimelineCliCommandModel
+ * @class PlaybookTimelineTerminalCommandModel
  */
-export class PlaybookTimelineCliCommandModel {
+export class PlaybookTimelineTerminalCommandModel {
 
     command;
 
@@ -642,19 +642,18 @@ export class PlaybookTimelineCliCommandModel {
     }
 
     /**
-     * Prints .withCommand entry as a child to the .addCli entry
+     * Prints .withCommand entry as a child to the .addTerminal entry
      *
      * @param {number} [indentSize=5]
      * @returns
-     * @memberof PlaybookTimelineCliCommandModel
+     * @memberof PlaybookTimelineTerminalCommandModel
      */
     printJsContent(indentSize = 5)
     {
         const indent1 = TextService.indent(indentSize);
         const indent2 = TextService.indent(indentSize + 1);
 
-        let content = indent1 + '.withCommand("' + this.command + '")\n';
-
+        let content = indent1 + '.withCommand("' + this.command.trim() + '")\n';
         return content;
     }
 
