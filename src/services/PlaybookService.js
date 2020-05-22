@@ -9,7 +9,7 @@ const rp = require('request-promise-native');
  * @import Constants
  */
 import {
-    MICROSERVICE_PLAYBOOK_URL
+    MICROSERVICE_PLAYBOOK_URL, CLIENT_MASTERCLASS_URL
 } from '../constants/url.const';
 
 /**
@@ -58,7 +58,46 @@ class PlaybookService{
         }
     }
 
-    async createPlaybookEntry(playbookName, authour, appUrl, blueprintUrl)
+    async validatePlaybookJson(url, branchOrTag)
+    {
+        try
+        {
+            let result = await rp({
+                method : "POST",
+                uri : MICROSERVICE_PLAYBOOK_URL + "/playbook/validate",
+                body : {
+                    url : url,
+                    branchOrTag : branchOrTag
+                },
+                json: true,
+            })
+
+            return result;
+        }
+        catch(err)
+        {
+            if (err.hasOwnProperty("error"))
+            {
+                throw err.error;
+            }
+            throw err;
+        }
+    }
+
+    /**
+     * Sends a POST to microservice-playbook
+     *
+     * @param {*} playbookName The name of the playbook
+     * @param {*} authour The name of the authour
+     * @param {*} appUrl The URL of the git project we generated the blueprint from
+     * @param {*} blueprintUrl The URL of the git project that contains all the blueprint/playbook.json data
+     * @param {*} blueprintVersion The version we will one day choose to publish to masterclass (follows semver structure)
+     * @param {*} appGitCheckoutRef The branch/tag that we used to generate this blueprint (optional in the server but we will supply it here as we should already have the information)
+     * @param {*} draftBlueprintGitCheckoutRef The branch/tag that we will use when loading the draft
+     * @returns
+     * @memberof PlaybookService
+     */
+    async createPlaybookEntry(playbookName, authour, appUrl, blueprintUrl, blueprintVersion, appGitCheckoutRef, draftBlueprintGitCheckoutRef)
     {
         try
         {
@@ -69,7 +108,10 @@ class PlaybookService{
                     playbook_name : playbookName,
                     authour: authour,
                     app_url : appUrl,
-                    blueprint_url : blueprintUrl
+                    blueprint_url : blueprintUrl,
+                    blueprint_version : blueprintVersion,
+                    app_git_checkout_ref : appGitCheckoutRef, // -- This will also be used by the server to auto-set the draft_app_git_checkout_ref
+                    draft_blueprint_git_checkout_ref: draftBlueprintGitCheckoutRef
                 },
                 json : true
             });
@@ -106,6 +148,78 @@ class PlaybookService{
             {
                 throw err.error;
             }
+            throw err;
+        }
+    }
+
+
+    /**
+     * Calls the /playbook/draft route to create a new version draft. This can later be published using the publish function
+     *
+     * @param {*} authour
+     * @param {*} playbookName
+     * @param {*} blueprintVersion
+     * @param {*} draftBlueprintGitCheckoutRef
+     * @param {*} draftAppGitCheckoutRef
+     * @returns
+     * @memberof PlaybookService
+     */
+    async createDraft(authour, playbookName, blueprintVersion, draftBlueprintGitCheckoutRef, draftAppGitCheckoutRef)
+    {
+        try
+        {
+            let result = await rp({
+                method : "POST",
+                uri : MICROSERVICE_PLAYBOOK_URL + "/playbook/draft",
+                body : {
+                    authour : authour,
+                    playbook_name : playbookName,
+                    blueprint_version: blueprintVersion,
+                    draft_blueprint_git_checkout_ref : draftBlueprintGitCheckoutRef,
+                    draft_app_git_checkout_ref : draftAppGitCheckoutRef
+                },
+                json : true
+            })
+
+            return result;
+        }
+        catch(err)
+        {
+            throw err;
+        }
+    }
+
+
+    /**
+     * Calls the /playbook/publish route to publish a blueprint version
+     *
+     * @param {*} authour
+     * @param {*} playbookName
+     * @param {*} blueprintVersion
+     * @param {*} appGitCheckoutRef
+     * @returns
+     * @memberof PlaybookService
+     */
+    async publish(authour, playbookName, blueprintVersion, appGitCheckoutRef)
+    {
+        try
+        {
+            let result = await rp({
+                method : "POST",
+                uri : MICROSERVICE_PLAYBOOK_URL + "/playbook/publish",
+                body : {
+                    authour : authour,
+                    playbook_name : playbookName,
+                    blueprint_version : blueprintVersion,
+                    app_git_checkout_ref : appGitCheckoutRef
+                },
+                json : true
+            })
+
+            return result;
+        }
+        catch(err)
+        {
             throw err;
         }
     }
@@ -169,6 +283,28 @@ class PlaybookService{
     findAllPlaybooks(){
         const fileModels =  FileService.findAllCwd('*.playbook.js');
         return fileModels;
+    }
+
+
+
+    createGithubUrl(url, branch) {
+        if (branch)
+        {
+            url += "/tree/" + branch;
+        }
+        return url;
+    }
+    
+
+    createMasterclassUrl(authour, playbookName, blueprintVersion) {
+
+        let url = CLIENT_MASTERCLASS_URL + "/#/" + authour + "/" + playbookName;
+        
+        if (blueprintVersion)
+        {
+            url += "/" + blueprintVersion;
+        }
+        return url;
     }
 }
 
