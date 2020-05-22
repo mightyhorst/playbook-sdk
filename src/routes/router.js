@@ -6,14 +6,19 @@ const ROUTES = {
     BUILD: 'build',
     PUSH: 'push',
     REGISTER: 'register',
-    MAGIC: 'magic'
+    MAGIC: 'magic',
+    VALIDATE: 'validate',
+    DRAFT: 'draft',
+    PUBLISH: 'publish'
 }
 const CTRLS = {
     playbookInit: require('../ctrls/PlaybookInitCtrl'),
     playbookBuild: require('../ctrls/PlaybookBuildCtrl'),
     //todo playbookPush: require('../ctrls/PlaybookPushCtrl'),
     //todo playbookRegister: require('../ctrls/PlaybookRegisterCtrl'),
-    playbookMagic: require('../ctrls/PlaybookMagicCtrl')
+    playbookMagic: require('../ctrls/PlaybookMagicCtrl'),
+    playbookValidate: require('../ctrls/PlaybookValidateCtrl'),
+    playbookVersion: require('../ctrls/PlaybookVersionCtrl')
 }
 
 
@@ -57,6 +62,24 @@ module.exports = async (args) => {
 
             console.log('🦄  Magic started ... ')
             CTRLS.playbookMagic.convertGit2Playbook(args);
+
+            break;
+        case ROUTES.VALIDATE:
+            
+            console.log('🔍  Validate a playbook.json');
+            CTRLS.playbookValidate.validate(args);
+
+            break;
+        case ROUTES.DRAFT:
+
+            console.log('📝  Create a draft version');
+            CTRLS.playbookVersion.draft(args);
+
+            break;
+        case ROUTES.PUBLISH:
+            
+            console.log('🎖  Publish a version');
+            CTRLS.playbookVersion.publish(args);
 
             break;
         default:
