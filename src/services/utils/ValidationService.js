@@ -5,6 +5,7 @@
  */
 class ValidationService
 {
+    semverRegex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
     /**
      * Check if the string passed in is a github URL
      *
@@ -61,6 +62,27 @@ class ValidationService
     isPercent(value)
     {
         return value.indexOf("%") >= 0
+    }
+
+
+    checkAndGetSemver(string)
+    {
+        let regexResult = string.match(this.semverRegex);
+
+        if (regexResult)
+        {
+            return {
+                major : regexResult[1],
+                minor : regexResult[2],
+                patch : regexResult[3],
+                release : regexResult[4],
+                build : regexResult[5]
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

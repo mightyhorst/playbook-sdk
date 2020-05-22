@@ -53,7 +53,10 @@ class PlaybookMagicCtrl extends Controller {
              * @step 1. Get the user repo if not yet provided or the url is not a valid github url
              */
             let githubUrl = args[3];
+            let githubAppTag;
             let blueprintGithubUrl = args[4];
+            let blueprintTag; // -- Semver formatted string
+            let blueprintBranchName = "draft/"; // -- draft/{blueprintTag}
 
             let addedSSHToKeychainAnswer = await inquirer.prompt({
                 type : "confirm",
@@ -79,6 +82,17 @@ class PlaybookMagicCtrl extends Controller {
                     githubUrl = githubUrlAnswer.githubUrl;
                 }
 
+                // -- Prompt for the app tag to use. The app tag does not need to follow semver rules because 
+                //    we should allow a user to pull the data from any location (Doesn't handle branches just yet, either assumes its master or tag)
+                let githubAppTagAnswer = await inquirer.prompt({
+                    type : "input",
+                    name : "githubAppTag",
+                    default: "master",
+                    message : "Which tag would you like from this app?"
+                })
+
+                githubAppTag = githubAppTagAnswer.githubAppTag != "" ? githubAppTagAnswer.githubAppTag : "master";
+
                 if (!blueprintGithubUrl || !ValidationService.isGithubUrl(githubUrl))
                 {
                     let blueprintGithubUrlAnswer = await inquirer.prompt({
@@ -94,6 +108,26 @@ class PlaybookMagicCtrl extends Controller {
                     blueprintGithubUrl = blueprintGithubUrlAnswer.blueprintGithubUrl;
                 }
 
+                // -- Prompt for a name for the blueprint branch. The blueprint must follow semver rules to allow
+                //    easy, dynamic sorting in masterclass
+                
+
+
+                let blueprintTagAnswer = await inquirer.prompt({
+                    type : "input",
+                    name : "blueprintTag",
+                    default : !!ValidationService.checkAndGetSemver(githubAppTag) ? githubAppTagAnswer : '1.0.0',
+                    message : "Please provide a version name (semver) to save the blueprint data to",
+                    validate: (val) => {
+                        return !!ValidationService.checkAndGetSemver(val) ? true : "Please enter a semver valid name";
+                    }
+                })
+
+                // -- Because this needs to be a branch (and to prevent multiple refs when tagging) we will prepend with "prerelease/"
+                blueprintTag = blueprintTagAnswer.blueprintTag;
+                blueprintBranchName += blueprintTag;
+
+
                 if (githubUrl && blueprintGithubUrl)
                 {
                     /**
@@ -105,13 +139,42 @@ class PlaybookMagicCtrl extends Controller {
                      * @step 3. Create or clone a git repo to store/update the blueprints 
                      */
                     blueprintRepoData = await NodeGitService.createOrCloneBlueprintRepoFromGithubUrl((blueprintGithubUrl ? blueprintGithubUrl : githubUrl), appAndBlueprintFolderPaths.blueprintFolderPath);
-                    
+
+                    /**
+                     * @step 4. Check if the given blueprintBranchName already exists and if the user wants to continue with auto generating if it exists
+                     */
+                    let branchExistsInRemote = await NodeGitService.doesBranchAlreadyExistInRemote(blueprintRepoData.remote, blueprintBranchName);
+
+                    if (branchExistsInRemote)
+                    {
+                        let continueWithMagicCommandAnswer = await inquirer.prompt({
+                            type : "confirm",
+                            name : "continueWithMagicCommand",
+                            message : chalk.black.bgYellow("The blueprint branch '" + blueprintBranchName + "' already exists!  Would you like to overwrite the branch?")
+                        })
+
+                        if (!continueWithMagicCommandAnswer.continueWithMagicCommand)
+                        {
+                            process.stdout.write("Aborting magic command. You can view the existing branch at " + (blueprintRepoData.isInit ? blueprintGithubUrl : PlaybookService.createGithubUrl(blueprintGithubUrl, blueprintBranchName)) + "\n");
+                            return;
+                        }
+                    }
+                    /**
+                     * @step 5. Create and checkout the blueprint branch
+                     */
+                    blueprintRepoData.branch = await NodeGitService.createAndCheckoutBranch(blueprintRepoData.repo, blueprintBranchName);
+
+                    /**
+                     * @step 6. Refresh repo index to proceed with auto-generating and adding files
+                     */
+                    blueprintRepoData.index = await blueprintRepoData.repo.refreshIndex();
+
                     if (blueprintRepoData)
                     {
                         /**
                          * @step 4. Create the blueprints folder with the github URL
                          */
-                        blueprintRepoData = await NodeGitService.createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData, appAndBlueprintFolderPaths.appFolderPath);
+                        blueprintRepoData = await NodeGitService.createBlueprintsFolderFromGithubUrl(githubUrl, githubAppTag, blueprintRepoData, appAndBlueprintFolderPaths.appFolderPath);
 
                         /**
                          * @step 5. Ask if we want to build the playbook.json
@@ -201,16 +264,22 @@ class PlaybookMagicCtrl extends Controller {
                                 appAndBlueprintFolderPaths.playbookName, 
                                 appAndBlueprintFolderPaths.authour,
                                 githubUrl, 
-                                blueprintGithubUrl
+                                blueprintGithubUrl,
+                                blueprintTag,
+                                githubAppTag,
+                                blueprintBranchName
                             )
                         }
 
                         
 
-                        process.stderr.write("\n============ Processing complete ============\n\n")
-                        process.stderr.write(`You can view your blueprints at the branch "${blueprintRepoData.isInit ? "master" : blueprintRepoData.branch}" found in the repo:\n`["green"]);
-                        process.stderr.write((blueprintRepoData.isInit ? blueprintGithubUrl : (blueprintGithubUrl + "/tree/" + blueprintRepoData.branch + "\n"))["yellow"]);
-                        process.stderr.write("\n=============================================\n\n")
+                        process.stdout.write("\n============ Processing complete ============\n\n")
+                        process.stdout.write(`You can view your blueprints at the branch "${blueprintRepoData.isInit ? "master" : blueprintRepoData.branch}" found in the repo:\n`["green"]);
+                        process.stdout.write((blueprintRepoData.isInit ? blueprintGithubUrl : PlaybookService.createGithubUrl(blueprintGithubUrl, blueprintRepoData.branch) + "\n")["yellow"]);
+                        process.stdout.write("\n")
+                        process.stdout.write("You can preview the blueprint in masterclass found at:\n"["green"]);
+                        process.stdout.write(PlaybookService.createMasterclassUrl(appAndBlueprintFolderPaths.authour, appAndBlueprintFolderPaths.playbookName))
+                        process.stdout.write("\n=============================================\n\n")
                     }
                 }
             }
@@ -222,7 +291,15 @@ class PlaybookMagicCtrl extends Controller {
         catch(err)
         {
             process.stderr.write("\n-------- An error occurred! --------\n\n"["red"]);
-            console.error(err);
+            if (typeof err == "object")
+            {
+                console.error(JSON.stringify(err, null, 4));
+            }
+            else
+            {
+                console.error(err);
+            }
+            
             process.stderr.write("\n------------------------------------\n"["red"]);
         }
         finally
@@ -232,7 +309,7 @@ class PlaybookMagicCtrl extends Controller {
                 /**
                  * @step 7. Cleanup blueprint folder
                  */
-                this.deleteFolder(appAndBlueprintFolderPaths.blueprintFolderPath);  
+                // this.deleteFolder(appAndBlueprintFolderPaths.blueprintFolderPath);  
             }
             
         }

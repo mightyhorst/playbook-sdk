@@ -3,6 +3,7 @@ const path = require("path");
 const os = require('os');
 const _ = require('lodash');
 const Url = require('url-parse');
+const chalk = require('chalk');
 
 /**
  * @requires Models
@@ -122,22 +123,20 @@ class NodeGitService
             await this.pushRepo(repo);
 
         }
-        const branchName = "magic/sdk-blueprint-" + Date.now();
-        
-        // -- Create a new branch that we can our new blueprint files to
-        await this.createAndCheckoutBranch(repo, branchName);
 
-        // -- Load the repo index so we can add files
-        const blueprintRepoIndex = await repo.refreshIndex();
+        // -- Create a remote that we can use to contact the remote repo
+        const remote = await this.connectToRemote(repo, 'origin');
 
         return {
             repo : repo,
             folderPath : blueprintFolderPath,
-            index : blueprintRepoIndex,
-            branch : branchName,
-            isInit : isInit
+            index : null,
+            branch : null,
+            isInit : isInit,
+            remote : remote
         };
     }
+
 
 
     /**
@@ -149,7 +148,7 @@ class NodeGitService
      * @returns
      * @memberof NodeGitService
      */
-    async createBlueprintsFolderFromGithubUrl(githubUrl, blueprintRepoData, appFolderPath)
+    async createBlueprintsFolderFromGithubUrl(githubUrl, githubAppTag, blueprintRepoData, appFolderPath)
     {
         // -- This is temporary to ensure we have a directory to clone to. We should resort to /tmp later
         FilesService.createFolder(path.resolve(os.homedir(), '.playbook'), "git-projects");
@@ -165,13 +164,14 @@ class NodeGitService
             let repo;
             try
             {
-                repo = await this.cloneRepo(githubUrl, appFolderPath);
+                repo = await this.cloneRepo(githubUrl, appFolderPath, githubAppTag);
             }
             catch(err)
             {
+                console.error("there was err here", err);
                 throw err;
             }
-            
+
 
             // -- Fetch all the commits from the start of time
             const commitOids = await this.getCommitHistory(repo);
@@ -242,6 +242,13 @@ class NodeGitService
                     const commit = await repo.getCommit(commitOid);
 
                     const commitMessage = commit.message();
+                    
+                    // -- Break the commit message into header and body (later this can be broken into different segments)
+                    let commitMessageSplitByParagraphs = commitMessage.split("\n\n");
+                    let commitHeader = commitMessageSplitByParagraphs.shift();
+
+                    // commitMessageSplitByParagraphs will now contain the remaining commit body paragraphs that can be used to define other parts of this playbook
+
 
                     // -- The commit will either be a branch commit or a merge pull request. For the merge pull requests, we will need to generate a new "step"
                     if (this.isMergeRequest(commitMessage, commitOidI, "github"))
@@ -263,12 +270,12 @@ class NodeGitService
                         const stepFolderModel = FilesService.createFolder(blueprintRepoData.folderPath, stepName);
 
                         // -- Attempt to read the branch name of this merge and use a cli command to execute a git checkout -b command
-                        const mergedBranchName = this.getBranchNameFromCommitMessage(commitMessage, appOwner, "github");
-
+                        const mergedBranchName = this.getBranchNameFromCommitMessage(commitHeader, appOwner, "github");
+                        
                         if (mergedBranchName)
                         {
-                            const cliModel = stepModel.addCli(0, 100);
-                            cliModel.addCommand("git checkout -b " + mergedBranchName);
+                            const terminalModel = stepModel.addTerminal(0, 100);
+                            terminalModel.addCommand("git checkout -b " + mergedBranchName);
                         }
                         
                         for (let commitInStepI = 0; commitInStepI < commitsForStepImplementation.length; commitInStepI++)
@@ -277,6 +284,9 @@ class NodeGitService
 
                             await this.handleCommitForBlueprintCreation(commitInStep, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel)
                         }
+
+                        // -- TODO: Only enable this once we have proper filtering on the commit body as it will also contain all file commits that we merged
+                        // this.createTerminalModelFromCommitMessage(stepModel, commitMessage);
 
                         // -- Once the step has been handled, add the step to an array of completed steps
                         completedStepsByMergeCommit.push(commit)
@@ -302,6 +312,42 @@ class NodeGitService
                     {
                         // -- This is a normal commit and needs to be added to the step implementation array
                         commitsForStepImplementation.push(commit);
+                    }
+
+                    // -- If we are at the end of the commit Oids and there are still commits that have not been handled by a merge then we should finish them here in their own step
+                    if (commitOidI === commitOids.length - 1 && commitsForStepImplementation.length > 0)
+                    {
+                        // -- We will now create a new step and use the build up of commits to implement this step
+                        const stepName = "trailing-commits";
+                        const stepVariableName = stepName.replace(/-/g, "_");
+
+                        // -- Add a Step to the playbook.js file
+                        const stepModel = new PlaybookStepModel(stepName);
+
+                        // -- Create a new step folder in the blueprints folder
+                        const stepFolderModel = FilesService.createFolder(blueprintRepoData.folderPath, stepName);
+                        
+                        for (let commitInStepI = 0; commitInStepI < commitsForStepImplementation.length; commitInStepI++)
+                        {
+                            const commitInStep = commitsForStepImplementation[commitInStepI];
+
+                            await this.handleCommitForBlueprintCreation(commitInStep, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel)
+                        }
+
+                        // -- Save the step playbook.js data to its own playbook.js file in its step folder
+                        const playbookJsStepFileModel = FilesService.createFile(stepFolderModel.path,
+                                                                                'playbook-' + stepName + '.js',
+                                                                                stepModel.printJsContent())
+
+                        // -- Register the step model to both the playbook and scene models
+                        playbookModel.addStep(playbookJsStepFileModel.path.slice(blueprintRepoData.folderPath.length + 1), stepVariableName)
+                        sceneModel.addStep(stepVariableName);
+
+                        // -- Add and commit this file
+                        await this.addAndCommitFile(blueprintRepoData.repo,
+                                                    blueprintRepoData.index,
+                                                    playbookJsStepFileModel.path.slice(blueprintRepoData.folderPath.length + 1),
+                                                    "feat(" + playbookJsStepFileModel.name + "): Initialising the playbook step js file which is used by the main playbook.js file");
                     }
 
                 }
@@ -333,7 +379,7 @@ class NodeGitService
             if (appFolderPath)
             {
                 // -- Delete the local app folder
-                FilesService.deleteFolder(appFolderPath)
+                // FilesService.deleteFolder(appFolderPath)
             }
             return blueprintRepoData;
         }
@@ -357,7 +403,11 @@ class NodeGitService
         {
             if (commit && blueprintRepoData && stepModel && stepName && completedStepsByMergeCommit && stepFolderModel)
             {
-                // -- We will need to get the files changed for each commit
+                /******************************
+                 *
+                 * Handle commit files body
+                 * 
+                 ******************************/
                 const diffList = await commit.getDiff();
 
                 for (let diffI = 0; diffI < diffList.length; diffI++)
@@ -366,6 +416,16 @@ class NodeGitService
 
                     await this.handleDiffForBlueprintCreation(commit, diff, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel)
                 }
+
+                /******************************
+                 *
+                 * Handle commit message body
+                 * 
+                 ******************************/
+                // -- Now that the files are handled, lets handle the commit message (the commit message body may contain metadata for the playbook.json e.g cli terminal)
+                this.createTerminalModelFromCommitMessage(stepModel, commit.message())
+                    
+                
             }
             else
             {
@@ -471,6 +531,7 @@ class NodeGitService
                     {
                         await this.createCodeModel(patch, blueprintRepoData, stepModel, stepName, completedStepsByMergeCommit, stepFolderModel, patchFolderPath, patchFilePath, patchFileName, avgDuration, currentMergeFileContent, changedFileStartTime)
                     }
+
                     return avgDuration;
                 }
             }
@@ -646,9 +707,25 @@ class NodeGitService
      * @param {*} stepModel
      * @memberof NodeGitService
      */
-    async createCliModel(stepModel)
+    async createTerminalModelFromCommitMessage(stepModel, commitMessage)
     {
+        let commitBodySplitByParagraphs = commitMessage.split("\n\n")
+        commitBodySplitByParagraphs.shift(); // Remove the commit header
 
+        // -- TODO: We will assume that all content in the body will be commands to run in the cli window
+        if (commitBodySplitByParagraphs.length > 0)
+        {
+            // -- Create the new code panel entry in the playbook.js
+            let terminalModel = stepModel.addTerminal(0, 100);
+
+            commitBodySplitByParagraphs.forEach((paragraph) => {
+                // -- Split the paragraph into new lines. Each new line will be a command
+                paragraph.split('/').forEach((paragraphLine) => {
+                    terminalModel.addCommand(paragraphLine);
+                });
+            })
+            // terminalModel.autoCalculateTime(); TODO
+        }
     }
 
     /**
@@ -661,7 +738,7 @@ class NodeGitService
     async getCommitHistory(repo)
     {
         // -- Fetch the latest commit on master
-        const latestMasterCommit = await repo.getMasterCommit();
+        const latestMasterCommit = await repo.getHeadCommit();
 
         // -- Create the walker we will use to get all commits in reverse order leading up to the master commit
         const walker = repo.createRevWalk();
@@ -687,39 +764,107 @@ class NodeGitService
         return commitOids;
     }
 
-    async cloneRepo(url, path)
+    async cloneRepo(url, path, tag="master")
     {
         try
         {
             let credentialsBreak = 0;
-            const repo = await Git.Clone(
-                this.createSshUrlFromHttps(url), 
-                path, 
-                {
-                    fetchOpts : {
-                        callbacks : {
-                            credentials : function (url, username) {
-                                console.log("Cloning - retrieving credentials for the repo '" + url + "'")
-                                if (credentialsBreak > 10)
-                                {
-                                    throw {
-                                        message : "Auth failed for the url '" + url + "'. Ensure you have the passphrase for ~/.ssh/id_rsa set in keychain using 'ssh-add -K ~/.ssh/id_rsa' or ensure you the owner/part of the github blueprint repo"
-                                    }
-                                }
-                                return Git.Cred.sshKeyFromAgent(username);
-                            }
-                        }
-                    }
-                }
+
+            // -- Init an empty repo
+            let repo = await Git.Repository.init(path, 0);
+
+            // -- Create a ref spec that will only pull a single branch to local
+            const remoteRef = "+refs/" + (tag != "master" ? "tags" : "heads") + "/" + tag;
+            const localRef = "refs/remotes/origin/" + tag;
+
+            const remote = await Git.Remote.createWithFetchspec(
+                repo,
+                'origin',
+                this.createSshUrlFromHttps(url),
+                remoteRef + ":" + localRef
             )
 
+            // -- Fire request to fetch all data
+            
+            await repo.fetchAll({
+                callbacks : {
+                    credentials : function (url, username) {
+                        console.log("Cloning - retrieving credentials for the repo '" + url + "'");
+                        return Git.Cred.sshKeyFromAgent(username);
+                    }
+                }
+            });
+            
+
+            // -- Checkout the tag or set the head if the we are pointing to the master
+            if (tag === "master")    
+            {
+                try
+                {
+                    await repo.setHead(localRef);
+                }
+                catch(err)
+                {
+                    // -- We only want to throw the error if the master doesn't exist. If master doesn't exist it would mean the repo has not been initialised
+                    if (tag != "master")
+                    {
+                        throw err;
+                    }
+                }
+            }
+            else
+            {
+                repo = await this.checkoutTag(repo, tag);
+            }
+            
             return repo;
         }
         catch(err)
         {
-            let errMessage = "Error cloning the blueprint github repo! - " + err.message;
+            let errMessage = "Error cloning the github repo! - " + err.message;
             throw errMessage;
         }
+    }
+
+
+    async connectToRemote(repo, remoteName)
+    {
+        const remote = await repo.getRemote(remoteName);
+
+        await remote.connect(Git.Enums.DIRECTION.FETCH, {
+            credentials: function(url, username) {
+                return Git.Cred.sshKeyFromAgent(username);
+            }
+        })
+
+        return remote;
+        
+    }
+
+
+    async checkoutTag(repo, githubAppTag)
+    {
+        if (githubAppTag != "master")
+        {
+            // -- First we will need to lookup the tag so we can retrieve the tag target id
+            let tagReference = await repo.getReference(githubAppTag);
+            
+            // -- Checkout the tag. This will set the head as detached by default
+            await repo.checkoutRef(tagReference);
+        }
+
+        return repo;
+    }
+
+
+    async doesBranchAlreadyExistInRemote(remote, branch)
+    {
+        const referenceList = await remote.referenceList();
+        let existingBranch = referenceList.find((reference) => {
+            return reference.name() === "refs/heads/" + branch;
+        })
+
+        return existingBranch != null
     }
 
     /**
@@ -734,6 +879,8 @@ class NodeGitService
         const headCommit = await repo.getHeadCommit();
         const blueprintBranchRef = await Git.Branch.create(repo, branch, headCommit, 0);
         await repo.checkoutRef(blueprintBranchRef);
+
+        return branch;
     }
 
     /**
@@ -775,11 +922,12 @@ class NodeGitService
     {
         try
         {
+            // -- DISABLING code below as we want to have branches to make it easier to publish versions
             // -- If this is an init, auto-merge the local branch straight to the remote master branch
-            if (isInit)
-            {
-                remoteBranch = "master";
-            }
+            // if (isInit)
+            // {
+            //     remoteBranch = "master";
+            // }
 
             let credentialsBreak = 0;
 
@@ -787,7 +935,7 @@ class NodeGitService
 
             await remote.push(
                 // ["refs/heads/sdk-branch:refs/heads/master"], // -- This merges the local-branch:remote-branch. So sdk-branch pushes to master
-                ["refs/heads/"+ localBranch + ":refs/heads/" + remoteBranch],
+                ["+refs/heads/"+ localBranch + ":refs/heads/" + remoteBranch],
                 {
                     callbacks: {
                         credentials: function(url, username) {
@@ -844,7 +992,7 @@ class NodeGitService
 
                     if (mergeMessageSplit.length > 1)
                     {
-                        const branchName = mergeMessageSplit[mergeMessageSplit.length - 1].slice(0, (mergeMessageSplit[mergeMessageSplit.length - 1]).indexOf("\n"));
+                        const branchName = mergeMessageSplit[mergeMessageSplit.length - 1].slice(0, (mergeMessageSplit[mergeMessageSplit.length - 1]).length);
 
                         return branchName;
                     }
