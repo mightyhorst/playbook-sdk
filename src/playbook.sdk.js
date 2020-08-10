@@ -372,7 +372,7 @@ class PlaybookSdk{
 		return this;
 	}
 
-	withPartial(partialId, partialFile, start, duration, compileData) {
+	withPartial(partialId, partialFile, start, duration, template_data) {
 		
 		const category = this.playbookJson.categories.find(cat => cat.id === this.last.category);
 		const scene = category.scenes.find(scene => scene.id === this.last.scene);
@@ -386,7 +386,7 @@ class PlaybookSdk{
 				"start" : start,
 				"duration" : duration,
 				"template" : partialFile,
-				"template_data" : {}
+				"template_data" : template_data || {}
 			})
 		}
 
@@ -1283,7 +1283,7 @@ class StepSdk
 		return this;
 	}
 
-	addCode(templateFile, outputFile, compileData) {
+	addCode(templateFile, outputFile, template_data) {
 
 		const id = this.nextId++;
 
@@ -1294,6 +1294,7 @@ class StepSdk
 			"duration": DEFAULTS.duration,
 			"code" : {
 				"template" : templateFile,
+				"template_data": template_data || {}, 
 				"partial_sections" : [],
 				"output" : outputFile
 			}
@@ -1304,7 +1305,7 @@ class StepSdk
 		return this;
 	}
 
-	withPartial(partialId, partialFile, start, duration, compileData) {
+	withPartial(partialId, partialFile, start, duration, template_data) {
 		
 		const time = this._getTimeline();
 
@@ -1315,7 +1316,7 @@ class StepSdk
 				"start" : start,
 				"duration" : duration,
 				"template" : partialFile,
-				"template_data" : {}
+				"template_data" : template_data || {}
 			})
 		}
 

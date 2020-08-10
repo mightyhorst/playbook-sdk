@@ -33,7 +33,7 @@ class PlaybookBuildCtrl extends Controller{
             {
                 global.playbook = require('../playbook.sdk').playbook;
                 global.step = require('../playbook.sdk').step;
-                PlaybookService.buildPlaybookJsonFromFolderPath(args[3])
+                PlaybookService.buildPlaybookJsonFromFolderPath(args[3] || './')
                 console.log("All done");
                 return;
             }
