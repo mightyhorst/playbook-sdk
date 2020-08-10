@@ -85,6 +85,7 @@ class FileService{
         const fileModels = filePaths.map(filePath => {
             /**
              * @step add cwd to the path 
+             * @desc this will complain sometimes so it's safer with the full path
              */
             filePath = path.join(process.cwd(), filePath); 
             return new FileModel(filePath);
