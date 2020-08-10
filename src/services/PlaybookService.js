@@ -260,6 +260,7 @@ class PlaybookService{
     buildPlaybookJsonFromFolderPath(folderPath)
     {
         const playbookFiles = FileService.findAll(folderPath, 'playbook.js');
+        console.log({playbookFiles})
 
         if (playbookFiles.length > 0)
         {
