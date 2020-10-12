@@ -4,6 +4,7 @@ const os = require('os');
 const _ = require('lodash');
 const Url = require('url-parse');
 const chalk = require('chalk');
+const Axios = require('axios');
 
 /**
  * @requires Models
@@ -19,6 +20,11 @@ import {
 const FilesService = require('../utils/FilesService');
 const DiffService = require('../diff/DiffService');
 const TextService = require('../utils/TextService');
+
+/**
+ * @import Errors
+ */
+const RepoNotFoundError = require('../../errors/repo-not-found.error');
 
 class NodeGitService
 {
@@ -37,7 +43,7 @@ class NodeGitService
      */
     prepareAppAndBlueprintFolderPaths(appGithubUrl, blueprintGithubUrl)
     {
-        const homeDir = path.resolve(os.homedir(), ".playbook");
+        const homeDir = FilesService.homeDir;
 
         const appUrl = new Url(appGithubUrl);
         const appPathnameSplit = appUrl.pathname.split("/");
@@ -1048,6 +1054,49 @@ class NodeGitService
     {
         const url = new Url(urlString);
         return "git@github.com:" + url.pathname.slice(1) + ".git";
+    }
+
+
+
+    /**
+     * Requests the given URL and if it returns as a 200 then we assume that it is a valid path.
+     *
+     * @param {*} gitUrl
+     * @returns
+     * @memberof NodeGitService
+     */
+    async checkIfRepoExists(gitUrl, gitCheckoutRef) {
+
+        try
+        {
+            let gitUrlModel = new Url(gitUrl);
+            let gitWithCheckoutRefUrl = "";
+
+            if (gitUrl.indexOf("github.com") >= 0)
+            {
+                gitUrlModel.pathname = path.join('/', gitUrlModel.pathname, 'tree', gitCheckoutRef);
+                
+            }
+            else if (gitUrl.indexOf("gitlab.com") >= 0)
+            {
+                gitUrlModel.pathname = path.join('/', gitUrlModel.pathname, '-/tree', gitCheckoutRef);
+            }
+            else
+            {
+                throw new RepoNotFoundError();
+            }
+
+            gitWithCheckoutRefUrl = gitUrlModel.toString();
+
+            const gitResponse = await Axios.get(gitWithCheckoutRefUrl);
+
+            return true;
+        }
+        catch(err)
+        {
+            throw new RepoNotFoundError();
+        }
+
     }
 }
 
