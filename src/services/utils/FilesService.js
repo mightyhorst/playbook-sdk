@@ -1,4 +1,5 @@
 const fs = require('fs');
+const os = require('os');
 const glob = require('glob');
 const chalk = require('chalk');
 const path = require('path');
@@ -39,6 +40,14 @@ var copyRecursiveSync = (src, dest) => {
  * @class FileService
  */
 class FileService{
+
+    constructor()
+    {
+        this.homeDir = path.resolve(os.homedir(), ".playbook");
+
+        // -- Ensure that there is a .playbook directory in the home dir of the user
+        console.warn("TODO: Create the .playbook folder!");
+    }
 
     /**
      * Copy folder from source path to destination 
@@ -227,6 +236,25 @@ class FileService{
         fileModels.forEach(fileModel => {
             console.log('• '+fileModel.path.replace(folderPath,''));
         })
+    }
+
+
+
+
+
+    findFile(folderPath, fileName) {
+
+        const filePath = path.resolve(folderPath, fileName);
+
+        try
+        {
+            let fileData = fs.readFileSync(filePath);
+            return new FileModel(filePath, fileData.toString())
+        }
+        catch(err)
+        {
+            throw err;
+        }
     }
 
 }
