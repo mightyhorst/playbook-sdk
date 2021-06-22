@@ -44,9 +44,28 @@ class FileService{
     constructor()
     {
         this.homeDir = path.resolve(os.homedir(), ".playbook");
+        const hasPlaybookFolder = this.checkFolderExists(this.homeDir);
+        if(!hasPlaybookFolder){
+            console.warn(chalk.cyan('There is no .playbook folder, so I\'m going to create one'));
+            this.createPlaybookFolder();
+        }
+    }
 
-        // -- Ensure that there is a .playbook directory in the home dir of the user
-        console.warn("TODO: Create the .playbook folder!");
+    createPlaybookFolder(){
+        try{
+            this.createFolder(os.homedir(), '.playbook');
+        }
+        catch(err){
+            console.error(chalk.red('I am very sorry, but I could NOT create a .playbook folder in the home directory of ')+this.homeDir);
+            console.error(chalk.gray('Error logs:\n'+err.message));
+        }
+    }
+
+    checkFolderExists(fullPathToFolder){
+        return fs.existsSync(fullPathToFolder) && fs.lstatSync(fullPathToFolder).isDirectory();
+    }
+    checkFileExists(fullPathToFile){
+        return fs.existsSync(fullPathToFile) && fs.lstatSync(fullPathToFile).isFile();
     }
 
     /**
@@ -127,7 +146,7 @@ class FileService{
      */
     createFolder(folderPath, folderName)
     {
-        const fullFolderPath = path.join(folderPath, folderName);
+        const fullFolderPath = !!folderName ? path.join(folderPath, folderName): folderPath;
         try
         {
             fs.mkdirSync(fullFolderPath, { recursive : true });
