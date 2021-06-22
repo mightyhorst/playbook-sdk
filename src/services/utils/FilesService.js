@@ -43,7 +43,7 @@ class FileService{
 
     constructor()
     {
-        this.homeDir = path.resolve(os.homedir(), ".playbook");
+        this.homeDir = path.resolve(os.homedir(), '.playbook');
         const hasPlaybookFolder = this.checkFolderExists(this.homeDir);
         if(!hasPlaybookFolder){
             console.warn(chalk.cyan('There is no .playbook folder, so I\'m going to create one'));
@@ -51,6 +51,9 @@ class FileService{
         }
     }
 
+    /**
+     * Create a .playbook folder if it doesn't exist
+     */
     createPlaybookFolder(){
         try{
             this.createFolder(os.homedir(), '.playbook');
@@ -61,9 +64,19 @@ class FileService{
         }
     }
 
+    /**
+     * Check the folder exists
+     * @param {string} fullPathToFolder - full path to the folder to check
+     * @returns 
+     */
     checkFolderExists(fullPathToFolder){
         return fs.existsSync(fullPathToFolder) && fs.lstatSync(fullPathToFolder).isDirectory();
     }
+    /**
+     * Check the file exists
+     * @param {string} fullPathToFile - full path to the file to check
+     * @returns 
+     */
     checkFileExists(fullPathToFile){
         return fs.existsSync(fullPathToFile) && fs.lstatSync(fullPathToFile).isFile();
     }
