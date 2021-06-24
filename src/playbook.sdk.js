@@ -1305,6 +1305,17 @@ class StepSdk
 		return this;
 	}
 
+	/**
+	 * adds a partial block to the code block
+	 * This MUST come after an 'addCode' block
+	 * 
+	 * @param {string} partialId - partial ID e.g. partial_01
+	 * @param {string} partialFile - path to partial file e.g. cat01/scene01/step01/partials/partial_01.hbs
+	 * @param {number} start - start time in ms e.g. 200
+	 * @param {number} duration - durtion in ms e.g. 2000
+	 * @param { {[key:string]: string} } template_data - template data to compile into the partials file e.g. { title: 'Hello world' }
+	 * @returns 
+	 */
 	withPartial(partialId, partialFile, start, duration, template_data) {
 		
 		const time = this._getTimeline();
@@ -1316,7 +1327,7 @@ class StepSdk
 				"start" : start,
 				"duration" : duration,
 				"template" : partialFile,
-				"template_data" : template_data || {}
+				"template_data" : template_data || {},
 			})
 		}
 

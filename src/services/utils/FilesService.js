@@ -115,9 +115,7 @@ class FileService{
          * @step find all paths 
          * @requires glob 
          */
-        // var filePaths = glob.sync(fromFolder, filePattern, {});
-            // filePaths = filePaths.concat( glob.sync(fromFolder + `/**/${filePattern}`, {}) );
-        const filePaths = glob.sync(fromFolder + `/**/${filePattern}`, {}) ;
+        const filePaths = glob.sync(fromFolder + `/**/${filePattern}`, {});
 
         /** 
          * @step map file paths to file model so includes contents too 
