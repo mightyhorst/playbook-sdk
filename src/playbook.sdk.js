@@ -1338,18 +1338,21 @@ class StepSdk
 	/**
 	 * Add entry point for commands to be printed to the terminal panel in masterclass
 	 *
+	 * @param {number} optionalStartMs - start in ms
+	 * @param {number} optionalDurationMs - duration in ms
+	 * 
 	 * @returns
 	 * @memberof PlaybookSdk
 	 */
-	addTerminal() 
+	addTerminal(optionalStartMs, optionalDurationMs) 
 	{
 		const id = this.nextId++;
 
 		this.stepData.timeline.push({
 			id: id,
 			"panel": "terminal",
-			"start": DEFAULTS.start,
-			"duration": DEFAULTS.duration,
+			"start": optionalStartMs || DEFAULTS.start,
+			"duration": optionalDurationMs || DEFAULTS.duration,
 			"terminal" : {
 				"commands" : []
 			}
