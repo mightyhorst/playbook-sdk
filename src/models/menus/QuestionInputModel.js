@@ -2,9 +2,17 @@ const QuestionModel = require('./QuestionModel');
 
 class QuestionInputModel extends QuestionModel{
     
-    constructor(varName, message, defaultMsg, validate, transformer){
+    /**
+     * 
+     * @param {string} questionId - question ID and key in the answers object 
+     * @param {string} message - quetion to the user
+     * @param {string} defaultMsg - default answer
+     * @param {()=>boolean} validate - validator function
+     * @param {()=>any} transformer - transform the prompt before the return value in the answers object
+     */
+    constructor(questionId, message, defaultMsg, validate, transformer, optionalPrefix){
         
-        super(varName, message);
+        super(questionId, message);
         this.question.type = 'input';
         this.question.default = () => defaultMsg || '';
 

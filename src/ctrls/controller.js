@@ -8,7 +8,7 @@ var term = require( 'terminal-kit').terminal;
  * @requires Services 
  */
 const FileService = require('../services/utils/FilesService');
-const PlaybookService = require('../services/PlaybookService');
+const PlaybookApiService = require('../services/PlaybookApiService');
 const TypeWriterService = require('../services/typewriter/TypeWriterService');
 
 /**
@@ -26,6 +26,10 @@ class Controller{
 
     constructor(){
         
+    }
+
+    clear(){
+        console.clear();
     }
 
     /**
@@ -89,12 +93,16 @@ class Controller{
      */
     findAllPlaybooks(){
         // const fileModels =  FileService.findAllCwd('*.playbook.js');
-        const fileModels =  PlaybookService.findAllPlaybooks();
+        const fileModels =  PlaybookApiService.findAllPlaybooks();
         return fileModels;
     }
 
     deleteFolder(folderPath) {
         FileService.deleteFolder(folderPath);
+    }
+
+    printUnknownCommand(arg){
+        console.log(chalk.red(`Unknown command: `)+arg);
     }
 }
 

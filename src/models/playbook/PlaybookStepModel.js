@@ -1,16 +1,27 @@
 /**
+ * @requires Logs
+ */
+const chalk = require('chalk');
+
+/**
  * @requires Services
  */
-import * as TextService from '../../services/utils/TextService';
+// import * as TextService from '../../services/utils/TextService';
+const TextService = require('../../services/utils/TextService');
 
 /**
  * @requires Models
  */
-import {
+// import {
+//     PlaybookTimelineDescriptionModel, 
+//     PlaybookTimelineCodeModel,
+//     PlaybookTimelineTerminalModel
+// } from './PlaybookTimelineModel';
+const {
     PlaybookTimelineDescriptionModel, 
     PlaybookTimelineCodeModel,
     PlaybookTimelineTerminalModel
-} from './PlaybookTimelineModel';
+} = require('./PlaybookTimelineModel');
 
 /**
  * The Step model added to a playbook scene model. This will contain a timeline that 
@@ -18,7 +29,8 @@ import {
  *
  * @class PlaybookStepModel
  */
-export class PlaybookStepModel
+// export class PlaybookStepModel
+class PlaybookStepModel
 {
     name;
     commitId;
@@ -28,6 +40,14 @@ export class PlaybookStepModel
     timelineTerminalModels = [];
     
 
+    /**
+     * @constructor
+     * @param {string} name - scene title
+     * @param {string} commitId - commit ID for something
+     * @todo 
+     *      - [ ] refactor name to title
+     *      - [ ] add ID and folderName 
+     */
     constructor(name, commitId)
     {
         this.name = name;
@@ -37,7 +57,7 @@ export class PlaybookStepModel
     /**
      * Creates a PlaybookTimelineDescriptionModel that represents ".addDescriptionFromMdFile()" in the playbook.js file
      *
-     * @param {*} name
+     * @param {string} name
      * @returns {PlaybookTimelineDescriptionModel}
      * @memberof PlaybookStepModel
      */
@@ -48,31 +68,38 @@ export class PlaybookStepModel
 
         return timelineDescriptionModel;
     }
+    addDescriptionModel(timelineDescriptionModel){
+        this.timelineDescriptionModels.push(timelineDescriptionModel);
+    }
 
     /**
      * Creates a PlaybookTimelineCodeModel that represents ".addCode()" in the playbook.js file
      *
-     * @param {*} start
-     * @param {*} duration
-     * @param {*} templateFilePath
-     * @param {*} outputFilePath
-     * @param {*} compileData
+     * @param {number} start
+     * @param {number} duration
+     * @param {string} templateFilePath
+     * @param {string} outputFilePath
+     * @param {string} template_data
+     * 
      * @returns {PlaybookTimelineCodeModel}
      * @memberof PlaybookStepModel
      */
-    addCode(start, duration, templateFilePath, outputFilePath, compileData)
+    addCode(start, duration, templateFilePath, outputFilePath, template_data)
     {
-        const timelineCodeModel = new PlaybookTimelineCodeModel(start, duration, templateFilePath, outputFilePath, compileData);
+        const timelineCodeModel = new PlaybookTimelineCodeModel(start, duration, templateFilePath, outputFilePath, template_data);
         this.timelineCodeModels.push(timelineCodeModel);
-
+        
         return timelineCodeModel;
+    }
+    addCodeModel(timelineCodeModel){
+        this.timelineCodeModels.push(timelineCodeModel);
     }
 
     /**
      * Creates a PlaybookTimelineTerminalModel that represends the ".addTerminal()" in the playbook.js file
      *
-     * @param {*} start
-     * @param {*} duration
+     * @param {number} start
+     * @param {number} duration
      * @returns
      * @memberof PlaybookStepModel
      */
@@ -82,6 +109,9 @@ export class PlaybookStepModel
         this.timelineTerminalModels.push(timelineTerminalModel);
 
         return timelineTerminalModel;
+    }
+    addTerminalModel(timelineTerminalModel){
+        this.timelineTerminalModels.push(timelineTerminalModel);
     }
     
     /**
@@ -95,22 +125,24 @@ export class PlaybookStepModel
     {
         const indent = TextService.indent(indentSize);
 
-        let content = "const path = require('path');\n\n"
+        let content = "const path = require('path');\n\n";
             content += 'module.exports = step("' + this.name + '")\n';
 
         this.timelineDescriptionModels.forEach((timelineDescriptionModel) => {
             content += timelineDescriptionModel.printJsContent(indentSize + 1);
-        })
+        });
 
         this.timelineCodeModels.forEach((timelineCodeModel) => {
             content += timelineCodeModel.printJsContent(indentSize + 1);
-        })
+        });
 
         this.timelineTerminalModels.forEach((timelineTerminalModel) => {
             content += timelineTerminalModel.printJsContent(indentSize + 1);
-        })
+        });
 
         return content;
     }
 
 }
+
+module.exports = PlaybookStepModel;

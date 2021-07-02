@@ -1,0 +1,43 @@
+const path = require('path');
+
+module.exports = 
+    step('[{--step.title--}]')
+        [{--#each step.description--}]
+        .addDescriptionFromMdFile(path.join(__dirname, '/description.md'))
+            .isNotMin()
+            .withTime({
+                [{--#if start--}]
+                "start" : [{--start--}],
+                [{--else--}]
+                "start" : 0,
+                [{--/if--}]
+                [{--#if duration--}]
+                "duration" : [{--duration--}]
+                [{--else--}]
+                "duration" : 5000,
+                [{--/if--}]
+            })
+        [{--/each--}]
+        .addCode('[{--category.folderName--}]/[{--scene.folderName--}]/[{--step.folderName--}]/template.hbs', 'cat01/scene01/step01/index.html', {
+            title: 'CSS Example 01',
+            partial_1: "{{partial_1}}",
+			partial_2: "{{partial_2}}",
+        })
+            .withTime({
+                start: 200,
+                duration: 10000,
+            })
+            .withPartial(
+                'partial_1', 
+                'cat01/scene01/step01/partials/partial01.hbs', 
+                200, 
+                2000, 
+            )
+            .withPartial(
+                'partial_2', 
+                'cat01/scene01/step01/partials/partial02.hbs', 
+                2000, 
+                3000, 
+            )
+
+        

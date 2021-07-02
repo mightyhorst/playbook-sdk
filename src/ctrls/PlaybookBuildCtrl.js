@@ -14,7 +14,7 @@ const Controller = require('./Controller');
  * * ExamplesService 
  */
 // const ExamplesService = require('../services/ExamplesService');
-const PlaybookService = require('../services/PlaybookService');
+const PlaybookApiService = require('../services/PlaybookApiService');
 
 
 class PlaybookBuildCtrl extends Controller{
@@ -33,7 +33,7 @@ class PlaybookBuildCtrl extends Controller{
             {
                 global.playbook = require('../playbook.sdk').playbook;
                 global.step = require('../playbook.sdk').step;
-                PlaybookService.buildPlaybookJsonFromFolderPath(args[3] || './')
+                PlaybookApiService.buildPlaybookJsonFromFolderPath(args[3] || './')
                 console.log("All done");
                 return;
             }

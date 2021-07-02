@@ -1,12 +1,16 @@
-import _ from 'lodash';
+// import _ from 'lodash';
+const loDash = require('lodash');
 
 /**
  * @requires Services
  */
-import * as TextService from '../../services/utils/TextService';
+// import * as TextService from '../../services/utils/TextService';
+const TextService = require('../../services/utils/TextService');
 
 
-export class PlaybookWindowSettingsModel
+
+// export class PlaybookWindowSettingsModel
+class PlaybookWindowSettingsModel
 {
     isMin;
     isNotMin;
@@ -300,7 +304,8 @@ export class PlaybookWindowSettingsModel
  * @export
  * @class PlaybookTimelineModel
  */
-export class PlaybookTimelineModel extends PlaybookWindowSettingsModel
+// export class PlaybookTimelineModel extends PlaybookWindowSettingsModel
+class PlaybookTimelineModel extends PlaybookWindowSettingsModel
 {
     start;
     duration;
@@ -324,14 +329,15 @@ export class PlaybookTimelineModel extends PlaybookWindowSettingsModel
     /**
      * Prints the ".withTime()" portion of a timeline entry which will include the start and duration values
      *
-     * @param {number} [indentSize=4]
+     * @param {number} [indentSize=6]
      * @returns {string}
      * @memberof PlaybookTimelineModel
      */
-    printJsContent(indentSize = 4)
+    printJsContent(indentSize = 6)
     {
         const indent1 = TextService.indent(indentSize);
         const indent2 = TextService.indent(indentSize + 1);
+        const indent3 = TextService.indent(indentSize + 2);
 
         // -- Print window settings
         let content = super.printJsContent(indentSize + 1);
@@ -345,10 +351,10 @@ export class PlaybookTimelineModel extends PlaybookWindowSettingsModel
         }
 
         // -- Append the timeline time
-        content += indent1 + '.withTime({\n';
-        content += indent2 + '"start" : ' + this.start + ',\n';
-        content += indent2 + '"duration" : ' + this.duration + '\n';
-        content += indent1 + "})\n";
+        content += indent2 + '.withTime({\n';
+        content += indent3 + '"start" : ' + this.start + ',\n';
+        content += indent3 + '"duration" : ' + this.duration + '\n';
+        content += indent2 + "})\n";
 
         return content;
     }
@@ -356,7 +362,8 @@ export class PlaybookTimelineModel extends PlaybookWindowSettingsModel
 
 
 
-export class PlaybookTimelineTransitionModel extends PlaybookWindowSettingsModel {
+// export class PlaybookTimelineTransitionModel extends PlaybookWindowSettingsModel {
+class PlaybookTimelineTransitionModel extends PlaybookWindowSettingsModel {
 
     start;
     end;
@@ -392,7 +399,8 @@ export class PlaybookTimelineTransitionModel extends PlaybookWindowSettingsModel
 }
 
 
-export class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
+// export class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
+class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
     
     filePath;
 
@@ -423,20 +431,21 @@ export class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
     
 }
 
-export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
+// export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
+class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
     
     templateFilePath;
     outputFilePath;
-    compileData;
+    template_data;
     partialModels = [];
 
-    constructor(start, duration, templateFilePath, outputFilePath, compileData)
+    constructor(start, duration, templateFilePath, outputFilePath, template_data)
     {
         super(start, duration);
 
         this.templateFilePath = templateFilePath;
         this.outputFilePath = outputFilePath;
-        this.compileData = compileData;
+        this.template_data = template_data;
     }
 
     /**
@@ -446,42 +455,45 @@ export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
      * @param {*} duration
      * @param {*} partialId
      * @param {*} templateFilePath
-     * @param {*} compileData
+     * @param {*} template_data
      * @returns {PlaybookTimelineCodePartialModel}
      * @memberof PlaybookTimelineCodeModel
      */
-    addPartial(start, duration, partialId, templateFilePath, compileData)
+    addPartial(start, duration, partialId, templateFilePath, template_data)
     {
-        const partialModel = new PlaybookTimelineCodePartialModel(start, duration, partialId, templateFilePath, compileData);
+        const partialModel = new PlaybookTimelineCodePartialModel(start, duration, partialId, templateFilePath, template_data);
 
         this.partialModels.push(partialModel);
 
         return partialModel;
     }
+    addPartialModel(partialModel){
+        this.partialModels.push(partialModel);
+    }
 
     /**
      * Prints the .addCode entry to a timeline
      *
-     * @param {number} [indentSize=1]
+     * @param {number} [indentSize=5]
      * @returns {string}
      * @memberof PlaybookTimelineCodeModel
      */
-    printJsContent(indentSize = 4)
+    printJsContent(indentSize = 5)
     {
         const indent1 = TextService.indent(indentSize);
         const indent2 = TextService.indent(indentSize + 1);
 
         let content = indent1 + '.addCode("' + this.templateFilePath + '", "' + this.outputFilePath + '"';
         
-        const lastHbsKey = _.findLastKey(this.compileData);
+        const lastHbsKey = loDash.findLastKey(this.template_data);
 
-        if (this.compileData && !_.isEmpty(this.compileData))
+        if (this.template_data && !loDash.isEmpty(this.template_data))
         {
             content += ", {\n";
 
-            for (let hbsKey in this.compileData)
+            for (let hbsKey in this.template_data)
             {
-                let hbsData = this.compileData[hbsKey];
+                let hbsData = this.template_data[hbsKey];
 
                 if (hbsKey === lastHbsKey)
                 {
@@ -514,19 +526,20 @@ export class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
 }
 
 
-export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
+// export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
+class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
 {
     partialId;
     templateFilePath;
-    compileData;
+    template_data;
 
-    constructor(start, duration, partialId, templateFilePath, compileData)
+    constructor(start, duration, partialId, templateFilePath, template_data)
     {
         super(start, duration);
 
         this.partialId = partialId;
         this.templateFilePath = templateFilePath;
-        this.compileData = compileData;
+        this.compileData = template_data;
     }
 
     /**
@@ -543,8 +556,8 @@ export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
 
         let content = indent1 + '.withPartial("' + this.partialId + '", "' + this.templateFilePath + '", ' + this.start + ", " + this.duration;
 
-        const lastHbsKey = _.findLastKey(this.compileData);
-        if (this.compileData && !_.isEmpty(this.compileData))
+        const lastHbsKey = loDash.findLastKey(this.compileData);
+        if (this.compileData && !loDash.isEmpty(this.compileData))
         {
             content += ", {\n";
 
@@ -582,7 +595,8 @@ export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
  * @class PlaybookTimelineTerminalModel
  * @extends {PlaybookTimelineModel}
  */
-export class PlaybookTimelineTerminalModel extends PlaybookTimelineModel {
+// export class PlaybookTimelineTerminalModel extends PlaybookTimelineModel {
+class PlaybookTimelineTerminalModel extends PlaybookTimelineModel {
 
     terminalCommandModels = [];
 
@@ -632,7 +646,8 @@ export class PlaybookTimelineTerminalModel extends PlaybookTimelineModel {
  * @export
  * @class PlaybookTimelineTerminalCommandModel
  */
-export class PlaybookTimelineTerminalCommandModel {
+// export class PlaybookTimelineTerminalCommandModel {
+class PlaybookTimelineTerminalCommandModel {
 
     command;
 
@@ -658,3 +673,14 @@ export class PlaybookTimelineTerminalCommandModel {
     }
 
 }
+
+module.exports = {
+    PlaybookWindowSettingsModel,
+    PlaybookTimelineModel,
+    PlaybookTimelineTransitionModel,
+    PlaybookTimelineDescriptionModel,
+    PlaybookTimelineCodeModel,
+    PlaybookTimelineCodePartialModel,
+    PlaybookTimelineTerminalModel,
+    PlaybookTimelineTerminalCommandModel,
+};

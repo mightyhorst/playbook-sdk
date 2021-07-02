@@ -1,0 +1,2861 @@
+{
+    "categories": [
+        {
+            "id": "cat01-css-grid",
+            "title": "CSS Grid",
+            "folderName": "cat01-css-grid",
+            "scenes": [
+                {
+                    "id": "scene01-define-a-grid",
+                    "title": "Define a grid",
+                    "folderName": "scene01-define-a-grid",
+                    "steps": [
+                        {
+                            "id": "step01-define-a-grid",
+                            "title": "Defining a Grid",
+                            "folderName": "step01-define-a-grid",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Defining a Grid"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example1/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example1/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nTo define a Grid use  display:grid  or  display:inline-grid  on the parent element. \n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "To define a Grid use  display:grid  or  display:inline-grid  on the parent element. ",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "To define a Grid use "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " or "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:inline-grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " on the parent element. "
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Grid Template"
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\n You can then create a grid using the grid-template-columns and grid-template-rows properties.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": " You can then create a grid using the grid-template-columns and grid-template-rows properties.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " You can then create a grid using the "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-columns"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "and "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-rows"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "properties."
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "👾 Grid Gap"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's the grid-gap property to create a gap between my columns and rows of 10px. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "Let's the "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "property to create a gap between my columns and rows of "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "10px"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This property is a shorthand for grid-column-gap and grid-row-gap so you can set these values individually.",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "This property is a shorthand for "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "and "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "so you can set these values individually."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "blockquote",
+                                            "txt": "\n  All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed."
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "cat01/scene01/step01/template.hbs",
+                                        "template_data": {
+                                            "title": "CSS Example 01",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "cat01/scene01/step01/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "cat01/scene01/step01/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "cat01/scene01/step01/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Defining a Grid",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Defining a Grid"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example1/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example1/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nTo define a Grid use  display:grid  or  display:inline-grid  on the parent element. \n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "To define a Grid use  display:grid  or  display:inline-grid  on the parent element. ",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "To define a Grid use "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " or "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:inline-grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " on the parent element. "
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Grid Template"
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\n You can then create a grid using the grid-template-columns and grid-template-rows properties.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": " You can then create a grid using the grid-template-columns and grid-template-rows properties.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " You can then create a grid using the "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-columns"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "and "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-rows"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "properties."
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "👾 Grid Gap"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's the grid-gap property to create a gap between my columns and rows of 10px. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "Let's the "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "property to create a gap between my columns and rows of "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "10px"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This property is a shorthand for grid-column-gap and grid-row-gap so you can set these values individually.",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "This property is a shorthand for "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "and "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "so you can set these values individually."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "blockquote",
+                                            "txt": "\n  All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed."
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "cat01/scene01/step02/template.hbs",
+                                        "template_data": {
+                                            "title": "CSS Example 02",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "cat01/scene01/step02/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "cat01/scene01/step02/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "cat01/scene01/step02/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Defining a Grid",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Grid Row and Column"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example2/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example2/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's have a look at how the grid is defined. The grid lines have rows and columns. These start at row 1, column 1  (not 0) "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "",
+                                            "kids": [
+                                                {
+                                                    "tag": "img",
+                                                    "txt": ""
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can manually place items in the grid by using "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row-start: 1;\ngrid-column-start: 1;\ngrid-column-end: 2;\ngrid-row-end: 2;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-start: 1;\ngrid-column-start: 1;\ngrid-column-end: 2;\ngrid-row-end: 2;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This starts at gridline row 1 and column 1 (top/left corner)\nand ending at gridline row 2 and column 2 mking one square. "
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "cat01/scene01/step03/template.hbs",
+                                        "template_data": {
+                                            "title": "CSS Example 02",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "cat01/scene01/step03/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "cat01/scene01/step03/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "cat01/scene01/step03/css-grid.html"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Grid by Example",
+            "id": "cat02-grid-by-example",
+            "folderName": "cat02-grid-by-example",
+            "scenes": [
+                {
+                    "id": 4,
+                    "title": "CSS Examples",
+                    "steps": [
+                        {
+                            "title": "Quick Start (TLDR)",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Quick Start"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example1/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example1/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nTo define a Grid use  display:grid  or  display:inline-grid  on the parent element. \n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "To define a Grid use  display:grid  or  display:inline-grid  on the parent element. ",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "To define a Grid use "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " or "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:inline-grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " on the parent element. "
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Grid Template"
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\n You can then create a grid using the grid-template-columns and grid-template-rows properties.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": " You can then create a grid using the grid-template-columns and grid-template-rows properties.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " You can then create a grid using the "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-columns"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "and "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-rows"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "properties."
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "👾 Grid Gap"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's the grid-gap property to create a gap between my columns and rows of 10px. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "Let's the "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "property to create a gap between my columns and rows of "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "10px"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This property is a shorthand for grid-column-gap and grid-row-gap so you can set these values individually.",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "This property is a shorthand for "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "and "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "so you can set these values individually."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "blockquote",
+                                            "txt": "\n  All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed."
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "cat02-grid-by-example/scene01-examples/step01-tldr/template.hbs",
+                                        "template_data": {
+                                            "title": "CSS Example 01",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "cat02-grid-by-example/scene01-examples/step01-tldr/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "cat02-grid-by-example/scene01-examples/step01-tldr/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "cat02-grid-by-example/scene01-examples/step01-tldr/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Defining a Grid",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Defining a Grid"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example1/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example1/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nTo define a Grid use  display:grid  or  display:inline-grid  on the parent element. \n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "To define a Grid use  display:grid  or  display:inline-grid  on the parent element. ",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "To define a Grid use "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " or "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "display:inline-grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " on the parent element. "
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Grid Template"
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\n You can then create a grid using the grid-template-columns and grid-template-rows properties.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": " You can then create a grid using the grid-template-columns and grid-template-rows properties.",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " You can then create a grid using the "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-columns"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "and "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-rows"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "properties."
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "👾 Grid Gap"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's the grid-gap property to create a gap between my columns and rows of 10px. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "Let's the "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "property to create a gap between my columns and rows of "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "10px"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This property is a shorthand for grid-column-gap and grid-row-gap so you can set these values individually.",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "This property is a shorthand for "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "and "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-gap"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "so you can set these values individually."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "blockquote",
+                                            "txt": "\n  All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "All direct children of the parent now become grid items and the auto-placement algorithm lays them out, one in each grid cell. Creating extra rows as needed."
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "cat02-grid-by-example/scene01-examples/step02-defining-a-grid/template.hbs",
+                                        "template_data": {
+                                            "title": "CSS Example 02",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "cat02-grid-by-example/scene01-examples/step02-defining-a-grid/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "cat02-grid-by-example/scene01-examples/step02-defining-a-grid/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "cat02-grid-by-example/scene01-examples/step02-defining-a-grid/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Explicit vs Implicit Grid",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 CSS Grid"
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "🎨  Explicit v. Implicit Grid"
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nSource: https://gridbyexample.com/examples/example5/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Source: https://gridbyexample.com/examples/example5/",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "em",
+                                                            "txt": "Source:"
+                                                        },
+                                                        {
+                                                            "tag": "a",
+                                                            "txt": "https://gridbyexample.com/examples/example5/"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "",
+                                            "kids": [
+                                                {
+                                                    "tag": "img",
+                                                    "txt": ""
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The explicit grid is the template. The implict grid are rows and columns outside the template. "
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nExplicit grid uses  grid-template-rows and grid-template-columns\nImplicit grid uses grid-auto-rows and grid-auto-columns\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Explicit grid uses  grid-template-rows and grid-template-columns",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Explicit grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "uses "
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-rows"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "and"
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-template-columns"
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Implicit grid uses grid-auto-rows and grid-auto-columns",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "strong",
+                                                            "txt": "Implicit grid"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "uses"
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-auto-rows"
+                                                        },
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": "and"
+                                                        },
+                                                        {
+                                                            "tag": "code",
+                                                            "txt": "grid-auto-columns"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Explicit Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "When creating a CSS Grid we define the grid template for the columns, rows or areas we want with properties:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-rows, grid-template-columns, and grid-template-areas\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-rows, grid-template-columns, and grid-template-areas\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "e.g."
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "display: grid;\ngrid-template-columns: 1fr 1fr; /* 2 columns, 1 fraction wide each */ \ngrid-template-rows: 1fr 1fr; /* 2 rows, 1 fraction high each*/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "display: grid;\ngrid-template-columns: 1fr 1fr; /* 2 columns, 1 fraction wide each */ \ngrid-template-rows: 1fr 1fr; /* 2 rows, 1 fraction high each*/\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "In CSS the template is refered to as the \"explicit grid\"."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can add more rows or columns outside of our template (say a third row, or third column)."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This is refered to as the \"implicit grid\". "
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Implict Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The \"implicit grid\" is any rows or columns outside of the template (or \"explicit grid\"). "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "To set the height or width of the implicit grid rows and columns we use "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-auto-rows: 1fr 1fr; /* 2 rows, 1 fraction high each*/\ngrid-auto-columns: 1fr 1fr; /* 2 columns, 1 fraction wide each */ \n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-auto-rows: 1fr 1fr; /* 2 rows, 1 fraction high each*/\ngrid-auto-columns: 1fr 1fr; /* 2 columns, 1 fraction wide each */ \n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h2",
+                                            "txt": "Auto Flow"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "By default, any extra grid items are added as a new row. "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "If we want to add extra grid items as a column we will use \"grid-auto-flow\" set to \"column\". "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-auto-flow: column;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-auto-flow: column;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Summary"
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nExplicit grid uses grid-template-rows and grid-template-columns.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Explicit grid uses grid-template-rows and grid-template-columns."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "/* 👉 row one: 60px, row two: 60px */\ngrid-template-rows: 60px 60px;\n/* 👉 column one: 1 fraction, column two: 1 fraction */\ngrid-template-columns: 1fr 1fr;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "/* 👉 row one: 60px, row two: 60px */\ngrid-template-rows: 60px 60px;\n/* 👉 column one: 1 fraction, column two: 1 fraction */\ngrid-template-columns: 1fr 1fr;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nImplicit grid uses grid-auto-rows and grid-auto-columns.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Implicit grid uses grid-auto-rows and grid-auto-columns."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "/* 👉 row one: 60px, row two: 60px */\ngrid-auto-rows: 60px 60px;\n/* 👉 column one: 1 fraction, column two: 1 fraction */\ngrid-auto-columns: 1fr 1fr;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "/* 👉 row one: 60px, row two: 60px */\ngrid-auto-rows: 60px 60px;\n/* 👉 column one: 1 fraction, column two: 1 fraction */\ngrid-auto-columns: 1fr 1fr;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "ul",
+                                            "txt": "\nAdd extra grid items to columns\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "li",
+                                                    "txt": "Add extra grid items to columns"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-auto-flow: column;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-auto-flow: column;\n"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "/cat02-grid-by-example/scene01-examples/step03-explicit-implicit-grid/template.hbs",
+                                        "template_data": {
+                                            "title": "Explicit vs Implicit Grid",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}",
+                                            "partial_3": "{{partial_3}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "/cat02-grid-by-example/scene01-examples/step03-explicit-implicit-grid/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene01-examples/step03-explicit-implicit-grid/partials/partial02.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_3",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene01-examples/step03-explicit-implicit-grid/partials/partial03.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "/cat02-grid-by-example/scene01-examples/step03-explicit-implicit-grid/css-grid.html"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "title": "Grid Lines",
+                    "steps": [
+                        {
+                            "title": "Line-based placement",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Grid Row and Column"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Grid"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example2/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example2/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's have a look at how the grid is defined. The grid lines have rows and columns. These start at row 1, column 1  (not 0) "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "",
+                                            "kids": [
+                                                {
+                                                    "tag": "img",
+                                                    "txt": ""
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can manually place items in the grid by defining the row start and end, and column start and end:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row-start: 1;\ngrid-column-start: 1;\ngrid-column-end: 2;\ngrid-row-end: 2;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-start: 1;\ngrid-column-start: 1;\ngrid-column-end: 2;\ngrid-row-end: 2;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This starts at gridline row 1 and column 1 (top/left corner)\nand ending at gridline row 2 and column 2 mking one square. "
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "cat02-grid-by-example/scene02-line-based-placement/step01-line-based-placement/template.hbs",
+                                        "template_data": {
+                                            "title": "CSS Example 03 - Line-based placement",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "cat02-grid-by-example/scene02-line-based-placement/step01-line-based-placement/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "cat02-grid-by-example/scene02-line-based-placement/step01-line-based-placement/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "cat02-grid-by-example/scene02-line-based-placement/step01-line-based-placement/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Grid Row and Column Shorthand",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Grid Row and Column Shorthand"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Line-based placement shorthand - grid-row and grid-column"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example3/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example3/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can achieve the same result as in example 2 using a shorthand syntax declaring the start and end values at once. "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The values grid-row-start: 1 and grid-row-end: 2  can be shortened to  grid-row: 1 / 2",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "The values"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-start: 1"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "and"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-end: 2"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": " can be shortened to "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row: 1 / 2"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Values are separated with a /",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "Values are separated with a /",
+                                                    "kids": [
+                                                        {
+                                                            "tag": "span",
+                                                            "txt": " /",
+                                                            "kids": [
+                                                                {
+                                                                    "tag": "strong",
+                                                                    "txt": "/"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Likewise the values grid-column-start: 1 and grid-column-end: 2  can be shortened to  grid-column: 1 / 2",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "Likewise the values"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column-start: 1"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "and"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column-end: 2"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": " can be shortened to "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column: 1 / 2"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "blockquote",
+                                            "txt": "\n  We would be valid to omit the / and the end value as we are spanning only one track.\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "p",
+                                                    "txt": "We would be valid to omit the / and the end value as we are spanning only one track."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h4",
+                                            "txt": "Summary"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can change "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row-start: 1;\ngrid-row-end: 2;\ngrid-column-start: 3;\ngrid-column-end: 3;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-start: 1;\ngrid-row-end: 2;\ngrid-column-start: 3;\ngrid-column-end: 3;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row: 1 / 2;    /* 👉 start:1 end:2 */\ngrid-column: 2 / 3; /* 👉 start:2 end:3 */\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row: 1 / 2;    /* 👉 start:1 end:2 */\ngrid-column: 2 / 3; /* 👉 start:2 end:3 */\n"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "cat02-grid-by-example/scene02-line-based-placement/step02-grid-column-grid-row/template.hbs",
+                                        "template_data": {
+                                            "title": "Line based placement - Grid Row and Grid Column shorthand",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "cat02-grid-by-example/scene02-line-based-placement/step02-grid-column-grid-row/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "cat02-grid-by-example/scene02-line-based-placement/step02-grid-column-grid-row/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "cat02-grid-by-example/scene02-line-based-placement/step02-grid-column-grid-row/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Grid Area Shorthand",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 Grid Area Shorthand"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨 Line-based placement shorthand with grid-area"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example4/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example4/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can use the shorthand for grid-area to place an item on the gridlines with one line using\ngrid-area: row-start / col-start / row-end / col-end;",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-area: row-start / col-start / row-end / col-end;"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Line placement with grid-row and grid-column with start and end"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row-start: 1;\ngrid-row-end: 2;\ngrid-column-start: 3;\ngrid-column-end: 3;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row-start: 1;\ngrid-row-end: 2;\ngrid-column-start: 3;\ngrid-column-end: 3;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Line placement with grid-row and grid-column"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row: 1 / 2;    /* 👉 start:1 end:2 */\ngrid-column: 2 / 3; /* 👉 start:2 end:3 */\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row: 1 / 2;    /* 👉 start:1 end:2 */\ngrid-column: 2 / 3; /* 👉 start:2 end:3 */\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Line placement with grid-area"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "OR with grid-area we can simplify into one line "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "/**\n👾\n👾 grid-area: row-start / col-start / row-end / col-end; \n👾\n**/\ngrid-area: 1 / 2 / 2 / 3; /* 👉 row-start: 1 col-start 2 row-end: 2 col-end: 3 */\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "/**\n👾\n👾 grid-area: row-start / col-start / row-end / col-end; \n👾\n**/\ngrid-area: 1 / 2 / 2 / 3; /* 👉 row-start: 1 col-start 2 row-end: 2 col-end: 3 */\n"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "/cat02-grid-by-example/scene02-line-based-placement/step03-grid-area/template.hbs",
+                                        "template_data": {
+                                            "title": "Grid Area Shorthand",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step03-grid-area/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step03-grid-area/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "/cat02-grid-by-example/scene02-line-based-placement/step03-grid-area/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Line-based placement spanning tracks",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 CSS Grid - Line-based placement"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨  spanning tracks"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example5/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example5/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "To create Grid Areas that are larger than a single grid track we specify an end line that is more than one track away."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Here I am using the grid-column and grid-row shorthand and have omitted the end value for any items that span one row or column track."
+                                        },
+                                        {
+                                            "tag": "h4",
+                                            "txt": "Summary"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "By default spans one column if an end isn't specified"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-column: 1 ; /* 👉 start:1 end:2 (start plus 1)*/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column: 1 ; /* 👉 start:1 end:2 (start plus 1)*/\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-column: 1 / 3; /* 👉 start:1 end:3 */\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column: 1 / 3; /* 👉 start:1 end:3 */\n"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "/cat02-grid-by-example/scene02-line-based-placement/step04-spanning-tracks/template.hbs",
+                                        "template_data": {
+                                            "title": "Line-based placement spanning tracks",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step04-spanning-tracks/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step04-spanning-tracks/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "/cat02-grid-by-example/scene02-line-based-placement/step04-spanning-tracks/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Line-based placement spanning tracks with the span keyword",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 CSS Grid - Line-based placement"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨  span keyword"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example6/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example6/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can also span using the span keyword. This example creates the same layout as the one in the previous example. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "span"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's use the span keyword rather than targeting the Grid Line by number. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "span"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "I am also using the defaults for row and column end, which is to span 1."
+                                        },
+                                        {
+                                            "tag": "h4",
+                                            "txt": "Summary"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "The span tells how many columns to span starting the column-start gridline"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "/* \"spans\" two whole columns e.g. 1<--span-->2<--span-->3 */\ngrid-column: 1 / span 2; /* 👉 start:1 <-- span 2 cols --> end:3 (start plus 2)*/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "/* \"spans\" two whole columns e.g. 1<--span-->2<--span-->3 */\ngrid-column: 1 / span 2; /* 👉 start:1 <-- span 2 cols --> end:3 (start plus 2)*/\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "we can span rows too"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row: 1 / span 3; /* 👉 start:1 <-- span 3 rows --> end:3 (start plus 3)*/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row: 1 / span 3; /* 👉 start:1 <-- span 3 rows --> end:3 (start plus 3)*/\n"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "/cat02-grid-by-example/scene02-line-based-placement/step05-span/template.hbs",
+                                        "template_data": {
+                                            "title": "Line-based placement spanning tracks with the span keyword",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step05-span/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step05-span/partials/partial02.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "/cat02-grid-by-example/scene02-line-based-placement/step05-span/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Line-based placement named lines",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 CSS Grid - Line-based placement"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨  Line-based placement named lines"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example7/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example7/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can name lines rather than targeting them by number. Name the line inside brackets. "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "To accomplish this we use the \ngrid-template-columns\ndefining the column templates ",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-columns"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "or \ngrid-template-rows defining our grid row template. ",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-rows"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Columns"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "You can name the grid lines what ever you like "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "            1fr                1fr\n    |-----------------|-----------------|\n   col-line-1    col-line-2         col-line-3\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "            1fr                1fr\n    |-----------------|-----------------|\n   col-line-1    col-line-2         col-line-3\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-columns: [col-line-1] 1fr [col-line2] 1fr [col-line-3];\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-columns: [col-line-1] 1fr [col-line2] 1fr [col-line-3];\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "A better approach is to use semantic names, for example:"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "        300px           1fr              200px\n  |-----------------|-----------------|----------|\nsidebar-start    content-start    ads-start  ads-end\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "        300px           1fr              200px\n  |-----------------|-----------------|----------|\nsidebar-start    content-start    ads-start  ads-end\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-columns: [sidebar-start] 300px [content-start] 1fr [ads-start] 200px [ads-end];\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-columns: [sidebar-start] 300px [content-start] 1fr [ads-start] 200px [ads-end];\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h6",
+                                            "txt": "Placing content on the column template"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can now use these grid lines to place our content with \ngrid-column",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "e.g. "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-column: sidebar-start / ads-end; /* 👉 start:sidebar-start end:ads-end (inclusive)*/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column: sidebar-start / ads-end; /* 👉 start:sidebar-start end:ads-end (inclusive)*/\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "Rows"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "You can name the grid lines what ever you like "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "row-line-1 ---------------\n           |\n           | 1fr\n           |\nrow-line-2 ---------------\n           |\n           | 1fr\n           |\nrow-line-3 ---------------\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "row-line-1 ---------------\n           |\n           | 1fr\n           |\nrow-line-2 ---------------\n           |\n           | 1fr\n           |\nrow-line-3 ---------------\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-rows: [row-line-1] 1fr [row-line2] 1fr [row-line-3];\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-rows: [row-line-1] 1fr [row-line2] 1fr [row-line-3];\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h6",
+                                            "txt": "Placing content on the row template"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can now use these grid lines to place our content with \ngrid-row",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "e.g. "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-row: row-line-1 / row-line-3; /* 👉 start:row-line-1 end:row-line-3 (inclusive)*/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-row: row-line-1 / row-line-3; /* 👉 start:row-line-1 end:row-line-3 (inclusive)*/\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h4",
+                                            "txt": "Summary"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Define the template gridline names"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-columns: [col-line-1] 1fr [col-line2] 1fr [col-line-3];\ngrid-template-rows: [row-line-1] 1fr [row-line2] 1fr [row-line-3];\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-columns: [col-line-1] 1fr [col-line2] 1fr [col-line-3];\ngrid-template-rows: [row-line-1] 1fr [row-line2] 1fr [row-line-3];\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Place your content on the grid "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-column: sidebar-start / ads-end; /* 👉 start:sidebar-start end:ads-end (inclusive)*/\ngrid-row: row-line-1 / row-line-3; /* 👉 start:row-line-1 end:row-line-3 (inclusive)*/\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column: sidebar-start / ads-end; /* 👉 start:sidebar-start end:ads-end (inclusive)*/\ngrid-row: row-line-1 / row-line-3; /* 👉 start:row-line-1 end:row-line-3 (inclusive)*/\n"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "/cat02-grid-by-example/scene02-line-based-placement/step06-named-lines/template.hbs",
+                                        "template_data": {
+                                            "title": "Line-based placement named lines",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}",
+                                            "partial_3": "{{partial_3}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step06-named-lines/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step06-named-lines/partials/partial02.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_3",
+                                                "start": 3000,
+                                                "duration": 4000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step06-named-lines/partials/partial03.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "/cat02-grid-by-example/scene02-line-based-placement/step06-named-lines/css-grid.html"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Line-based placement named lines with spans",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 CSS Grid - Line-based placement"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨  Line-based placement named lines with spans"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example8/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example8/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "You can give lines the same name and then use the span keyword to target lines of a certain name. "
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "This is really useful if you want to create a complex grid with multiple content tracks and gutters."
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "I have made a slightly larger grid here and have named all of the Grid Lines before the content tracks with col and all of the lines before the row tracks with row. I can then start at a certain column line by using col  <line number> and span by saying span  <number of lines>.",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "I have made a slightly larger grid here and have named all of the Grid Lines before the content tracks with col and all of the lines before the row tracks with row. I can then start at a certain column line by using col "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<line number>"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "and span by saying span "
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "<number of lines>"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h4",
+                                            "txt": "Summary"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Define your grid template"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-columns: [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr;\ngrid-template-rows: [row-name] auto [row-name] auto [row-name];\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-columns: [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr;\ngrid-template-rows: [row-name] auto [row-name] auto [row-name];\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Place your content on the grid "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-column: col-name 2 / span 3 ; /* 👉 start: 2 <-- span 3 cols --> end: 5 (2 plus 3) */\ngrid-row: row 2 / span 2; /* 👉 start: 2 <-- span 2 --> end: 4 (2 plus 2) */\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column: col-name 2 / span 3 ; /* 👉 start: 2 <-- span 3 cols --> end: 5 (2 plus 3) */\ngrid-row: row 2 / span 2; /* 👉 start: 2 <-- span 2 --> end: 4 (2 plus 2) */\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "If an span (or -end) is not specified it defaults to 1 span."
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-column: col-name 2 ; /* 👉 start: 2 <-- span 1 cols --> end: 3 (2 plus 1) */\ngrid-row: row 2; /* 👉 start: 2 <-- span 1 row by default --> end: 3 (2 plus 1) */\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-column: col-name 2 ; /* 👉 start: 2 <-- span 1 cols --> end: 3 (2 plus 1) */\ngrid-row: row 2; /* 👉 start: 2 <-- span 1 row by default --> end: 3 (2 plus 1) */\n"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "/cat02-grid-by-example/scene02-line-based-placement/step07-named-lines-with-spans/template.hbs",
+                                        "template_data": {
+                                            "title": "Line-based placement named lines with spans",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}",
+                                            "partial_3": "{{partial_3}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step07-named-lines-with-spans/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step07-named-lines-with-spans/partials/partial02.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_3",
+                                                "start": 3000,
+                                                "duration": 4000,
+                                                "template": "/cat02-grid-by-example/scene02-line-based-placement/step07-named-lines-with-spans/partials/partial03.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "/cat02-grid-by-example/scene02-line-based-placement/step07-named-lines-with-spans/css-grid.html"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "title": "Auto Layout",
+                    "steps": [
+                        {
+                            "title": "Using repeat notation",
+                            "gitData": {},
+                            "windowSettings": {
+                                "description": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "0px",
+                                    "width": "45%",
+                                    "height": "100%",
+                                    "transitions": [],
+                                    "isMin": false
+                                },
+                                "code": {
+                                    "isClosed": false,
+                                    "top": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "80%",
+                                    "transitions": []
+                                },
+                                "terminal": {
+                                    "isClosed": true,
+                                    "bottom": "0px",
+                                    "left": "50%",
+                                    "width": "45%",
+                                    "height": "20%",
+                                    "transitions": []
+                                }
+                            },
+                            "timeline": [
+                                {
+                                    "id": 1,
+                                    "panel": "description",
+                                    "start": 0,
+                                    "duration": 5000,
+                                    "description": [
+                                        {
+                                            "tag": "h1",
+                                            "txt": "💅 CSS Grid - Auto placement"
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "🎨  Source"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Source https://gridbyexample.com/examples/example9/",
+                                            "kids": [
+                                                {
+                                                    "tag": "a",
+                                                    "txt": "https://gridbyexample.com/examples/example9/"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h3",
+                                            "txt": "👾 repeat()"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can repeat columns using the repeat keyword.",
+                                            "kids": [
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "We can repeat columns using the"
+                                                },
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "repeat"
+                                                },
+                                                {
+                                                    "tag": "span",
+                                                    "txt": "keyword."
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "Let's create 10 columns with the name \"col-name\". We will make each column 1fr wide."
+                                        },
+                                        {
+                                            "tag": "h6",
+                                            "txt": "❌ without repeat()"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-columns: [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr;\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-columns: [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr [col-name] 1fr;\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "h6",
+                                            "txt": "✅ with repeat()"
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "We can use the keyword repeat instead. "
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "/**\n * @param numberOfTimes - the number of times to repeat\n * @param optionalColumnName - the optional column name\n * @param width - width e.g. 1 fraction, %, px, vw, em or rem \n */\nrepeat(numberOfTimes, [optionalColumnName] width)\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "/**\n * @param numberOfTimes - the number of times to repeat\n * @param optionalColumnName - the optional column name\n * @param width - width e.g. 1 fraction, %, px, vw, em or rem \n */\nrepeat(numberOfTimes, [optionalColumnName] width)\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "grid-template-columns: repeat(10, [col-name] 1fr)\n```\n* Repeat 10 times\n* Column name is \"col-name\". this can be anything.\n* width of 1 fraction each column. This is will split the parents width into 10 fractions (the equivalent of 10% width) \n\nWe can omit the column name too \n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "grid-template-columns: repeat(10, [col-name] 1fr)\n```\n* Repeat 10 times\n* Column name is \"col-name\". this can be anything.\n* width of 1 fraction each column. This is will split the parents width into 10 fractions (the equivalent of 10% width) \n\nWe can omit the column name too \n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "css\ngrid-template-columns: repeat(10, 1fr)"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "###### Grid Item Placement\nWe can use the column names to target the column gridline\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "###### Grid Item Placement\nWe can use the column names to target the column gridline\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "css\ngrid-column: col-name 1 / span 3; /* 👉 start:1 end:4 /\ngrid-row: row-name 2 / span 2; / 👉 start:2 end:4 */",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "/\ngrid-row: row-name 2 / span 2; /"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "Here we place the item on column:\n* column gridline 1 (far left) \n* span 2 whole columns\n* the end gridline is 3 (1 + 2)\n\nHere we place the item on row:\n* row  gridline 2 \n* span 2 whole rows\n* the end gridline is 4 (2 + 2)\n\n\n\nif a span is not specified it defaults to 1\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "Here we place the item on column:\n* column gridline 1 (far left) \n* span 2 whole columns\n* the end gridline is 3 (1 + 2)\n\nHere we place the item on row:\n* row  gridline 2 \n* span 2 whole rows\n* the end gridline is 4 (2 + 2)\n\n\n\nif a span is not specified it defaults to 1\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "css\ngrid-column: col-name 1; /* 👉 start:1 end:2 (default span 1) /\ngrid-row: row-name 2; / 👉 start:2 end:3 (default span 1) */",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "/\ngrid-row: row-name 2; /"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "### Summary \nBy default spans one column if an end isn't specified\n\n###### Grid Template\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "### Summary \nBy default spans one column if an end isn't specified\n\n###### Grid Template\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "css\ngrid-template-columns: repeat(10, [col-name] 1fr); \ngrid-template-rows: repeat(10, [row-name] 1fr);"
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "###### Grid Item Placement\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "###### Grid Item Placement\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "css\ngrid-column: col-name 1 / span 3; /* 👉 start:1 end:4 /\ngrid-row: row-name 2 / span 2; / 👉 start:2 end:4 */",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "/\ngrid-row: row-name 2 / span 2; /"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "pre",
+                                            "txt": "if a span is not specified it defaults to 1\n",
+                                            "kids": [
+                                                {
+                                                    "tag": "code",
+                                                    "txt": "if a span is not specified it defaults to 1\n"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "tag": "p",
+                                            "txt": "css\ngrid-column: col-name 1; /* 👉 start:1 end:2 (default span 1) /\ngrid-row: row-name 2; / 👉 start:2 end:3 (default span 1) */\n```",
+                                            "kids": [
+                                                {
+                                                    "tag": "em",
+                                                    "txt": "/\ngrid-row: row-name 2; /"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 2,
+                                    "panel": "code",
+                                    "start": 200,
+                                    "duration": 10000,
+                                    "code": {
+                                        "template": "/cat02-grid-by-example/scene03-auto/step01-auto-keyword/template.hbs",
+                                        "template_data": {
+                                            "title": "Using repeat notation",
+                                            "partial_1": "{{partial_1}}",
+                                            "partial_2": "{{partial_2}}",
+                                            "partial_3": "{{partial_3}}"
+                                        },
+                                        "partial_sections": [
+                                            {
+                                                "partial_id": "partial_1",
+                                                "start": 200,
+                                                "duration": 2000,
+                                                "template": "/cat02-grid-by-example/scene03-auto/step01-auto-keyword/partials/partial01.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_2",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene03-auto/step01-auto-keyword/partials/partial02.hbs",
+                                                "template_data": {}
+                                            },
+                                            {
+                                                "partial_id": "partial_3",
+                                                "start": 2000,
+                                                "duration": 3000,
+                                                "template": "/cat02-grid-by-example/scene03-auto/step01-auto-keyword/partials/partial03.hbs",
+                                                "template_data": {}
+                                            }
+                                        ],
+                                        "output": "/cat02-grid-by-example/scene03-auto/step01-auto-keyword/css-grid.html"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

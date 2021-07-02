@@ -1,3 +1,5 @@
+const PlaybookPackages = require('./playbook');
 module.exports = {
-    FileModel: require('./FileModel')
+    FileModel: require('./FileModel'),
+    ...PlaybookPackages,
 }

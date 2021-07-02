@@ -10,7 +10,7 @@ const Controller = require('./Controller');
  * @requires Services 
  * @param ValidationService - Validate github URL 
  */
-const PlaybookService = require('../services/PlaybookService');
+const PlaybookApiService = require('../services/PlaybookApiService');
 const ValidationService = require('../services/utils/ValidationService')
 
  /**
@@ -117,7 +117,7 @@ class PlaybookVersionCtrl extends Controller {
 
             // -- First we need to use the authour and playbook and check if there is a playbook to save a draft to
             console.log(chalk.green("\n\nSearching for your playbook...\n"));
-            let existingPlaybookEntriesArray = await PlaybookService.getPlaybookEntry(playbookName, authour);
+            let existingPlaybookEntriesArray = await PlaybookApiService.getPlaybookEntry(playbookName, authour);
 
             if (existingPlaybookEntriesArray.length === 0)
             {
@@ -147,7 +147,7 @@ class PlaybookVersionCtrl extends Controller {
                     // -- We can only continue if we have a playbook entry so lets automatically do that
                     try
                     {
-                        await PlaybookService.createPlaybookEntry(
+                        await PlaybookApiService.createPlaybookEntry(
                             playbookName, 
                             authour,
                             undefined,
@@ -160,7 +160,7 @@ class PlaybookVersionCtrl extends Controller {
                         
                         console.log(chalk.green('============================================================\n'))
                         console.log(chalk.green("Your playbook has been created! You can preview your draft at: \n\n"))
-                        console.log(PlaybookService.createMasterclassUrl(authour, playbookName, blueprintVersion));
+                        console.log(PlaybookApiService.createMasterclassUrl(authour, playbookName, blueprintVersion));
                         console.log(chalk.green('\n============================================================\n\n'))
                     }
                     catch(createPlaybookEntryError)
@@ -221,7 +221,7 @@ class PlaybookVersionCtrl extends Controller {
                 // -- Attempt to create the draft
                 try
                 {
-                    await PlaybookService.createDraft(
+                    await PlaybookApiService.createDraft(
                         authour,
                         playbookName,
                         blueprintVersion,
@@ -231,7 +231,7 @@ class PlaybookVersionCtrl extends Controller {
 
                     console.log(chalk.green('============================================================\n'))
                     console.log(chalk.green("Your draft has been created! You can preview this at: \n\n"))
-                    console.log(PlaybookService.createMasterclassUrl(authour, playbookName, blueprintVersion));
+                    console.log(PlaybookApiService.createMasterclassUrl(authour, playbookName, blueprintVersion));
                     console.log(chalk.green('\n============================================================\n\n'))
                 }
                 catch(createDraftError)
@@ -335,7 +335,7 @@ class PlaybookVersionCtrl extends Controller {
 
             // -- First we need to use the authour and playbook and check if there is a playbook to save a draft to
             console.log(chalk.green("\n\nSearching for your playbook...\n"));
-            let existingPlaybookEntriesArray = await PlaybookService.getPlaybookEntry(playbookName, authour);
+            let existingPlaybookEntriesArray = await PlaybookApiService.getPlaybookEntry(playbookName, authour);
 
             if (existingPlaybookEntriesArray.length === 0)
             {
@@ -365,7 +365,7 @@ class PlaybookVersionCtrl extends Controller {
                     // -- We can only continue if we have a playbook entry so lets automatically do that
                     try
                     {
-                        await PlaybookService.createPlaybookEntry(
+                        await PlaybookApiService.createPlaybookEntry(
                             playbookName, 
                             authour,
                             undefined,
@@ -403,7 +403,7 @@ class PlaybookVersionCtrl extends Controller {
             console.log(chalk.green("Publishing your version...\n"));
             try
             {
-                await PlaybookService.publish(
+                await PlaybookApiService.publish(
                     authour,
                     playbookName,
                     blueprintVersion
@@ -411,7 +411,7 @@ class PlaybookVersionCtrl extends Controller {
                 
                 console.log(chalk.green('============================================================\n'))
                 console.log(chalk.green("Your playbook version has been published! You can view it at:\n\n"))
-                console.log(PlaybookService.createMasterclassUrl(authour, playbookName, blueprintVersion));
+                console.log(PlaybookApiService.createMasterclassUrl(authour, playbookName, blueprintVersion));
                 console.log(chalk.green('\n============================================================\n\n'))
             }
             catch(publishError)

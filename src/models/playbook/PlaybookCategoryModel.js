@@ -1,12 +1,20 @@
 /**
+ * @requires Logs
+ */
+const chalk = require('chalk');
+
+/**
  * @requires Services
  */
-import * as TextService from '../../services/utils/TextService';
+// import * as TextService from '../../services/utils/TextService';
+const TextService = require('../../services/utils/TextService');
 
 /**
  * @requires Models
  */
-import { PlaybookSceneModel } from "./PlaybookSceneModel";
+// import { PlaybookSceneModel } from "./PlaybookSceneModel";
+// const { PlaybookSceneModel } = require("./PlaybookSceneModel");
+const PlaybookSceneModel = require("./PlaybookSceneModel");
 
 
 /**
@@ -14,29 +22,48 @@ import { PlaybookSceneModel } from "./PlaybookSceneModel";
  *
  * @class PlaybookCategoryModel
  */
-export class PlaybookCategoryModel {
+// export class PlaybookCategoryModel {
+class PlaybookCategoryModel {
 
+    id;
     name;
     sceneModels = [];
 
-    constructor(name)
+    /**
+     * @constructor
+     * @param {string} name - playbook name
+     * @param {string} id - playbook id
+     * @param {string} folderName - folder name
+     */
+    constructor(name, id, folderName)
     {
         this.name = name;
+        this.id = id;
+        this.folderName = folderName;
     }
 
     /**
      * Creates a PlaybookSceneModel that represents ".addScene()" in the playbook.js file
      *
-     * @param {*} name
+     * @param {string} name - name
+     * @param {string?} optionalId - optional - id
+     * @param {string?} optionalFolderName - optional - folder name
      * @returns {PlaybookSceneModel}
      * @memberof PlaybookCategoryModel
      */
-    addScene(name)
+    addScene(name, optionalId, optionalFolderName)
     {
-        const scene = new PlaybookSceneModel(name);
+        const scene = new PlaybookSceneModel(
+            name,
+            optionalId,
+            optionalFolderName,
+        );
         this.sceneModels.push(scene);
 
         return scene;
+    }
+    addSceneModel(sceneModel){
+        this.sceneModels.push(sceneModel);
     }
 
     /**
@@ -51,7 +78,7 @@ export class PlaybookCategoryModel {
         const indent = TextService.indent(indentSize);
 
         let content = indent + '.addCategory("' + this.name + '")\n';
-
+        
         this.sceneModels.forEach((scene) => {
             content += scene.printJsContent(indentSize + 1);
         })
@@ -59,3 +86,5 @@ export class PlaybookCategoryModel {
         return content;
     }
 }
+
+module.exports = PlaybookCategoryModel;

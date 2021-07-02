@@ -12,7 +12,8 @@ const ROUTES = {
     SERVER_MAGIC: 'smagic',
     VALIDATE: 'validate',
     DRAFT: 'draft',
-    PUBLISH: 'publish'
+    PUBLISH: 'publish',
+    WIZARD: 'wizard',
 }
 const CTRLS = {
     auth : require('../ctrls/AuthController'),
@@ -23,7 +24,8 @@ const CTRLS = {
     playbookMagic: require('../ctrls/PlaybookMagicCtrl'),
     playbookServerMagic: require('../ctrls/PlaybookServerMagicCtrl'),
     playbookValidate: require('../ctrls/PlaybookValidateCtrl'),
-    playbookVersion: require('../ctrls/PlaybookVersionCtrl')
+    playbookVersion: require('../ctrls/PlaybookVersionCtrl'),
+    wizard: require('../ctrls/PlaybookWizardCtrl'),
 }
 
 
@@ -100,6 +102,12 @@ module.exports = async (args) => {
             
             console.log('🎖  Publish a version');
             CTRLS.playbookVersion.publish(args);
+
+            break;
+        case ROUTES.WIZARD:
+            
+            console.log('🥑  Use the wizard to create a new step');
+            CTRLS.wizard.handle(args);
 
             break;
         default:

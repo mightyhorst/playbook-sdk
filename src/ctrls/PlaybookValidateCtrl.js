@@ -10,7 +10,7 @@ const Controller = require('./Controller');
  * @requires Services 
  * @param ValidationService - Validate github URL 
  */
-const PlaybookService = require('../services/PlaybookService');
+const PlaybookApiService = require('../services/PlaybookApiService');
 
  /**
  * Playbook Validate handler 
@@ -66,7 +66,7 @@ class PlaybookValidateCtrl extends Controller {
             {
                 console.log(chalk.green("\nValidating the playbook.json file...\n"))
 
-                await PlaybookService.validatePlaybookJson(githubUrl, githubBranchOrTag);
+                await PlaybookApiService.validatePlaybookJson(githubUrl, githubBranchOrTag);
 
                 console.log(chalk.green("The playbook.json file is valid!\n"))
             }

@@ -10,7 +10,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "echo \"@todo\"",
+    "test": "jest",
     "commit": "git-cz"
   },
   "author": {
@@ -36,6 +36,7 @@
     "git-diff": "^2.0.6",
     "glob": "^7.1.6",
     "handlebars": "^4.5.3",
+    "handlebars-delimiters": "^1.0.0",
     "inquirer": "^7.0.0",
     "inquirer-search-list": "^1.2.6",
     "jsdom": "^15.1.1",
@@ -59,7 +60,8 @@
     "@commitlint/config-conventional": "^8.2.0",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.0.2",
-    "husky": "^6.0.0"
+    "husky": "^6.0.0",
+    "jest": "^27.0.5"
   },
   "config": {
     "commitizen": {

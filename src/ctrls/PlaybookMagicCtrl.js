@@ -17,7 +17,7 @@ const QuestionInputModel = require('../models/menus/QuestionInputModel');
  */
 const ValidationService = require('../services/utils/ValidationService');
 const NodeGitService = require('../services/nodegit/NodeGitService');
-const PlaybookService = require('../services/PlaybookService');
+const PlaybookApiService = require('../services/PlaybookApiService');
 
  /**
  * Playbook Magic handler 
@@ -155,7 +155,7 @@ class PlaybookMagicCtrl extends Controller {
 
                         if (!continueWithMagicCommandAnswer.continueWithMagicCommand)
                         {
-                            process.stdout.write("Aborting magic command. You can view the existing branch at " + (blueprintRepoData.isInit ? blueprintGithubUrl : PlaybookService.createGithubUrl(blueprintGithubUrl, blueprintBranchName)) + "\n");
+                            process.stdout.write("Aborting magic command. You can view the existing branch at " + (blueprintRepoData.isInit ? blueprintGithubUrl : PlaybookApiService.createGithubUrl(blueprintGithubUrl, blueprintBranchName)) + "\n");
                             return;
                         }
                     }
@@ -191,7 +191,7 @@ class PlaybookMagicCtrl extends Controller {
                         {
                             global.playbook = require('../playbook.sdk').playbook;
                             global.step = require('../playbook.sdk').step;
-                            await PlaybookService.buildPlaybookJsonFromGithub(blueprintGithubUrl, blueprintRepoData);
+                            await PlaybookApiService.buildPlaybookJsonFromGithub(blueprintGithubUrl, blueprintRepoData);
                         }
                         else
                         {
@@ -211,7 +211,7 @@ class PlaybookMagicCtrl extends Controller {
                          * @step 7. Attempt to fetch the playbook data from playbook microervice using a combination of author and playbookName.
                          *          If there is a change then prompt user if they confirm to updated data
                          */
-                        let existingPlaybookEntryArray = await PlaybookService.getPlaybookEntry(appAndBlueprintFolderPaths.playbookName, appAndBlueprintFolderPaths.authour);
+                        let existingPlaybookEntryArray = await PlaybookApiService.getPlaybookEntry(appAndBlueprintFolderPaths.playbookName, appAndBlueprintFolderPaths.authour);
                         
                         if (existingPlaybookEntryArray.length != 0)
                         {
@@ -248,7 +248,7 @@ class PlaybookMagicCtrl extends Controller {
 
                                 if (updatePlaybookEntryAnswer.updatePlaybookEntry)
                                 {
-                                    await PlaybookService.updatePlaybookEntry(
+                                    await PlaybookApiService.updatePlaybookEntry(
                                         existingPlaybookEntry._id,
                                         updateData
                                     )
@@ -260,7 +260,7 @@ class PlaybookMagicCtrl extends Controller {
                             /**
                              * @step 8. Post the new playbook.json file to the playbook microservice
                              */
-                            await PlaybookService.createPlaybookEntry(
+                            await PlaybookApiService.createPlaybookEntry(
                                 appAndBlueprintFolderPaths.playbookName, 
                                 appAndBlueprintFolderPaths.authour,
                                 githubUrl, 
@@ -275,10 +275,10 @@ class PlaybookMagicCtrl extends Controller {
 
                         process.stdout.write("\n============ Processing complete ============\n\n")
                         process.stdout.write(`You can view your blueprints at the branch "${blueprintRepoData.isInit ? "master" : blueprintRepoData.branch}" found in the repo:\n`["green"]);
-                        process.stdout.write((blueprintRepoData.isInit ? blueprintGithubUrl : PlaybookService.createGithubUrl(blueprintGithubUrl, blueprintRepoData.branch) + "\n")["yellow"]);
+                        process.stdout.write((blueprintRepoData.isInit ? blueprintGithubUrl : PlaybookApiService.createGithubUrl(blueprintGithubUrl, blueprintRepoData.branch) + "\n")["yellow"]);
                         process.stdout.write("\n")
                         process.stdout.write("You can preview the blueprint in masterclass found at:\n"["green"]);
-                        process.stdout.write(PlaybookService.createMasterclassUrl(appAndBlueprintFolderPaths.authour, appAndBlueprintFolderPaths.playbookName))
+                        process.stdout.write(PlaybookApiService.createMasterclassUrl(appAndBlueprintFolderPaths.authour, appAndBlueprintFolderPaths.playbookName))
                         process.stdout.write("\n=============================================\n\n")
                     }
                 }

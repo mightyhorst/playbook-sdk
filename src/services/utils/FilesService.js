@@ -5,6 +5,10 @@ const chalk = require('chalk');
 const path = require('path');
 const rimraf = require("rimraf");
 
+/**
+ * @requires Services
+ */
+const transformId = require('./transformId');
 
 /**
  * @requires Models 
@@ -12,12 +16,22 @@ const rimraf = require("rimraf");
 const FileModel = require('../../models/FileModel');
 const FolderModel = require('../../models/FolderModel');
 
+/**
+ * @requires Errors 
+ */
+const {
+    NoCategoriesFoundError,
+    NoScenesFoundError,
+    NoStepsFoundError,
+    FileSystemError,
+} = require('../../errors');
+
 /** 
  * Look ma, it's cp -R. 
  * @param {string} src The path to the thing to copy. 
  * @param {string} dest The path to the new copy. 
  * */ 
-var copyRecursiveSync = (src, dest) => { 
+const copyRecursiveSync = (src, dest) => { 
     var exists = fs.existsSync(src); 
     var stats = exists && fs.statSync(src); 
     
@@ -284,6 +298,190 @@ class FileService{
         catch(err)
         {
             throw err;
+        }
+    }
+
+    /**
+     * @method findNextId 
+     * @desc Find next ID for the cat, scene or step
+     * @param {'cat' | 'scene' | 'step'} prefix - "cat", "scene", "step"
+     * @param {Category[] | Scene[] | Step[]} values - array of categories, scenes, steps
+     * @returns {number} nextId
+     */
+    findNextId(prefix, values){
+        const lastId = [0, ...values].reduce((previous, current)=>{
+            const id = current.replace(prefix, '');
+            return parseInt(id) || previous;
+        });
+        return lastId+1;
+    }
+    /**
+     * @method findNextCatId 
+     * @desc Find next ID for the cat
+     * @param {Category[] } cats - array of categories
+     */
+    findNextCatId(cats){
+        return this.findNextId('cat', cats);
+    }
+    /**
+     * @method findNextSceneId 
+     * @desc Find next ID for the scene
+     * @param {Scenes[] } scenes - array of scenes
+     */
+    findNextSceneId(scenes){
+        return this.findNextId('scene', scenes);
+    }
+    /**
+     * @method findNextStepId 
+     * @desc Find next ID for the steps
+     * @param {Step[] } steps - array of steps
+     */
+    findNextStepId(steps){
+        return this.findNextId('step', steps);
+    }
+
+    /**
+     * Find all the categories in a folder 
+     * 
+     * @desc cats folders MUST start with "cat"
+     * 
+     * @param {string} pathToCatFolder - path to look for cats in
+     * @returns {{string[], number}} {categories: string[], nextCatId: number}
+     */
+    findCategories(pathToCatFolder){
+        let categories; 
+        try{
+            categories = fs.readdirSync(pathToCatFolder).filter(file => file.startsWith('cat'));
+        }
+        catch(err){
+            throw new FileSystemError(err);
+        }
+        if(!categories){
+            throw new NoCategoriesFoundError(pathToCatFolder, fs.readdirSync(pathToCatFolder));
+        }
+
+        return {
+            categories: categories,
+            nextCatId: this.findNextCatId(categories),
+        };
+    }
+    /**
+     * Find the last category in a folder 
+     * 
+     * @desc 
+     *  • cats folders MUST start with "cat" 
+     *  • and SHOULD start with "cat01" to be in order
+     * 
+     * @param {string} pathToCatFolder - path to look for cats in
+     * 
+     * @returns {string[]} category paths
+     */
+    findLastCat(pathToCatFolder){
+        const cats = this.findCategories(pathToCatFolder);
+        if(cats.length > 0){
+            const lastCat = cats[cats.length-1];
+            return lastCat;
+        }
+        else{
+            return false;
+        }
+    }
+
+    /**
+     * @method findScenes
+     * @desc 
+     *  Find all the scenes in a folder 
+     *  • scenes folders MUST start with "scene"
+     * 
+     * @param {string} pathToSceneFolder - path to look for scenes in
+     * @returns { { scenes:string[], nextSceneId: number } } 
+     *  scenes:string[] - scene paths
+     *  nextSceneId: number - e.g. 1 for "scene01"
+     */
+     findScenes(pathToSceneFolder){
+        let scenes; 
+        try{
+            scenes = fs.readdirSync(pathToSceneFolder).filter(file => file.startsWith('scene'));
+        }
+        catch(err){
+            throw new FileSystemError(err);
+        }
+        if(!scenes){
+            throw new NoScenesFoundError(pathToSceneFolder, fs.readdirSync(pathToSceneFolder));
+        }
+
+        return {
+            scenes,
+            nextSceneId: this.findNextSceneId(scenes),
+        };
+    }
+    /**
+     * @method findLastScene
+     * @desc 
+     *  Find the last scene in a folder 
+     *  • scenes folders MUST start with "scene" 
+     *  • and SHOULD start with "scene01" to be in order
+     * 
+     * @param {string} pathToSceneFolder - path to look for scenes in
+     * 
+     * @returns {string[]} scene paths
+     */
+    findLastScene(pathToSceneFolder){
+        const scenes = this.findScenes(pathToSceneFolder);
+        if(scenes.length > 0){
+            const lastScene = scenes[scenes.length-1];
+            return lastScene;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    /**
+     * @method findSteps
+     * @desc 
+     *  Find all the steps in a folder 
+     *  • steps folders MUST start with "step"
+     * 
+     * @param {string} pathToStepFolder - path to look for steps in
+     * @returns {string[]} step paths
+     */
+     findSteps(pathToStepFolder){
+        let steps; 
+        try{
+            steps = fs.readdirSync(pathToStepFolder).filter(file => file.startsWith('step'));
+        }
+        catch(err){
+            throw new FileSystemError(err);
+        }
+        if(!steps){
+            throw new NoStepsFoundError(pathToStepFolder, fs.readdirSync(pathToStepFolder));
+        }
+
+        return {
+            steps,
+            nextStepId: this.findNextStepId(steps),
+        };
+    }
+    /**
+     * @method findLastStep
+     * @desc 
+     *  Find the last step in a folder 
+     *  • steps folders MUST start with "step" 
+     *  • and SHOULD start with "step01" to be in order
+     * 
+     * @param {string} pathToStepFolder - path to look for steps in
+     * 
+     * @returns {string[]} step paths
+     */
+    findLastStep(pathToStepFolder){
+        const steps = this.findSteps(pathToStepFolder);
+        if(steps.length > 0){
+            const lastScene = steps[steps.length-1];
+            return lastScene;
+        }
+        else{
+            return false;
         }
     }
 

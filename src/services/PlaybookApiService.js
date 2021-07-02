@@ -8,15 +8,20 @@ const rp = require('request-promise-native');
 /**
  * @import Constants
  */
-import {
-    MICROSERVICE_PLAYBOOK_URL, CLIENT_MASTERCLASS_URL
-} from '../constants/url.const';
+// import {
+//     MICROSERVICE_PLAYBOOK_URL, 
+//     CLIENT_MASTERCLASS_URL,
+// } from '../constants/url.const';
+const {
+    MICROSERVICE_PLAYBOOK_URL, 
+    CLIENT_MASTERCLASS_URL,
+} = require('../constants');
 
 /**
  * @requires Services 
  */
-const FileService = require('../services/utils/FilesService');
-const NodeGitService = require('../services/nodegit/NodeGitService');
+const FileService = require('./utils/FilesService');
+const NodeGitService = require('./nodegit/NodeGitService');
 
 /**
  * @constant VIEWS 
@@ -30,7 +35,7 @@ const Models = require('../models/index');
 const FileModel = Models.FileModel;
 
 
-class PlaybookService{
+class PlaybookApiService{
 
     constructor(){
         
@@ -309,4 +314,4 @@ class PlaybookService{
     }
 }
 
-module.exports = new PlaybookService();
+module.exports = new PlaybookApiService();

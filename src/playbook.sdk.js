@@ -1364,14 +1364,18 @@ class StepSdk
 
 	}
 
-	
+	/**
+	 * add a command to the terminal panel 
+	 * @param {string} command - cli command
+	 * @returns {PlaybookSdk} this
+	 */
 	withCommand(command) 
 	{
-		const time = this._getTimeline()
+		const time = this._getTimeline();
 
 		if (time.hasOwnProperty('terminal') && time.terminal.hasOwnProperty('commands'))
 		{
-			time.terminal.commands.push(command)
+			time.terminal.commands.push(command);
 		}
 
 		return this;
@@ -1396,7 +1400,7 @@ class StepSdk
 			this.stepData.windowSettings[panelName].transitions.push({
 				start : start,
 				end : end
-			})
+			});
 		}
 
 		return this;

@@ -11,7 +11,7 @@ class InitMenuView{
     /**
      * Creates an instance of InitMenuView.
      * 
-     * @param {*} choiceModels
+     * @param {ChoiceModel[]} choiceModels
      * @memberof InitMenuView
      */
     constructor(choiceModels){
@@ -22,7 +22,7 @@ class InitMenuView{
         const questionListModel = new QuestionListModel(
             'keyChosenExample', 
             'Which example do you want to use?', 
-            choiceModels
+            choiceModels,
         );
 
         /**

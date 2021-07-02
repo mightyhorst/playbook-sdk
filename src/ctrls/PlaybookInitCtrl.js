@@ -162,7 +162,7 @@ class PlaybookInitCtrl extends Controller{
             createdPlaybookFolderModel = FileService.copyFolder(sourceFolderModel, destination);
 
             /**
-             * @step 4.1. Creta e.playbook config folder and config.json file 
+             * @step 4.1. Create .playbook config folder and config.json file 
              */ 
             const folderPlaybookConfig = FileService.createFolder(createdPlaybookFolderModel.path, '.playbook');
             const fileConfig = FileService.createFile(folderPlaybookConfig.path, 'config.json', '{\n\t"playbook":{\n\n\t}\n}')
@@ -240,8 +240,8 @@ class PlaybookInitCtrl extends Controller{
          * @description pretty print the hello.playbook.js to the console 
          * @todo add cancel key and visual info 
          */
-        var cardinal = require('cardinal')
-        var hideSemicolonsTheme = require('cardinal/themes/hide-semicolons')
+        var cardinal = require('cardinal');
+        var hideSemicolonsTheme = require('cardinal/themes/hide-semicolons');
 
         const printerContent = cardinal.highlightFileSync(outputFile, {theme: hideSemicolonsTheme});
 

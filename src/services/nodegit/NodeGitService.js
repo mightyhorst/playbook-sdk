@@ -9,10 +9,14 @@ const Axios = require('axios');
 /**
  * @requires Models
  */
-import {
+// import {
+//     PlaybookModel,
+//     PlaybookStepModel
+// } from '../../models/playbook/index';
+const {
     PlaybookModel,
     PlaybookStepModel
-} from '../../models/playbook/index';
+} = require('../../models/playbook');
 
 /**
  * @requires Services 
