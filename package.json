@@ -1,7 +1,7 @@
 {
   "name": "masterclass-playbook",
   "description": "A CLI to bootsrap and CRUD playbooks in my repos",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "main": "src/index.js",
   "bin": {
     "playbook": "bin/playbook"
