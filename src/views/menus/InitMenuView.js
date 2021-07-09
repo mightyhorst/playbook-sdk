@@ -28,6 +28,7 @@ class InitMenuView{
         /**
          * @param keyPlaybookName - playbook file name 
          */
+        /*
         const defaultPlaybookName = 'hello.playbook.js';
         const questionPlaybookName = new QuestionInputModel(
             'keyPlaybookName', 
@@ -41,6 +42,7 @@ class InitMenuView{
                 return val ? chalk.green(val) + chalk.grey('.playbook.js') : '';
             },
         );
+        */
         
         /**
          * @param keyPlaybookFolder - path to install the playbook (default cwd)
@@ -51,30 +53,25 @@ class InitMenuView{
             'Where shall we install the playbook file and folders? (hit enter for this folder)',
             defaultFolder,
             (val)=>{
-                return val.substring(0,2) === defaultFolder ? true: 'Please start with '+defaultFolder;
-                // return val.length > 1 ? true: 'Please enter more than 1 letters';
+                // return val.substring(0,2) === defaultFolder ? true: 'Please start with '+defaultFolder;
+                return val.length > 1 ? true: 'Please enter more than 1 letters';
             },
-            (val)=>{
-                if(val === defaultFolder) return val; 
-                return val ? chalk.grey(defaultFolder) + chalk.green('learn2code-graphql') + chalk.grey('/')  : '';
-            },
+            // (val)=>{
+            //     if(val === defaultFolder) return val; 
+            //     return val ? chalk.grey(defaultFolder) + chalk.green('learn2code-graphql') + chalk.grey('/')  : '';
+            // },
         );
 
         this.questions = [
             questionListModel.question,
-            questionPlaybookName.question,
+            // questionPlaybookName.question,
             questionPlaybookFolder.question
         ];
     }
 
-    createMenu(){
-
-    }
-
     show(){
-        let showMenu;
         try{
-            showMenu = inquirer.prompt(this.questions);
+            const showMenu = inquirer.prompt(this.questions);
             return showMenu;
         }
         catch(err){

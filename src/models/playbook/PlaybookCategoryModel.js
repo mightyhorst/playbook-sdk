@@ -40,6 +40,7 @@ class PlaybookCategoryModel {
         this.name = name;
         this.id = id;
         this.folderName = folderName;
+        this.sceneModels = [];
     }
 
     /**
@@ -78,7 +79,7 @@ class PlaybookCategoryModel {
         const indent = TextService.indent(indentSize);
 
         let content = indent + '.addCategory("' + this.name + '")\n';
-        
+
         this.sceneModels.forEach((scene) => {
             content += scene.printJsContent(indentSize + 1);
         })

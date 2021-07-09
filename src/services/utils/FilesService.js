@@ -140,7 +140,8 @@ class FileService{
              * @step add cwd to the path 
              * @desc this will complain sometimes so it's safer with the full path
              */
-            filePath = path.join(process.cwd(), filePath); 
+            // filePath = path.join(process.cwd(), filePath); 
+            filePath = path.resolve(fromFolder, filePath); 
             return new FileModel(filePath);
         });
 
@@ -193,7 +194,8 @@ class FileService{
      * @memberof FileService
      */
     createFile(filePath, fileName, fileContents){
-        const fullFilePath = path.join(filePath, fileName);
+        const fullFilePath = path.resolve(filePath, fileName);
+        console.log("createFile(filePath, fileName, fileContents)====> ", {filePath, fileName, fileContents});
         try{
             fs.writeFileSync(fullFilePath, fileContents, {encoding:'utf8'});
             return new FileModel(fullFilePath, fileContents);

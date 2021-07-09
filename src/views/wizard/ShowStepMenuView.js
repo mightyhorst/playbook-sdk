@@ -20,14 +20,13 @@ class ShowStepMenuView{
     /**
      * Creates an instance of ShowStepMenuView.
      * 
-     * @param {string[]} steps - list of step names
-     * 
      * @memberof ShowStepMenuView
      */
-    constructor(steps){
+    constructor(){
 
         this.BACK = '👈 Back to Choose Step';
         this.EDIT_TIMELINE = '⏰ Edit timeline';
+        this.DELETE_TIMELINE = '❌ Delete timeline';
         this.ADD_DESCRIPTION = '📗 Add Description';
         this.ADD_CODE = '👾 Add Code';
         this.ADD_TEST = '🎓 Add Test';
@@ -47,6 +46,10 @@ class ShowStepMenuView{
             new ChoiceModel(
                 false,
                 this.EDIT_TIMELINE,
+            ),
+            new ChoiceModel(
+                false,
+                this.DELETE_TIMELINE,
             ),
             new ChoiceModel(true),
             new ChoiceModel(

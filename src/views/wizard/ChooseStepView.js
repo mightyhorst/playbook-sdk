@@ -32,7 +32,6 @@ class ChooseStepView{
 
         let choiceModelsForSteps = steps.map(step => {
             const choiceModel = new ChoiceModel(false, step);
-            console.log(choiceModel.choice);
             return choiceModel;
         });
 
@@ -40,22 +39,21 @@ class ChooseStepView{
          * @const {ChoiceModel[]} choiceModels - choose a step menu
          */
         const choiceModels = [
-            new ChoiceModel(
-                false,
-                this.backLabel,
-            ),
+            ...choiceModelsForSteps,
             new ChoiceModel(true),
             new ChoiceModel(
                 false,
                 this.newStepLabel,
             ),
-            new ChoiceModel(true),
-            ...choiceModelsForSteps,
-            new ChoiceModel(true),
+            new ChoiceModel(
+                false,
+                this.backLabel,
+            ),
             new ChoiceModel(
                 false,
                 this.exitLabel,
             ),
+            new ChoiceModel(true),
         ];        
 
         /**

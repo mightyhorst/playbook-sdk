@@ -74,8 +74,8 @@ class PlaybookInitCtrl extends Controller{
          *  3. Load them into a Menu View 
          *  4. Display as List 
          *  5. On select:
-         *  6. copy the PlaybookJs file contents to the pwd 
-         *  7. Copy the example folder to the pwd 
+         *  6.  copy the PlaybookJs file contents to the pwd 
+         *  7.  Copy the example folder to the pwd 
          *  8. (no change) Slow print 
          */
 
@@ -86,8 +86,6 @@ class PlaybookInitCtrl extends Controller{
         let exampleModels;
         try{
             exampleModels = ExamplesService.findAllExamples();
-            // console.log('exampleModels ---> ', exampleModels);
-            // console.log('exampleModels ---> ', exampleModels[0].playbookFileModel.contents);
         }
         catch(err){
             console.log('💀 Sorry, I had problems finding the examples. ', chalk.red(err.message));
@@ -112,17 +110,19 @@ class PlaybookInitCtrl extends Controller{
              */
             chosenExampleModel = exampleModels.find(exampleModel=>{
                 return exampleModel.name === answers.keyChosenExample;
-            })
+            });
 
             /** 
              * @param {string} playbookName - name of the playbook 
              */
-            playbookName = answers.keyPlaybookName+'.playbook.js';
+            // playbookName = answers.keyPlaybookName+'playbook.js';
+            playbookName = 'playbook.js';
 
             /** 
              * @param {string} playbookFolder - folder to install the playbook 
              */
-            playbookFolder = path.resolve(process.cwd(), answers.keyPlaybookFolder);
+            // playbookFolder = path.resolve(process.cwd(), answers.keyPlaybookFolder);
+            playbookFolder = answers.keyPlaybookFolder;
 
         }
         catch(err){
@@ -131,9 +131,7 @@ class PlaybookInitCtrl extends Controller{
             return;
         }
 
-        if(debug) console.log({playbookName, playbookFolder, 'chosenExampleModel.name': chosenExampleModel.name});
-
-        
+        if(debug) console.log(`@step 2. Show Init Menu from Example View `, {playbookName, playbookFolder, 'chosenExampleModel.name': chosenExampleModel.name});
 
         /**
          * @step 3. Create PlaybookJs file 
@@ -143,19 +141,18 @@ class PlaybookInitCtrl extends Controller{
             createdPlaybookFileModel = FileService.createFile(playbookFolder, playbookName, chosenExampleModel.playbookFileModel.contents);
         }
         catch(err){
-            console.log('💀 Sorry, I had problems creating the playbook.js file. ', chalk.red(err.message));
+            console.log(chalk.red('💀 Sorry, I had problems creating the playbook.js file. '), chalk.italic.magentaBright(err.message));
             if(debug) console.error(err);
             return; 
         }
 
-
         /**
-         * @step 4. Copy Playbbok folder 
+         * @step 4. Copy Playbook folder 
          */ 
         let createdPlaybookFolderModel, sourceFolderModel, destination; 
         try{
             sourceFolderModel = chosenExampleModel.docsFolderModel; 
-            destination = path.join(playbookFolder, 'playbook');
+            destination = path.resolve(playbookFolder, 'playbook');
 
             console.log(`Copying from: \n${chalk.blue(sourceFolderModel.path)} \nto: \n${chalk.green(destination)}`);
 
@@ -185,15 +182,13 @@ class PlaybookInitCtrl extends Controller{
             return; 
         }
 
-
         /**
          * @step 6. Typewriter the playbook init 
          */
         try{
-            
             const printerContent = WordColorService.codeColour(createdPlaybookFileModel.path);
 
-            var slowTyper = this.typeWriter(printerContent);
+            const slowTyper = this.typeWriter(printerContent);
             slowTyper.start();
         }
         catch(err){
@@ -201,7 +196,6 @@ class PlaybookInitCtrl extends Controller{
             if(debug) console.error(err);
             return; 
         }
-
 
         return;
 

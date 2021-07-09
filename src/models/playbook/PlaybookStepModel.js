@@ -33,6 +33,7 @@ const {
 class PlaybookStepModel
 {
     name;
+    title;
     commitId;
 
     timelineDescriptionModels = [];
@@ -42,16 +43,32 @@ class PlaybookStepModel
 
     /**
      * @constructor
-     * @param {string} name - scene title
+     * @param {string} title - scene title
      * @param {string} commitId - commit ID for something
      * @todo 
      *      - [ ] refactor name to title
      *      - [ ] add ID and folderName 
      */
-    constructor(name, commitId)
+    constructor(title, commitId)
     {
-        this.name = name;
+        /**
+         * @deprecated
+         */
+        this.name = title;
+        this.title = title;
         this.commitId = commitId;
+
+        this.timelineDescriptionModels = [];
+        this.timelineCodeModels = [];
+        this.timelineTerminalModels = [];
+    }
+
+    getAllTimelines(){
+        return [].concat(
+            this.timelineDescriptionModels,
+            this.timelineCodeModels,
+            this.timelineTerminalModels,
+        );
     }
 
     /**
@@ -61,15 +78,18 @@ class PlaybookStepModel
      * @returns {PlaybookTimelineDescriptionModel}
      * @memberof PlaybookStepModel
      */
-    addDescriptionFromMdFile(start, duration, filePath)
+    addDescriptionFromMdFile(start, duration, filePath, title)
     {
-        const timelineDescriptionModel = new PlaybookTimelineDescriptionModel(start, duration, filePath);
+        const timelineDescriptionModel = new PlaybookTimelineDescriptionModel(start, duration, filePath, title);
         this.timelineDescriptionModels.push(timelineDescriptionModel);
 
         return timelineDescriptionModel;
     }
     addDescriptionModel(timelineDescriptionModel){
         this.timelineDescriptionModels.push(timelineDescriptionModel);
+    }
+    deleteDescriptionModel(timelineModel){
+        return this.deleteModel(this.timelineDescriptionModels, timelineModel);
     }
 
     /**
@@ -94,6 +114,9 @@ class PlaybookStepModel
     addCodeModel(timelineCodeModel){
         this.timelineCodeModels.push(timelineCodeModel);
     }
+    deleteCodeModel(timelineModel){
+        return this.deleteModel(this.timelineCodeModels, timelineModel);
+    }
 
     /**
      * Creates a PlaybookTimelineTerminalModel that represends the ".addTerminal()" in the playbook.js file
@@ -112,6 +135,44 @@ class PlaybookStepModel
     }
     addTerminalModel(timelineTerminalModel){
         this.timelineTerminalModels.push(timelineTerminalModel);
+    }
+    deleteTerminalModel(timelineModel){
+        return this.deleteModel(this.timelineTerminalModels, timelineModel);
+    }
+    deleteModel(models, timelineModel){
+        const index = models.findIndex(t => timelineModel.id === t.id);
+        if(index === -1){
+            return false;
+        }
+        else{
+            models.splice(index, 1);
+            return true;
+        }
+    }
+
+    /**
+     * Delete the timeline
+     * @param {PlaybookTimelineModel} timelineModel - model to delete
+     */
+    deleteTimelineModel(timelineModel){
+        switch(timelineModel.panel){
+            case 'description':
+                return this.deleteDescriptionModel(timelineModel);
+            case 'code':
+                return this.deleteCodeModel(timelineModel);
+            case 'test':
+                return this.deleteTestModel(timelineModel);
+            case 'browser':
+                return this.deleteBrowserModel(timelineModel);
+            case 'terminal':
+                return this.deleteTerminalModel(timelineModel);
+            case 'audio':
+                return this.deleteAudioModel(timelineModel);
+            case 'video':
+                return this.deleteVideoModel(timelineModel);
+            default:
+                throw new Error(chalk.red('TimelineModel has a panel I don\'t support yet: ')+timelineModel.panel);
+        }
     }
     
     /**

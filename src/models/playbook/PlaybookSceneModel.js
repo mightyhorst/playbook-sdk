@@ -86,7 +86,7 @@ class PlaybookSceneModel
         else{
             this.stepModels.forEach((stepModel) => {
                 // content += indent2 + '.addStepFromModel(' + stepModel.playbookJsRequireId + ')\n';
-                const requirePath = `require('./${stepModel.relativePathFromPlaybookFolder}')`;
+                const requirePath = `require('./${stepModel.relativePathFromPlaybookFolder}/step.playbook.js')`;
                 content += indent2 + `.addStepFromModel(${requirePath})\n`;
             });
         }

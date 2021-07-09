@@ -44,22 +44,21 @@ class ChooseSceneView{
          * @const {ChoiceModel[]} choiceModels - choose a scene menu
          */
         const choiceModels = [
-            new ChoiceModel(
-                false,
-                this.backLabel,
-            ),
+            ...choiceModelsForScenes,
             new ChoiceModel(true),
             new ChoiceModel(
                 false,
                 this.newSceneLabel,
             ),
-            new ChoiceModel(true),
-            ...choiceModelsForScenes,
-            new ChoiceModel(true),
+            new ChoiceModel(
+                false,
+                this.backLabel,
+            ),
             new ChoiceModel(
                 false,
                 this.exitLabel,
             ),
+            new ChoiceModel(true),
         ];        
 
         /**

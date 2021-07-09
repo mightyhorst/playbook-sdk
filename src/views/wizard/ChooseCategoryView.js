@@ -43,17 +43,17 @@ class ChooseCategoryView{
          * @const {ChoiceModel[]} choiceModels - choose a category menu
          */
         const choiceModels = [
-            new ChoiceModel(
-                false,
-                this.exitLabel,
-            ),
+            ...choiceModelsForCats,
             new ChoiceModel(true),
             new ChoiceModel(
                 false,
                 this.newCategoryLabel,
             ),
+            new ChoiceModel(
+                false,
+                this.exitLabel,
+            ),
             new ChoiceModel(true),
-            ...choiceModelsForCats,
         ];        
 
         /**

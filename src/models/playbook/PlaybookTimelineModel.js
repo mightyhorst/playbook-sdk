@@ -1,5 +1,10 @@
-// import _ from 'lodash';
+/**
+ * @requires libs
+ */
+const chalk = require('chalk');
 const loDash = require('lodash');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * @requires Services
@@ -309,13 +314,21 @@ class PlaybookTimelineModel extends PlaybookWindowSettingsModel
 {
     start;
     duration;
+    panel;
     transitions = [];
 
-    constructor(start, duration)
+    /**
+     * 
+     * @param {number} start - start in ms
+     * @param {number} duration - duration in ms
+     * @param {'description'|'code'|'test'|'browser'|'audio'|'video'|'terminal'|'partial'} panel - panel category
+     */
+    constructor(start, duration, panel)
     {
         super();
         this.start = start;
         this.duration = duration;
+        this.panel = panel; 
     }
 
     addTransition(start, end)
@@ -403,12 +416,24 @@ class PlaybookTimelineTransitionModel extends PlaybookWindowSettingsModel {
 class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
     
     filePath;
+    title;
 
-    constructor(start, duration, filePath)
+    constructor(start, duration, filePath, title)
     {
-        super(start, duration);
-
+        super(start, duration, 'description');
         this.filePath = filePath;
+        this.title = title;
+    }
+
+    contents(cwd){
+        try{
+            const descriptionFilePath = path.resolve(cwd, this.filePath);
+            const contents = fs.readFileSync(descriptionFilePath);
+            return contents;
+        }
+        catch(err){
+            throw new Error(chalk.red(`💩 Sorry, but I could not read back the code file. Are you sure the path exists: `)+chalk.green.italic(descriptionFilePath)+chalk.grey.bold(`\n\nHere's the error: \n${err.message}`));
+        }
     }
 
     /**
@@ -426,7 +451,7 @@ class PlaybookTimelineDescriptionModel extends PlaybookTimelineModel {
 
         content += super.printJsContent(indentSize);
 
-        return content
+        return content;
     }
     
 }
@@ -438,37 +463,72 @@ class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
     outputFilePath;
     template_data;
     partialModels = [];
+    fullPathToCodeHbsFile;
 
-    constructor(start, duration, templateFilePath, outputFilePath, template_data)
+    constructor(start, duration, templateFilePath, outputFilePath, template_data, fullPathToCodeHbsFile)
     {
-        super(start, duration);
+        super(start, duration, 'code');
 
         this.templateFilePath = templateFilePath;
         this.outputFilePath = outputFilePath;
         this.template_data = template_data;
+        this.fullPathToCodeHbsFile = fullPathToCodeHbsFile;
     }
+
+    /**
+     * @file read the code file
+     */
+    hbsContents(){
+        try{
+            const hbsContents = fs.readFileSync(this.fullPathToCodeHbsFile);
+            return hbsContents;
+        }
+        catch(err){
+            throw new Error(chalk.red(`💩 Sorry, but I could not read back the code file. Are you sure the path exists: `)+chalk.green.italic(this.fullPathToCodeHbsFile)+chalk.grey.bold(`\n\nHere's the error: \n${err.message}`));
+        }
+    }
+        
 
     /**
      * Create a PlaybookTimelineCodePartialModel that represents ".withPartial()" in the playbook.js
      *
-     * @param {*} start
-     * @param {*} duration
-     * @param {*} partialId
-     * @param {*} templateFilePath
-     * @param {*} template_data
+     * @param {number} start
+     * @param {number} duration
+     * @param {string} partialId
+     * @param {string} templateFilePath
+     * @param { {[key]: string} } template_data
+     * @param {string} fullPathToCodeHbsFile - full path to partial hbs file
      * @returns {PlaybookTimelineCodePartialModel}
      * @memberof PlaybookTimelineCodeModel
      */
-    addPartial(start, duration, partialId, templateFilePath, template_data)
+    addPartial(start, duration, partialId, templateFilePath, template_data, fullPathToCodeHbsFile)
     {
-        const partialModel = new PlaybookTimelineCodePartialModel(start, duration, partialId, templateFilePath, template_data);
-
+        const partialModel = new PlaybookTimelineCodePartialModel(
+            start, 
+            duration, 
+            partialId, 
+            templateFilePath, 
+            template_data,
+            fullPathToCodeHbsFile,
+        );
         this.partialModels.push(partialModel);
-
         return partialModel;
     }
     addPartialModel(partialModel){
         this.partialModels.push(partialModel);
+    }
+    deletePartialModel(partialModel){
+        const partialIndex = this.partialModels
+            .findIndex(partial => {
+                return partialModel.id === partial.id;
+            });
+        if(partialIndex === -1){
+            return false;
+        }
+        else{
+            this.partialModels.splice(partialIndex, 1);
+            return true;
+        }
     }
 
     /**
@@ -525,22 +585,40 @@ class PlaybookTimelineCodeModel extends PlaybookTimelineModel {
     }
 }
 
-
-// export class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
+/**
+ * @class PlaybookTimelineCodePartialModel
+ * @extends PlaybookTimelineModel
+ */
 class PlaybookTimelineCodePartialModel extends PlaybookTimelineModel
 {
     partialId;
     templateFilePath;
     template_data;
+    fullPathToCodeHbsFile;
 
-    constructor(start, duration, partialId, templateFilePath, template_data)
+    constructor(start, duration, partialId, templateFilePath, template_data, fullPathToCodeHbsFile)
     {
-        super(start, duration);
+        super(start, duration, 'partial');
 
         this.partialId = partialId;
         this.templateFilePath = templateFilePath;
         this.compileData = template_data;
+        this.fullPathToCodeHbsFile = fullPathToCodeHbsFile;
     }
+
+    /**
+     * @file read the code file
+     */
+    hbsContents(){
+        try{
+            const hbsContents = fs.readFileSync(this.fullPathToCodeHbsFile);
+            return hbsContents;
+        }
+        catch(err){
+            throw new Error(chalk.red(`💩 Sorry, but I could not read back the code file. Are you sure the path exists: `)+chalk.green.italic(this.fullPathToCodeHbsFile)+chalk.grey.bold(`\n\nHere's the error: \n${err.message}`));
+        }
+    }
+    
 
     /**
      * Prints the .withPartial entry that is a child to the .addCode entry
@@ -602,7 +680,7 @@ class PlaybookTimelineTerminalModel extends PlaybookTimelineModel {
 
     constructor(start, duration)
     {
-        super(start, duration);
+        super(start, duration, 'terminal');
     }
 
     addCommand(command)

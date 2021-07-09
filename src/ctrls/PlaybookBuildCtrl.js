@@ -3,6 +3,10 @@ const fs = require('fs');
 const chalk = require('chalk');
 const glob = require('glob');
 
+/**
+ * @requires PlaybookSDK
+ */
+const PlaybookSDK = require('../playbook.sdk');
 
 /**
  * @requires Controller - parent controller 
@@ -23,25 +27,34 @@ class PlaybookBuildCtrl extends Controller{
         super();
     }
 
+    requireSdk(){
+        if(!global.playbook){
+            global.playbook = PlaybookSDK.playbook;
+        }
+        if(!global.step){
+            global.step = PlaybookSDK.step;
+        }
+    }
+    build(folderPath){
+        this.requireSdk();
+        return PlaybookApiService.buildPlaybookJsonFromFolderPath(folderPath);
+    }
     buildPlaybook(args){
 
         if(args.length >= 3){
             if(args[3] === 'usage') {
                 console.log(`If you run ${chalk.magenta('playbook build')} it will look for all the ${chalk.green('*.playbook.js')} files`);  
             }
-            else
-            {
-                global.playbook = require('../playbook.sdk').playbook;
-                global.step = require('../playbook.sdk').step;
-                PlaybookApiService.buildPlaybookJsonFromFolderPath(args[3] || './')
-                console.log("All done");
+            else {
+                const folderPath = args[3] || './';
+                this.build(folderPath);
+                console.log(chalk.greenBright('All done'));
                 return;
             }
         }
 
 
         const playbookFiles = this.findAllPlaybooks();
-        console.log('playbookFiles --->', playbookFiles);
 
         /**
          * @constant global.playbook 

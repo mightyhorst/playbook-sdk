@@ -58,7 +58,7 @@ class PlaybookJsonService{
         this.playbookJsonFileName = optPlaybookJsonFileName || 'playbook.json'
         this.pathToPlaybookJson = path.resolve(playbookFolder, this.playbookJsonFileName);
 
-        return this.validate();
+        // return this.validate();
     }
     /**
      * @description validate the folder and playbook exists
@@ -139,6 +139,9 @@ class PlaybookJsonService{
      * @returns {Categories[]} categories
      */
     getCategories(){
+        if(!this.playbookJson){
+            throw new Error(chalk.red('playbookJson is missing \n') );
+        }
         if(!this.playbookJson.hasOwnProperty('categories')){
             throw new Error(chalk.red('playbookJson is missing categories \n')+chalk.grey(`Here's what I have for the playbook.json:\n`)+JSON.stringify(Object.keys(this.playbookJson), null, 4));
         }
@@ -459,6 +462,11 @@ class PlaybookJsonService{
 
             return cat;
         });
+    }
+    doesPlaybookJsonExist(optionalPathToPlaybookJson){
+        const pathPlaybookJson = optionalPathToPlaybookJson || this.pathToPlaybookJson;
+        if(!pathPlaybookJson) return false;
+        return fs.existsSync(pathPlaybookJson);
     }
     /**
      * audit the playbook.json
@@ -1186,6 +1194,7 @@ class PlaybookJsonService{
                         step.name,
                     );
                     playbookStepModel.id = step.id;
+                    playbookStepModel.folderName = step.folderName;
                     playbookStepModel.playbookJsRequireId = step.id && step.id.split('-').join('_');
                     playbookStepModel.relativePathFromPlaybookFolder = step.relativePathFromPlaybookFolder;
                     playbookStepModel.fullPathToFolder = step.fullPathToFolder;
@@ -1241,7 +1250,9 @@ class PlaybookJsonService{
                                             timeline.start,
                                             timeline.duration,
                                             PLAYBOOK.defaultDescriptionFilename || 'description.md',
+                                            timeline.title,
                                         );
+                                        if(timeline.title) timelineDescriptionModel.title = timeline.title;
                                         playbookStepModel.addDescriptionModel(timelineDescriptionModel);
                                     }
                                     
@@ -1285,6 +1296,14 @@ class PlaybookJsonService{
                                             throw new Error(chalk.red(`Timeline code panel is missing an "output": \n`) + chalk.magenta(JSON.stringify({timeline}, null, 4)));
 
                                         /**
+                                         * @step add full path to the code file and check 
+                                         */
+                                        const fullPathToCodeHbsFile = path.join(this.playbookFolder, timeline.code.template);
+                                        if(!fs.existsSync(fullPathToCodeHbsFile)){
+                                            throw new Error(chalk.red(`Timeline code panel is missing a file at "fullPathToCodeHbsFile". Can you check this path: \n`) + chalk.cyan.italic(JSON.stringify({fullPathToCodeHbsFile, 'timeline.code': timeline.code}, null, 4)));
+                                        }
+
+                                        /**
                                          * @step add code model
                                          */
                                         const timelineCodeModel = new PlaybookTimelineCodeModel(
@@ -1293,7 +1312,9 @@ class PlaybookJsonService{
                                             timeline.code.template,
                                             timeline.code.output,
                                             timeline.code.template_data || {},
+                                            fullPathToCodeHbsFile,
                                         );
+                                        if(timeline.title) timelineCodeModel.title = timeline.title;
                                         playbookStepModel.addCodeModel(timelineCodeModel);
 
                                         /**
@@ -1329,12 +1350,24 @@ class PlaybookJsonService{
                                                 if(!partial.hasOwnProperty('partial_id'))
                                                     throw new Error(chalk.red(`Partial is missing a "partial_id": \n`) + chalk.magenta(JSON.stringify(partial, null, 4)));
 
+                                                /**
+                                                 * @step add full path to the code file and check 
+                                                 */
+                                                const fullPathToPartialHbsFile = path.join(this.playbookFolder, partial.template);
+                                                if(!fs.existsSync(fullPathToPartialHbsFile)){
+                                                    throw new Error(chalk.red(`Partial panel is missing the file. Can you check this path: \n`) + chalk.cyan.italic(JSON.stringify({fullPathToPartialHbsFile, partial}, null, 4)));
+                                                }
+
+                                                /**
+                                                 * @model add partial model
+                                                 */
                                                 const partialModel = new PlaybookTimelineCodePartialModel(
                                                     partial.start,
                                                     partial.duration,
                                                     partial.partial_id,
                                                     partial.template,
                                                     partial.template_data || {},
+                                                    fullPathToPartialHbsFile,
                                                 );
                                                 timelineCodeModel.addPartialModel(partialModel);
                                             });
@@ -1370,6 +1403,7 @@ class PlaybookJsonService{
                                             timeline.start,
                                             timeline.duration
                                         );
+                                        if(timeline.title) terminalModel.title = timeline.title;
                                         timeline.terminal.commands.map(command =>{
                                             terminalModel.addCommand(command);
                                         });
@@ -1390,9 +1424,9 @@ class PlaybookJsonService{
                         });
                     }
 
-                    console.log(playbookStepModel.printJsContent());
-                    fs.writeFileSync('./logs.txt', playbookStepModel.printJsContent(), 'utf8');
-                    process.exit();
+                    // console.log(playbookStepModel.printJsContent());
+                    // fs.writeFileSync('./logs.txt', playbookStepModel.printJsContent(), 'utf8');
+                    // process.exit();
 
                     return playbookStepModel;
                 });

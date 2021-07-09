@@ -40,6 +40,9 @@ class PlaybookModel {
         this.nextCatId = 0;
         this.name = name;
         this.outputFileName = outputFileName || 'playbook.json';
+
+        this.categoryModels = [];
+        this.stepModels = [];
     }
 
     /**

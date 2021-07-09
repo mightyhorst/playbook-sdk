@@ -8,6 +8,7 @@
  * @imports Services
  */
 const ValidationService = require('./services/utils/ValidationService');
+const transformId = require('./services/utils/transformId');
 
 /**
 * @imports Files
@@ -112,7 +113,12 @@ class PlaybookSdk{
 	 */
 	constructor(name, isDebug){
 		this.DEBUG = isDebug || false;
-		this.nextId = 1; 
+		this.nextCatId = 0; 
+		this.nextSceneId = 0; 
+		this.nextStepId = 0; 
+		this.nextDescId = 0; 
+		this.nextCodeId = 0; 
+		this.nextTerminalId = 0; 
 		this.name = name;
 		this.playbookJson = {};
 
@@ -152,14 +158,16 @@ class PlaybookSdk{
 			this.playbookJson.categories = [];
 		}
 
-		const id = this.nextId++;
-
+		const id = transformId('cat', this.nextCatId, title);
+		
 		this.playbookJson.categories.push({
 			id: id, 
 			title: title, 
+			folderName: id, 
 			scenes: []
 		});
-
+		
+		this.nextCatId++;
 		this.last.category = id; 
 		
 		return this;
@@ -180,14 +188,16 @@ class PlaybookSdk{
 			category.scenes = [];
 		}
 
-		const id = this.nextId++;
+		const id = transformId('scene', this.nextSceneId, title);
 		
 		category.scenes.push({
 			id: id, 
 			title: title, 
-			steps: []
+			folderName: id, 
+			steps: [],
 		});
-
+		
+		this.nextSceneId++;
 		this.last.scene = id; 
 		
 		return this;
@@ -223,11 +233,12 @@ class PlaybookSdk{
 			scene.steps = [];
 		}
 
-		const id = this.nextId++;
+		const id = transformId('step', this.nextStepId, title);
 
 		scene.steps.push({
 			id: id, 
 			title : title,
+			folderName: id, 
 			gitData : {
 				branch : gitBranch
 			},
@@ -260,6 +271,7 @@ class PlaybookSdk{
 			timeline: []
 		});
 
+		this.nextStepId++;
 		this.last.step = id; 
 
 		return this;
@@ -332,7 +344,7 @@ class PlaybookSdk{
 
 		const descriptionJson = htmlToList(wrapper);
 
-		const id = this.nextId++;
+		const id = this.nextDescId++;
 
 		step.timeline.push({
 			id: id, 
@@ -353,7 +365,7 @@ class PlaybookSdk{
 		const scene = category.scenes.find(scene => scene.id === this.last.scene);
 		const step = scene.steps.find(step => step.id === this.last.step);
 
-		const id = this.nextId++;
+		const id = this.nextCodeId++;
 
 		step.timeline.push({
 			id: id,
@@ -406,7 +418,7 @@ class PlaybookSdk{
 		const scene = category.scenes.find(scene => scene.id === this.last.scene);
 		const step = scene.steps.find(step => step.id === this.last.step);
 
-		const id = this.nextId++;
+		const id = this.nextTerminalId++;
 
 		step.timeline.push({
 			id: id,
@@ -810,8 +822,8 @@ class PlaybookSdk{
 	/**
 	 * Take the current window width and height and add/subtract the width and height values provided
 	 *
-	 * @param {*} width
-	 * @param {*} height
+	 * @param {number} width
+	 * @param {number} height
 	 * @memberof PlaybookSdk
 	 */
 	changeDimension(width, height)
@@ -982,7 +994,7 @@ class PlaybookSdk{
 	/**
 	 * Add timeline for granular control over how quick the printing is and when it starts 
 	 *
-	 * @param {*} config
+	 * @param {PlaybookConfig} config
 	 * @returns
 	 * @memberof PlaybookSdk
 	 */
@@ -1080,7 +1092,9 @@ class PlaybookSdk{
 			{
 				const transition = windowSetting.transitions[i];
 
-				// -- Check the transition to see if it has the property, if it does then return it
+				/**
+				 * @step Check the transition to see if it has the property, if it does then return it
+				 */
 				if (transition.hasOwnProperty(property))
 				{
 					value = transition[property];
@@ -1088,7 +1102,9 @@ class PlaybookSdk{
 				}
 			}
 
-			// -- If the value is not found, default to the window settings default value
+			/**
+			 * @step If the value is not found, default to the window settings default value
+			 */
 			if (value == undefined)
 			{
 				value = windowSetting[property];

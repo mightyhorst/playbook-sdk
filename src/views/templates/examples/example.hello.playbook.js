@@ -9,5 +9,5 @@
             .addScene('Title of the First scene')       
                 .addStep('Say Hello World!')            
                     .addDescription('Hello World ')     
-        .write('./playbook.hello.json');                
+        .write('./playbook.json');                
 

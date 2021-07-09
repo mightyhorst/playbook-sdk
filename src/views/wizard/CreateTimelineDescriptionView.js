@@ -20,6 +20,7 @@ const {
  */
 const QuestionIds = {
     DESCRIPTION_FILENAME_ID: 'DESCRIPTION_FILENAME_ID',
+    DESCRIPTION_TITLE_ID: 'DESCRIPTION_TITLE_ID',
     DESCRIPTION_CONTENT_ID: 'DESCRIPTION_CONTENT_ID',
     START_ID: 'START_ID',
     DURATION_ID: 'DURATION_ID',
@@ -28,17 +29,17 @@ const QuestionIds = {
 /**
  * @view Create a new step prompt
  */
-class CreateNewDescriptionView{
+class CreateTimelineDescriptionView{
 
     /**
-     * @constructor Creates an instance of CreateNewDescriptionView.
+     * @constructor Creates an instance of CreateTimelineDescriptionView.
      * 
      * @param {string} defaultDescriptionFileName - default file name
      * @param {string} defaultDescription - default description text for the md file
      * @param {number} defaultStartMs - default start time in milliseconds
      * @param {number} defaultDurationMs - default duration time in milliseconds
      * 
-     * @memberof CreateNewDescriptionView
+     * @memberof CreateTimelineDescriptionView
      */
     constructor(defaultDescriptionFileName, defaultDescription, defaultStartMs, defaultDurationMs){
         /**
@@ -48,6 +49,21 @@ class CreateNewDescriptionView{
             QuestionIds.DESCRIPTION_FILENAME_ID,
             '👉 What should I call the description file?',
             defaultDescriptionFileName,
+            (val) => {
+                const isGreaterThanZero = val.length > 0;
+                if(!isGreaterThanZero) 
+                    return `Must be longer than 0. \n\nreceived: ${val}\n`;
+                return true;
+            },
+        );
+        
+        /**
+         * @constant questionTitle - start time 
+         */
+         const questionTitle = new QuestionInputModel(
+            QuestionIds.DESCRIPTION_TITLE_ID,
+            '👉 What is the friendly title ?',
+            '',
             (val) => {
                 const isGreaterThanZero = val.length > 0;
                 if(!isGreaterThanZero) 
@@ -102,6 +118,7 @@ class CreateNewDescriptionView{
          */
         this.questions = [
             questionDescriptionFileName.question,
+            questionTitle.question,
             questionDescription.question,
             questionStartTime.question,
             questionDurationTime.question,
@@ -136,6 +153,7 @@ class CreateNewDescriptionView{
                 validationErrors,
                 fileName,
                 description,
+                title,
                 start,
                 duration,
             } = this._validateAnswers(answers);
@@ -154,6 +172,7 @@ class CreateNewDescriptionView{
                 validationErrors,
                 fileName,
                 description,
+                title,
                 start,
                 duration,
             };
@@ -170,6 +189,7 @@ class CreateNewDescriptionView{
             description: [],
             start: [],
             duration: [],
+            title: [],
         };
 
         let isFilenameValid = false;
@@ -180,6 +200,8 @@ class CreateNewDescriptionView{
         const start = (answers[QuestionIds.START_ID]);
         let isDurationValid = false;
         const duration = (answers[QuestionIds.DURATION_ID]);
+        let isTitleValid = false;
+        const title = answers[QuestionIds.DESCRIPTION_TITLE_ID];
 
         let isFilenameGtZero = false;
         if(fileName.length > 1){
@@ -187,6 +209,14 @@ class CreateNewDescriptionView{
         }
         else{
             validationErrors.filename.push('Description must be greater than 0');
+        }
+        
+        let isTitleGtZero = false;
+        if(title.length > 1){
+            isTitleGtZero = true;
+        }
+        else{
+            validationErrors.title.push('Title must be greater than 0');
         }
         
         let isDescGtZero = false;
@@ -231,18 +261,20 @@ class CreateNewDescriptionView{
 
         isFilenameValid = isFilenameGtZero;
         isDescValid = isDescGtZero;
+        isTitleValid = isTitleGtZero;
         isStartValid = isStartGtZero && isStartNumber;
         isDurationValid = isDurationGtZero && isDurationNumber;
-        isValid = isFilenameValid && isDescValid && isStartValid && isDurationValid;
+        isValid = isFilenameValid && isDescValid && isTitleValid && isStartValid && isDurationValid;
         
         return {
             isValid, 
             validationErrors,
             fileName,
             description,
+            title,
             start,
             duration,
         };
     }
 }
-module.exports = CreateNewDescriptionView;
+module.exports = CreateTimelineDescriptionView;
